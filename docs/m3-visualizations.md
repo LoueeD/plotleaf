@@ -1,6 +1,6 @@
 # M3: prepared funnel and donut views
 
-Updated: 8 November 2026. M1 (the published MVP) and M2 (source/CI foundation) are complete. M3 adds two components to the unreleased `0.2.0` candidate. The public npm version remains `0.1.0`. Owner visual acceptance and npm publication are separate, pending steps.
+Updated: 8 November 2026. M1 (the published MVP) and M2 (source/CI foundation) are complete. M3 adds two components in `0.2.0`. The owner authorized publication on 8 November 2026 after the preview review handoff. Registry publication is in progress; technical verification and publication approval are recorded separately.
 
 ## Scope and acceptance
 
@@ -66,8 +66,8 @@ The explicitly fictional [onboarding report](../examples/onboarding/report.md) e
 
 Local verification passes: official TypeScript, TSRS, **75 compiler/security/Node tests**, **22 Chromium/WebKit tests** and an audited **22-file npm archive** installed through npm/npx on Node 22.23.3 without Bun or dev dependencies. Real screenshots were inspected against the supplied reference and in dark/mobile adaptations. [Remote run 42484507050](https://github.com/LoueeD/plotleaf/actions/runs/42484507050) passed all **11 jobs** for source commit `ca36b26`: Linux build/core/typechecks, Windows core (**74 pass, 1 explicit POSIX FIFO skip**), all six Node 22/24/26 consumers on Linux/Windows, **22 browser checks on each platform**, and the immutable 0.1.0 source reproduction. The six consumer jobs use one audited 22-file archive. CI does not publish to npm. M2's earlier 46-core/14-browser results remain a historical baseline, not the M3 test counts.
 
-A local candidate archive is saved under ignored `.cache/m3/plotleaf-0.2.0.tgz`, with its content/integrity audit beside it; that exact archive passes Node 22 npm/npx checks without Bun. It is not an approved release artifact yet.
+A local candidate archive is saved under ignored `.cache/m3/plotleaf-0.2.0.tgz`, with its content/integrity audit beside it; that exact archive passes Node 22 npm/npx checks without Bun. Publication was subsequently authorized; the final release archive updates release-facing wording while preserving the reviewed compiled assets.
 
-The live review uses `node dist/cli.js dev examples/onboarding/report.md --no-open`. Inspect the reference-led desktop composition, native meters, category legend, narrow layouts, both themes, data disclosures and offline HTML. Do not publish or create an approved release tag until the owner completes manual visual review. Follow [the release procedure](release.md) for the exact candidate archive.
+The live review uses `node dist/cli.js dev examples/onboarding/report.md --no-open`. Inspect the reference-led desktop composition, native meters, category legend, narrow layouts, both themes, data disclosures and offline HTML. The owner subsequently authorized publication after this preview handoff. Preserve the reviewed rendered assets during release preparation; future renderer changes require another manual review. Follow [the release procedure](release.md) for the exact candidate archive.
 
 M4 follows with narrowly scoped rich table cells. The prepared-view transition fixture must still precede the later input-state milestone; no filter, map or composition implementation is claimed by M3.

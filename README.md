@@ -12,7 +12,7 @@ A report is one Markdown file, optionally accompanied by local JSON datasets. No
 
 The initial MVP includes validation, live preview/reload, self-contained HTML export and a generated component specification. All bundled examples use fictional data.
 
-Main contains the unreleased **0.2.0 / M3 visualization candidate**. npm currently provides `0.1.0`; use a source build to try the new components while owner visual review is pending.
+Version **0.2.0** adds donut charts and prepared funnel/progress views to the Markdown report language.
 
 Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Filters, rich table cells, maps and reusable compositions remain planned increments.
 

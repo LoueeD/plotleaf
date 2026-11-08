@@ -1,8 +1,8 @@
 # Releasing plotleaf
 
-Use the npm registry and a Node-compatible package. Bun is a maintainer tool, not a consumer prerequisite. Current public examples are the explicitly fictional storefront and adoption reports. Internal-project demos and owner-supplied design screenshots do not belong in a release.
+Use the npm registry and a Node-compatible package. Bun is a maintainer tool, not a consumer prerequisite. Current public examples are the explicitly fictional storefront, adoption and onboarding reports. Internal-project demos and owner-supplied design screenshots do not belong in a release.
 
-Current source candidate: **0.2.0 / M3**, unreleased and awaiting owner visual review. See [M3 verification](m3-visualizations.md) for the new funnel/donut contracts, package audit and technical checks. The public release remains 0.1.0.
+Current release: **0.2.0 / M3**, authorized by the owner after the preview review handoff; registry publication is in progress. See [M3 verification](m3-visualizations.md) for the new funnel/donut contracts, package audit and technical checks. The public release remains 0.1.0.
 
 Before publishing, run the repository typechecks, build, core tests and browser suite.
 

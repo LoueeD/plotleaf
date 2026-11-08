@@ -11,7 +11,7 @@ Use an installed `plotleaf` CLI or `npx plotleaf`. In an unpublished source chec
 
 ## Discover the contract
 
-Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components in 0.2.0 include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Public 0.1.0 does not support donut/funnel; use the matching source CLI while 0.2.0 is unreleased.
+Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components in 0.2.0 include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Donut and funnel require plotleaf 0.2.0 or newer; check the installed CLI's schema when using an older version.
 
 Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Filters, maps, image/sparkline cells and executable/custom components are future capabilities, not supported syntax.
 
