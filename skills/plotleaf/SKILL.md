@@ -11,9 +11,9 @@ Use an installed `plotleaf` CLI or `npx plotleaf`. In an unpublished source chec
 
 ## Discover the contract
 
-Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported initial components are `grid`, `metric`, `line`, `area`, `bar`, `table`, `column` and `callout`.
+Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components in 0.2.0 include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Public 0.1.0 does not support donut/funnel; use the matching source CLI while 0.2.0 is unreleased.
 
-Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Filters, maps, donut/funnel, image cells and executable/custom components are future capabilities, not supported syntax.
+Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Filters, maps, image/sparkline cells and executable/custom components are future capabilities, not supported syntax.
 
 ## Author prepared content
 
@@ -50,6 +50,18 @@ Literal attributes are quoted strings, decoded by the component schema. `::` is 
 - Numeric formats are `number`, `percent`, `percentage-points` and `currency:GBP` (validated ISO code). Percent uses ratios (`0.12` → 12%); percentage-points uses point values (`0.8` → 0.8 pt); currency uses major units. Whole currency amounts omit `.00`; nonzero cents retain two decimal places. Formatting uses `en-GB`.
 - Metrics, comparisons and business sentiment are supplied by the agent. An increase is not automatically positive. Comparison direction and sentiment are independent; both require comparison text when explicitly supplied. Numeric table changes can declare `higher-is-better` or `lower-is-better` semantics.
 - Include data period, provenance and limitations in the prose where they help readers assess the report. Do not invent findings or imply filters/refresh that the file does not provide.
+
+## Part-to-whole and stage views
+
+```markdown
+::donut{data="./plans.json" category="plan" value="teams" title="Teams by plan"}
+::funnel{data="./funnel.json" stage="stage" value="teams" total="baseline" share="share" status="status" title="Funnel by stage"}
+```
+
+- Donuts require at most eight unique, nonblank string categories and finite nonnegative values with a finite sum. Prepare mutually exclusive parts of one whole; group a tail into an explicit Other row before rendering if appropriate. Zero values remain in the legend/data; all-zero data is an empty state, never equal slices.
+- Funnel rows supply value, positive denominator and share explicitly, such as `{"stage":"Activated","teams":25,"baseline":100,"share":0.25,"status":"below-target"}`. Shares use ratios and must match value / total within 0.0005 (rounding to 0.1 percentage point). No baseline means an empty array, not a zero denominator.
+- Funnel stage names are unique nonblank strings, with at most 20 stages in source order. Each stage can have its own denominator; explain that choice in prose. Status values are `on-target`, `below-target`, `at-risk` or `neutral`. Omit the status mapping for neutral styling; the engine never infers business status. All mapped fields must differ.
+- Use the full-value data disclosures to check counts behind compact funnel labels. Both components retain readable HTML data without JavaScript. Keep the denominator of any nearby conversion KPI explicit when it differs from the funnel baseline.
 
 ## Validate, preview and export
 

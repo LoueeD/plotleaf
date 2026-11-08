@@ -164,7 +164,7 @@ For example, the reference's mixed count/percentage table can be expressed witho
 
 Its prepared `qoq` values are ratios such as `0.41`, displayed as `+41%`. The engine does not calculate quarter-over-quarter change from raw events.
 
-The first V1 visualization follow-up adds `donut` with `data`, `category`, `value`, `title`, plus a separately specified funnel/progress-stage component matching reference 01. Donut values must be nonnegative and categories unique; an all-zero dataset is an empty state. Funnel percentages/status are prepared rather than inferred from an arbitrary stage denominator. Both remain trusted renderers. There is no separate `section` or `divider` component.
+The implemented, unreleased [M3 visualization follow-up](m3-visualizations.md) adds `donut` with `data`, `category`, `value`, `title`, plus a native prepared funnel/progress-stage component matching reference 01. Donut values must be nonnegative and categories unique; an all-zero dataset is an empty state. Funnel percentages/status are prepared rather than inferred from an arbitrary stage denominator. Both are trusted renderers; M3 now specifies and validates their explicit prepared-data contracts. There is no separate `section` or `divider` component.
 
 ### Data semantics
 
@@ -471,7 +471,7 @@ Use a fixed fixture of four metrics, two 1,000-row charts (area with a target an
 | --- | --- | --- |
 | Warm CLI start to preview listening | Under 1 second, excluding package download/browser launch | Profile imports; defer chart loading for validate; remove runtime compilation. |
 | Valid edit to browser reload | Under 500 ms after save stabilization | Inspect watcher/debounce and compile cost before adding caches. |
-| Core chart modules + browser runtime | At most 200 KiB gzip, excluding CSS/fonts/data | Measure line/area/bar/target and the prospective donut module; compare Chart.js if needed. Maps and rich interaction get separate future budgets. |
+| Core chart modules + browser runtime | Original provisional 200 KiB; explicitly revised to 210 KiB for M3, excluding CSS/fonts/data | Measure line/area/bar/target and the prospective donut module; compare Chart.js if needed. Maps and rich interaction get separate future budgets. |
 | Chart-free report | No chart runtime in output | Select the prebuilt runtime only when required; no per-report bundling. |
 | Portability | Zero required network requests; real local-file browser pass | Remove fetch/module/chunk dependencies; do not substitute an HTTP-only test. |
 
@@ -490,7 +490,7 @@ Continue to exclude all explicitly out-of-scope platform features: hosting integ
 | Item | Current status | Next evidence |
 | --- | --- | --- |
 | Product principles / exclusions | Established by owner | Preserve in implementation reviews. |
-| Design authority | Three references preserved; owner-reviewed MVP published with responsive currency fixes | Every later renderer release needs owner visual review; onboarding filters/funnel remain unbuilt. |
+| Design authority | Three references preserved; owner-reviewed MVP published with responsive currency fixes | Every later renderer release needs owner visual review; onboarding filters remain unbuilt; M3 funnel/donut are implemented as an unreleased candidate pending owner review. |
 | Expanded capabilities | Staged roadmap delivered | Prioritize increments after the revised MVP; no filters/maps/reuse implementation claimed. |
 | Consumer runtime / development tools | Packed checks pass on Node 22/24/26; Bun 1.4.4 pinned | Platform matrix and measured remote results are recorded in [source/CI evidence](source-ci.md). |
 | Package asset bundler | Bun.build selected; Node ESM and browser IIFEs pass | Watch future output regressions; no competing bundler installed. |
@@ -498,7 +498,7 @@ Continue to exclude all explicitly out-of-scope platform features: hosting integ
 | Typechecker | Official TypeScript authoritative; TSRS passes same configurations with fast disabled | Matching-version conformance and repeated time/memory comparison remain open. |
 | Directive DSL / remark | Implemented with source-aware recovery lint | Extend fixtures when syntax changes; preserve literal-only language. |
 | Static renderer / no framework | Implemented; offline, theme and resize checks pass | Revisit only with a real future shared-input fixture. |
-| Modular ECharts SVG | Implemented; current bundle meets provisional budget | Prospective donut exceeds budget slightly; review before adding it. |
+| Modular ECharts SVG | Implemented; current bundle meets provisional budget | M3 includes donut at about 203.5 KiB gzip under an explicit 210 KiB build-enforced ceiling; see [M3 evidence](m3-visualizations.md). |
 | Native tables | Formatted columns and stable keyboard-accessible sorting implemented | Richer cells/subtotals follow dedicated contracts. |
 | Single-file HTML default | Offline `file://` interaction passes in both browsers under CSP | Larger assets and other export formats remain deferred. |
 | Data semantics and limits | Shared implementation/specification; adversarial fixtures pass | Validate future dataset kinds through separate schemas. |

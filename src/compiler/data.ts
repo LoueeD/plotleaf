@@ -2,7 +2,7 @@ import path from "node:path";
 import { open, realpath, stat } from "node:fs/promises";
 import type { Block, ComponentBlock } from "./ir.js";
 import type { ColumnProps } from "./registry.js";
-import type { Cell, Row } from "../shared/payload.js";
+import { funnelStatuses, type Cell, type Row } from "../shared/payload.js";
 import { Diagnostics } from "./diagnostics.js";
 import { limits } from "../shared/limits.js";
 
@@ -224,6 +224,8 @@ export class DataResolver {
         block.name === "line" ||
         block.name === "area" ||
         block.name === "bar" ||
+        block.name === "donut" ||
+        block.name === "funnel" ||
         block.name === "table"
       ) {
         const rows = await this.load(block.props.data, block);
@@ -237,6 +239,8 @@ export class DataResolver {
               "warning",
             );
           if (block.name === "table") this.resolveTable(block, rows);
+          else if (block.name === "donut" || block.name === "funnel")
+            this.resolveParts(block, rows);
           else this.resolveChart(block, rows);
         }
       }
@@ -318,6 +322,127 @@ export class DataResolver {
       Object.fromEntries(
         [...new Set([x, y])].map((key) => [key, row[key] as Cell]),
       ),
+    );
+  }
+
+  private resolveParts(
+    block: Extract<ComponentBlock, { name: "donut" | "funnel" }>,
+    rows: Row[],
+  ): void {
+    const props = block.props;
+    const maximum =
+      block.name === "donut" ? limits.donutSlices : limits.funnelStages;
+    const fields =
+      block.name === "donut"
+        ? [block.props.category, props.value]
+        : [
+            block.props.stage,
+            props.value,
+            block.props.total,
+            block.props.share,
+            ...(block.props.status ? [block.props.status] : []),
+          ];
+    const fail = (code: string, message: string, hint: string): void => {
+      this.diagnostics.add(
+        code,
+        `${props.data}: ${message}`,
+        block.position,
+        hint,
+      );
+    };
+    if (rows.length > maximum) {
+      fail(
+        "E_DATA_LIMIT",
+        `${block.name} supports at most ${maximum} rows.`,
+        "Prepare a smaller summary; plotleaf does not group or truncate data.",
+      );
+      return;
+    }
+    if (fields.some((field) => !this.field(rows, field, block))) return;
+    const seen = new Set<string>();
+    let sum = 0;
+    for (const [index, row] of rows.entries()) {
+      const name = row[fields[0]!];
+      const value = row[props.value];
+      if (typeof name !== "string" || !name.trim() || name.length > 1000) {
+        fail(
+          "E_DATA_TYPE",
+          `Row ${index + 1}: ${JSON.stringify(fields[0])} must be a nonblank string of at most 1000 characters.`,
+          "Supply a short, explicit label for every category or stage.",
+        );
+        return;
+      }
+      if (seen.has(name)) {
+        fail(
+          "E_DATA_ORDER",
+          `Row ${index + 1}: category/stage labels must be unique.`,
+          "Prepare distinct labels; source order is preserved.",
+        );
+        return;
+      }
+      seen.add(name);
+      if (typeof value !== "number" || value < 0) {
+        fail(
+          "E_DATA_TYPE",
+          `Row ${index + 1}: ${JSON.stringify(props.value)} must be a nonnegative number.`,
+          "Use finite JSON numbers, not nulls or numeric strings.",
+        );
+        return;
+      }
+      if (block.name === "donut") {
+        sum += value;
+        if (!Number.isFinite(sum)) {
+          fail(
+            "E_DATA_VALUE",
+            "The donut total exceeds the finite numeric range.",
+            "Prepare values in smaller units before rendering.",
+          );
+          return;
+        }
+      } else {
+        const total = row[block.props.total];
+        const share = row[block.props.share];
+        if (
+          typeof total !== "number" ||
+          total <= 0 ||
+          value > total ||
+          typeof share !== "number" ||
+          share < 0 ||
+          share > 1
+        ) {
+          fail(
+            "E_DATA_VALUE",
+            `Row ${index + 1}: total must be positive, value must not exceed total, and share must be a number from 0 to 1.`,
+            "Supply each stage's denominator and prepared ratio explicitly; use an empty array when no baseline exists.",
+          );
+          return;
+        }
+        if (Math.abs(share - value / total) > 0.0005 + Number.EPSILON) {
+          fail(
+            "E_DATA_VALUE",
+            `Row ${index + 1}: share does not match value / total.`,
+            "Prepare a ratio consistent with the displayed values; rounding to 0.1 percentage point is supported.",
+          );
+          return;
+        }
+        if (block.props.status) {
+          const status = row[block.props.status];
+          if (
+            typeof status !== "string" ||
+            !Object.hasOwn(funnelStatuses, status)
+          ) {
+            fail(
+              "E_DATA_VALUE",
+              `Row ${index + 1}: status must be ${Object.keys(funnelStatuses).join(", ")}.`,
+              "Supply business status explicitly, or omit the status property for neutral styling.",
+            );
+            return;
+          }
+        }
+      }
+    }
+    block.rows = rows.map((row) =>
+      Object.fromEntries(fields.map((field) => [field, row[field] as Cell])),
     );
   }
 

@@ -86,8 +86,14 @@ await writeFile(
 );
 for (const filename of ["base.js", "charts.js"]) {
   const bytes = await readFile(`dist/assets/${filename}`);
+  const gzipBytes = gzipSync(bytes).length;
+  const budget = filename === "charts.js" ? 210 * 1024 : 5 * 1024;
+  if (gzipBytes > budget)
+    throw new Error(
+      `${filename} exceeds its ${budget / 1024} KiB gzip budget (${gzipBytes} bytes).`,
+    );
   console.log(
-    `${filename}: ${(bytes.length / 1024).toFixed(1)} KiB raw, ${(gzipSync(bytes).length / 1024).toFixed(1)} KiB gzip`,
+    `${filename}: ${(bytes.length / 1024).toFixed(1)} KiB raw, ${(gzipBytes / 1024).toFixed(1)} KiB gzip`,
   );
 }
 console.log(

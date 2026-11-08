@@ -14,6 +14,7 @@ import type {
 import { formatValue, valueSentiment } from "../shared/format.js";
 import { parseDate } from "../compiler/data.js";
 import { serializeData } from "../shared/serialize.js";
+import { funnelStatuses } from "../shared/payload.js";
 
 type Child = Element | Text;
 const t = (value: unknown): Text => ({ type: "text", value: String(value) });
@@ -34,6 +35,7 @@ const serializer = unified()
       "figcaption",
       "button",
       "caption",
+      "meter",
     ],
     attributes: {
       ...defaultSchema.attributes,
@@ -53,9 +55,15 @@ const serializer = unified()
         "dataColumns",
         "dataSentiment",
         "dataTone",
+        "dataStatus",
+        "dataSlice",
       ],
       button: ["type", "disabled", "ariaLabel", "dataColumn"],
       section: ["className", "ariaLabel"],
+      meter: ["min", "max", "value", "className", "ariaLabel"],
+      ul: ["className", "role"],
+      ol: ["start", "className", "role"],
+      li: ["className", "dataStatus"],
       th: ["scope", "ariaSort", "className"],
       td: ["className", "dataRaw"],
     },
@@ -151,6 +159,21 @@ function table(
       head,
       body,
     ]),
+  ]);
+}
+
+function dataDisclosure(
+  rows: Row[],
+  columns: ColumnProps[],
+  title: string,
+  id: string,
+): Element {
+  return h("details", { className: ["chart-data"] }, [
+    h("summary", {}, [
+      t("View data"),
+      h("span", { className: ["visually-hidden"] }, [t(` for ${title}`)]),
+    ]),
+    table(rows, columns, title, `${id}-data`, false),
   ]);
 }
 
@@ -304,6 +327,10 @@ export function renderContent(report: Report): RenderedContent {
           ];
         case "column":
           return [];
+        case "funnel":
+          return renderFunnel(block, id);
+        case "donut":
+          return renderDonut(block, id);
         case "line":
         case "area":
         case "bar":
@@ -311,6 +338,232 @@ export function renderContent(report: Report): RenderedContent {
       }
     });
   }
+  function renderFunnel(
+    block: Extract<ComponentBlock, { name: "funnel" }>,
+    id: string,
+  ): Child[] {
+    const { stage, value, total, share, status, title, format } = block.props;
+    const rows = block.rows ?? [];
+    const columns: ColumnProps[] = [
+      { field: stage, label: label(stage), sign: "auto", semantics: "neutral" },
+      {
+        field: value,
+        label: label(value),
+        format,
+        sign: "auto",
+        semantics: "neutral",
+      },
+      {
+        field: total,
+        label: label(total),
+        format,
+        sign: "auto",
+        semantics: "neutral",
+      },
+      {
+        field: share,
+        label: "Share",
+        format: "percent",
+        sign: "auto",
+        semantics: "neutral",
+      },
+      ...(status
+        ? [
+            {
+              field: status,
+              label: "Status",
+              sign: "auto" as const,
+              semantics: "neutral" as const,
+            },
+          ]
+        : []),
+    ];
+    return [
+      h("figure", { className: ["chart", "funnel"] }, [
+        h("figcaption", { id: `${id}-title` }, [t(title)]),
+        ...(rows.length
+          ? [
+              h(
+                "ol",
+                { className: ["funnel-stages"], role: "list" },
+                rows.map((row) => {
+                  const state = status
+                    ? (row[status] as keyof typeof funnelStatuses)
+                    : "neutral";
+                  const rate = formatValue(row[share] as number, "percent");
+                  const amount = formatValue(
+                    row[value] as number,
+                    format,
+                    "auto",
+                    true,
+                  );
+                  const denominator = formatValue(
+                    row[total] as number,
+                    format,
+                    "auto",
+                    true,
+                  );
+                  return h(
+                    "li",
+                    { className: ["funnel-stage"], dataStatus: state },
+                    [
+                      h("div", { className: ["funnel-heading"] }, [
+                        h("span", { className: ["funnel-label"] }, [
+                          t(row[stage]),
+                        ]),
+                        h("span", { className: ["funnel-values"] }, [
+                          h("strong", {}, [t(rate)]),
+                          h("span", {}, [t(`${amount} / ${denominator}`)]),
+                        ]),
+                      ]),
+                      h(
+                        "meter",
+                        {
+                          min: "0",
+                          max: "1",
+                          value: String(row[share]),
+                          ariaLabel: `${row[stage]}: ${rate}, ${formatValue(row[value] as number, format)} of ${formatValue(row[total] as number, format)}${status ? `, ${funnelStatuses[state]}` : ""}`,
+                        },
+                        [t(rate)],
+                      ),
+                      ...(status
+                        ? [
+                            h("span", { className: ["funnel-status"] }, [
+                              t(funnelStatuses[state]),
+                            ]),
+                          ]
+                        : []),
+                    ],
+                  );
+                }),
+              ),
+            ]
+          : [
+              h("p", { className: ["empty-state"] }, [
+                t("No data to display."),
+              ]),
+            ]),
+        ...(rows.length
+          ? [
+              dataDisclosure(
+                rows.map((row) =>
+                  status
+                    ? {
+                        ...row,
+                        [status]:
+                          funnelStatuses[
+                            row[status] as keyof typeof funnelStatuses
+                          ],
+                      }
+                    : row,
+                ),
+                columns,
+                title,
+                id,
+              ),
+            ]
+          : []),
+      ]),
+    ];
+  }
+
+  function renderDonut(
+    block: Extract<ComponentBlock, { name: "donut" }>,
+    id: string,
+  ): Child[] {
+    const { category, value, title, format } = block.props;
+    const rows = block.rows ?? [];
+    const total = rows.reduce((sum, row) => sum + (row[value] as number), 0);
+    if (total > 0)
+      payload.charts.push({
+        id,
+        kind: "donut",
+        title,
+        format,
+        rows: rows.map((row) => [
+          row[category] as string,
+          row[value] as number,
+        ]),
+      });
+    return [
+      h("figure", { className: ["chart", "donut"] }, [
+        h("figcaption", { id: `${id}-title` }, [t(title)]),
+        ...(total > 0
+          ? [
+              h("div", { className: ["donut-layout"] }, [
+                h("div", {
+                  className: ["chart-plot", "donut-plot"],
+                  id,
+                  dataPlotleafChart: "",
+                  role: "img",
+                  ariaLabel: `${title}. Values and shares follow in the legend and data table.`,
+                }),
+                h(
+                  "ul",
+                  { className: ["donut-legend"], role: "list" },
+                  rows.map((row, index) =>
+                    h("li", {}, [
+                      h("span", { className: ["donut-key"] }, [
+                        h("span", {
+                          className: ["donut-swatch"],
+                          dataSlice: index + 1,
+                          ariaHidden: "true",
+                        }),
+                        h("span", {}, [t(row[category])]),
+                      ]),
+                      h("span", { className: ["donut-value"] }, [
+                        t(formatValue(row[value] as number, format)),
+                      ]),
+                      h("span", { className: ["donut-share"] }, [
+                        t(
+                          formatValue(
+                            (row[value] as number) / total,
+                            "percent",
+                          ),
+                        ),
+                      ]),
+                    ]),
+                  ),
+                ),
+              ]),
+            ]
+          : [
+              h("p", { className: ["empty-state"] }, [
+                t(
+                  rows.length
+                    ? "No non-zero values to display."
+                    : "No data to display.",
+                ),
+              ]),
+            ]),
+        ...(rows.length
+          ? [
+              dataDisclosure(
+                rows,
+                [
+                  {
+                    field: category,
+                    label: label(category),
+                    sign: "auto",
+                    semantics: "neutral",
+                  },
+                  {
+                    field: value,
+                    label: label(value),
+                    format,
+                    sign: "auto",
+                    semantics: "neutral",
+                  },
+                ],
+                title,
+                id,
+              ),
+            ]
+          : []),
+      ]),
+    ];
+  }
+
   function renderChart(
     block: Extract<ComponentBlock, { name: "line" | "area" | "bar" }>,
     id: string,
@@ -364,19 +617,7 @@ export function renderContent(report: Report): RenderedContent {
                 t("No data to display."),
               ]),
             ]),
-        ...(rows.length
-          ? [
-              h("details", { className: ["chart-data"] }, [
-                h("summary", {}, [
-                  t("View data"),
-                  h("span", { className: ["visually-hidden"] }, [
-                    t(` for ${title}`),
-                  ]),
-                ]),
-                table(rows, columns, title, `${id}-data`, false),
-              ]),
-            ]
-          : []),
+        ...(rows.length ? [dataDisclosure(rows, columns, title, id)] : []),
       ]),
     ];
   }

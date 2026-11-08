@@ -1,6 +1,6 @@
 import "./base.js";
 import * as echarts from "echarts/core";
-import { BarChart, LineChart } from "echarts/charts";
+import { BarChart, LineChart, PieChart } from "echarts/charts";
 import {
   AriaComponent,
   GridComponent,
@@ -14,6 +14,7 @@ import { formatDate, formatValue } from "../shared/format.js";
 echarts.use([
   BarChart,
   LineChart,
+  PieChart,
   GridComponent,
   TooltipComponent,
   MarkLineComponent,
@@ -34,6 +35,54 @@ function options(data: ChartPayload): echarts.EChartsCoreOption {
   const styles = getComputedStyle(document.documentElement);
   const token = (name: string): string =>
     styles.getPropertyValue(`--${name}`).trim();
+  if (data.kind === "donut")
+    return {
+      animation: false,
+      color: Array.from({ length: 8 }, (_, index) =>
+        token(`slice-${index + 1}`),
+      ),
+      textStyle: { fontFamily: styles.fontFamily, fontSize: 12 },
+      aria: {
+        enabled: true,
+        label: {
+          description: `${data.title}. Values and shares are available in the adjacent legend and data table.`,
+        },
+      },
+      tooltip: {
+        trigger: "item",
+        renderMode: "richText",
+        confine: true,
+        backgroundColor: token("tooltip"),
+        borderColor: token("rule"),
+        borderWidth: 1,
+        textStyle: {
+          color: token("ink"),
+          fontFamily: styles.fontFamily,
+          fontSize: 13,
+        },
+        valueFormatter: (value: unknown) =>
+          typeof value === "number" ? formatValue(value, data.format) : "—",
+      },
+      series: [
+        {
+          type: "pie",
+          radius: ["58%", "88%"],
+          center: ["50%", "50%"],
+          clockwise: true,
+          startAngle: 90,
+          stillShowZeroSum: false,
+          label: { show: false },
+          labelLine: { show: false },
+          itemStyle: {
+            borderColor: token("page"),
+            borderWidth: 2,
+            borderRadius: 2,
+          },
+          emphasis: { scale: false, itemStyle: { opacity: 0.8 } },
+          data: data.rows.map(([name, value]) => ({ name, value })),
+        },
+      ],
+    };
   const date = data.xType === "date";
   const category = data.xType === "category";
   const duration = date

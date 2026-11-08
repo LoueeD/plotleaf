@@ -36,7 +36,7 @@ Controls use restrained outlines or a pale grouped surface. The active segment i
 | Counts, percentages and changes in one table | Optional explicit column children, labels, formats, sign display and declared value semantics. | Weekend MVP; advanced cells later. |
 | Narrative findings | Ordinary Markdown headings, paragraphs and emphasis, without wrapping every finding in a card. | Weekend MVP. |
 | Region segments/date control | Shared input state, explicit bindings, reset/empty states and correct cross-component updates. | V1 interaction increment. |
-| Funnel by stage | Prepared numerator/denominator/percentage/status per stage, with accessible labels. Do not guess the denominator or target status. | V1 visualization increment. |
+| Funnel by stage | Prepared numerator/denominator/percentage/status per stage, with accessible labels. Do not guess the denominator or target status. | M3 implemented; owner review pending. |
 | Breadcrumbs | Visual context only; they do not require navigation, routing or a multi-page application. | No engine feature implied. |
 
 The requested sparklines, image cells, subtotals, maps and reusable components are product requirements described in [the roadmap](product-roadmap.md). They are not visible evidence about styling in these screenshots.
@@ -68,6 +68,6 @@ The first renderer uses a system sans-serif stack (no remote font dependency), a
 
 The storefront and adoption examples exercise the analytical and narrative compositions. Playwright captures `desktop-light.png`, `desktop-dark.png` and `mobile-dark.png` under `test-results/` and verifies offline output, theme changes, keyboard sorting and local table overflow. These are generated QA artifacts, not npm assets. [Implementation results](phase-zero-results.md) records checks and limitations.
 
-The full onboarding reference is not implemented: filters and funnel remain later increments. Owner approval of exact typography and visual calibration is still a review step, separate from the automated checks.
+M3 adds the prepared funnel/progress component and a fictional onboarding composition. Per-stage status text supplements colour; exact values remain available through native data disclosures. Donut is an extension using the same typography, blue-led category palette and theme tokens. The full onboarding reference is not implemented: functional filters remain a later increment. Owner approval of exact typography and visual calibration is still a review step, separate from the automated checks.
 
 Metric amounts must stay on one visible line at representative widths; preserving currency, separators and decimals takes priority over retaining four columns. Check the full storefront currency at 320, 375, 540, 640, 768, 820, 1000, 1094, 1280, 1281, 1366 and 1440 px. Do not treat a no-page-overflow check as proof that the value is readable: verify its text bounds and that no local scroll is needed for the example amount. Owner manual review remains a release prerequisite.

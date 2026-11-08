@@ -244,6 +244,8 @@ describe("report compiler", () => {
       "line",
       "area",
       "bar",
+      "donut",
+      "funnel",
       "table",
       "column",
       "callout",

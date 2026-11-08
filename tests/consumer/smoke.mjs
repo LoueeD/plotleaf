@@ -173,11 +173,48 @@ try {
   assert(!html.includes(root));
   assert(!html.includes(directory));
   assert(!html.includes("/__plotleaf/events"));
-  preview = spawn(process.execPath, [cli, "dev", report, "--no-open"], {
-    cwd: directory,
-    env,
-    stdio: ["ignore", "pipe", "pipe"],
-  });
+  const onboarding = path.join(directory, "onboarding");
+  await cp(
+    path.join(directory, "node_modules/plotleaf/examples/onboarding"),
+    onboarding,
+    { recursive: true },
+  );
+  const onboardingReport = path.join(onboarding, "report.md");
+  const onboardingValidation = JSON.parse(
+    run(process.execPath, [
+      npxCli,
+      "--no-install",
+      "plotleaf",
+      "validate",
+      onboardingReport,
+      "--json",
+    ]),
+  );
+  assert.equal(onboardingValidation.valid, true);
+  const onboardingOutput = path.join(directory, "onboarding.html");
+  run(process.execPath, [
+    npxCli,
+    "--no-install",
+    "plotleaf",
+    "build",
+    onboardingReport,
+    "--out",
+    onboardingOutput,
+  ]);
+  const onboardingHtml = await readFile(onboardingOutput, "utf8");
+  assert(onboardingHtml.includes('<meter min="0" max="1"'));
+  assert(onboardingHtml.includes('"kind":"donut"'));
+  assert(onboardingHtml.includes("At risk"));
+  assert(!onboardingHtml.includes(onboarding));
+  preview = spawn(
+    process.execPath,
+    [cli, "dev", onboardingReport, "--no-open"],
+    {
+      cwd: directory,
+      env,
+      stdio: ["ignore", "pipe", "pipe"],
+    },
+  );
   const url = await new Promise((resolve, reject) => {
     let output = "";
     const timer = setTimeout(
@@ -203,8 +240,8 @@ try {
       }
     });
   });
-  assert((await (await fetch(url)).text()).includes("Storefront Overview"));
-  assert.equal((await fetch(url + "/orders.json")).status, 404);
+  assert((await (await fetch(url)).text()).includes("PLG Onboarding"));
+  assert.equal((await fetch(url + "/funnel.json")).status, 404);
   const metrics = {
     node: process.versions.node,
     tarballBytes: audited.bytes,

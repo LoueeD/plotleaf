@@ -12,7 +12,9 @@ A report is one Markdown file, optionally accompanied by local JSON datasets. No
 
 The initial MVP includes validation, live preview/reload, self-contained HTML export and a generated component specification. All bundled examples use fictional data.
 
-Implemented components: responsive grids, metrics/comparisons, line/area/bar charts, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Filters, rich table cells, maps, donut/funnel and reusable compositions are planned increments.
+Main contains the unreleased **0.2.0 / M3 visualization candidate**. npm currently provides `0.1.0`; use a source build to try the new components while owner visual review is pending.
+
+Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Filters, rich table cells, maps and reusable compositions remain planned increments.
 
 ## Quick start
 
@@ -77,7 +79,20 @@ Attributes are literal values, not JavaScript. Keep leaf directives on one line 
 
 Numbers, comparisons, trends and findings are prepared by the author. `percent` uses ratios (`0.12` → 12%); `percentage-points` uses point values (`0.8` → 0.8 pt); `currency:GBP` uses major units. Whole currency amounts omit `.00`; nonzero cents retain two decimal places. Formatting is `en-GB`; date display is UTC. An increase does not imply positive business sentiment.
 
-Use `schema` for current property schemas, child rules and input limits. The installed package includes `schema/components.json`, generated from the validation registry, and `skills/plotleaf/SKILL.md`, a reusable report-authoring guide. Public examples under `examples/storefront/` and `examples/adoption/` contain only fictional data.
+Use `schema` for current property schemas, child rules and input limits. The installed package includes `schema/components.json`, generated from the validation registry, and `skills/plotleaf/SKILL.md`, a reusable report-authoring guide. Public examples under `examples/storefront/`, `examples/adoption/` and `examples/onboarding/` contain only fictional data.
+
+## Donut and funnel
+
+```markdown
+::donut{data="./plans.json" category="plan" value="teams" title="Teams by plan"}
+::funnel{data="./funnel.json" stage="stage" value="teams" total="baseline" share="share" status="status" title="Funnel by stage"}
+```
+
+Donuts accept up to eight unique, nonblank categories with nonnegative numeric values. Prepare mutually exclusive parts of one whole. Zero values stay in the legend/table; an all-zero dataset shows an empty state. Categories remain in source order and are never grouped automatically.
+
+Funnel data supplies each stage explicitly, for example `{"stage":"Activated","teams":25,"baseline":100,"share":0.25,"status":"below-target"}`. `total` maps the positive denominator; `share` maps a ratio from 0 to 1 and must agree with `value / total` within 0.0005. Status is optional and is never inferred: supported values are `on-target`, `below-target`, `at-risk` and `neutral`. Stages stay in source order, with a limit of 20. Native meters, text status and full data disclosures work without JavaScript.
+
+Try the fictional `examples/onboarding/report.md` from a source checkout. See [M3 contracts and tradeoffs](https://github.com/LoueeD/plotleaf/blob/main/docs/m3-visualizations.md).
 
 ## Data and security boundaries
 

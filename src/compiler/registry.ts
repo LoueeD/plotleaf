@@ -1,5 +1,6 @@
 import * as z from "zod";
 import { limits } from "../shared/limits.js";
+import { funnelStatuses } from "../shared/payload.js";
 
 const text = z.string().min(1).max(1000);
 const format = z
@@ -25,7 +26,16 @@ const line = z.strictObject({
 export const registry = {
   grid: {
     forms: ["container"],
-    children: ["metric", "line", "area", "bar", "table", "callout"],
+    children: [
+      "metric",
+      "line",
+      "area",
+      "bar",
+      "donut",
+      "funnel",
+      "table",
+      "callout",
+    ],
     description: "A responsive row of one to four components.",
     schema: z.strictObject({
       columns: z.number().int().min(1).max(4).default(2),
@@ -70,6 +80,57 @@ export const registry = {
     schema: z.strictObject(chart),
     example:
       '::bar{data="./errors.json" x="category" y="count" title="Errors by category"}',
+  },
+  donut: {
+    forms: ["leaf"],
+    children: [],
+    description:
+      "A part-to-whole donut with a readable legend and native data table.",
+    schema: z.strictObject({
+      data: text,
+      category: text,
+      value: text,
+      title: text,
+      format: format.default("number"),
+    }),
+    dataRules: {
+      category:
+        "Unique nonblank strings of at most 1000 characters; source order is preserved.",
+      value:
+        "Finite nonnegative numbers with a finite sum. Nulls and numeric strings are invalid. All-zero values show an empty state.",
+      maximumRows: limits.donutSlices,
+    },
+    example:
+      '::donut{data="./plans.json" category="plan" value="teams" title="Teams by plan"}',
+  },
+  funnel: {
+    forms: ["leaf"],
+    children: [],
+    description:
+      "Ordered stage/progress rows with prepared values, denominators, shares and optional explicit status. Works without JavaScript.",
+    schema: z.strictObject({
+      data: text,
+      stage: text,
+      value: text,
+      total: text,
+      share: text,
+      status: text.optional(),
+      title: text,
+      format: format.default("number"),
+    }),
+    dataRules: {
+      stage:
+        "Unique nonblank strings of at most 1000 characters; source order is preserved.",
+      value: "Finite nonnegative number no greater than its row's total.",
+      total:
+        "Finite positive denominator supplied per row. No denominator is inferred from adjacent stages.",
+      share:
+        "Prepared ratio from 0 to 1, matching value / total to within 0.0005 (rounding to 0.1 percentage point).",
+      status: Object.keys(funnelStatuses),
+      maximumRows: limits.funnelStages,
+    },
+    example:
+      '::funnel{data="./funnel.json" stage="stage" value="teams" total="baseline" share="share" status="status" title="Funnel by stage"}',
   },
   table: {
     forms: ["leaf", "container"],
@@ -141,6 +202,7 @@ export function componentSpec() {
           children: entry.children,
           props: z.toJSONSchema(entry.schema),
           example: entry.example,
+          ...("dataRules" in entry ? { dataRules: entry.dataRules } : {}),
         },
       ]),
     ),
@@ -153,6 +215,8 @@ export function componentSpec() {
       "Dataset fields are literal own-property keys, not expressions.",
       "Charts preserve source order; date/number x values must increase.",
       "Line/area null y values create gaps; bar null y values are invalid.",
+      "Donut category/value fields must differ; category count is bounded, and all-zero values do not create equal slices.",
+      "Funnel fields must differ; shares and denominators are supplied, validated and displayed per row, with no sorting or status inference.",
       "Filters, maps, images, nested data and executable components are not supported in this release.",
     ],
   };
@@ -185,6 +249,20 @@ export function decodeProps(
     };
   const props = result.data;
   const errors: string[] = [];
+  if (name === "donut" || name === "funnel") {
+    const fields = Object.entries(props)
+      .filter(
+        ([key, value]) =>
+          ["category", "stage", "value", "total", "share", "status"].includes(
+            key,
+          ) && value !== undefined,
+      )
+      .map(([, value]) => value);
+    if (new Set(fields).size !== fields.length)
+      errors.push(
+        `${name} field properties must reference different dataset fields.`,
+      );
+  }
   if (
     "format" in props &&
     props.format?.startsWith("currency:") &&

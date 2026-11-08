@@ -1,0 +1,30 @@
+[
+  {
+    "stage": "Visited",
+    "teams": 41200,
+    "baseline": 41200,
+    "share": 1.0,
+    "status": "on-target"
+  },
+  {
+    "stage": "Signed up",
+    "teams": 12480,
+    "baseline": 41200,
+    "share": 0.3029126213592233,
+    "status": "on-target"
+  },
+  {
+    "stage": "Activated",
+    "teams": 7612,
+    "baseline": 41200,
+    "share": 0.18475728155339805,
+    "status": "below-target"
+  },
+  {
+    "stage": "Converted",
+    "teams": 1284,
+    "baseline": 41200,
+    "share": 0.03116504854368932,
+    "status": "at-risk"
+  }
+]

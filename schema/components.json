@@ -9,6 +9,8 @@
     "datasets": 64,
     "rows": 100000,
     "chartRows": 10000,
+    "donutSlices": 8,
+    "funnelStages": 20,
     "tableRows": 1000,
     "tableColumns": 40
   },
@@ -32,6 +34,8 @@
         "line",
         "area",
         "bar",
+        "donut",
+        "funnel",
         "table",
         "callout"
       ],
@@ -286,6 +290,135 @@
       },
       "example": "::bar{data=\"./errors.json\" x=\"category\" y=\"count\" title=\"Errors by category\"}"
     },
+    "donut": {
+      "description": "A part-to-whole donut with a readable legend and native data table.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "format": {
+            "default": "number",
+            "type": "string",
+            "pattern": "^(number|percent|percentage-points|currency:[A-Z]{3})$"
+          }
+        },
+        "required": [
+          "data",
+          "category",
+          "value",
+          "title",
+          "format"
+        ],
+        "additionalProperties": false
+      },
+      "example": "::donut{data=\"./plans.json\" category=\"plan\" value=\"teams\" title=\"Teams by plan\"}",
+      "dataRules": {
+        "category": "Unique nonblank strings of at most 1000 characters; source order is preserved.",
+        "value": "Finite nonnegative numbers with a finite sum. Nulls and numeric strings are invalid. All-zero values show an empty state.",
+        "maximumRows": 8
+      }
+    },
+    "funnel": {
+      "description": "Ordered stage/progress rows with prepared values, denominators, shares and optional explicit status. Works without JavaScript.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "stage": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "total": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "share": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "status": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "format": {
+            "default": "number",
+            "type": "string",
+            "pattern": "^(number|percent|percentage-points|currency:[A-Z]{3})$"
+          }
+        },
+        "required": [
+          "data",
+          "stage",
+          "value",
+          "total",
+          "share",
+          "title",
+          "format"
+        ],
+        "additionalProperties": false
+      },
+      "example": "::funnel{data=\"./funnel.json\" stage=\"stage\" value=\"teams\" total=\"baseline\" share=\"share\" status=\"status\" title=\"Funnel by stage\"}",
+      "dataRules": {
+        "stage": "Unique nonblank strings of at most 1000 characters; source order is preserved.",
+        "value": "Finite nonnegative number no greater than its row's total.",
+        "total": "Finite positive denominator supplied per row. No denominator is inferred from adjacent stages.",
+        "share": "Prepared ratio from 0 to 1, matching value / total to within 0.0005 (rounding to 0.1 percentage point).",
+        "status": [
+          "on-target",
+          "below-target",
+          "at-risk",
+          "neutral"
+        ],
+        "maximumRows": 20
+      }
+    },
     "table": {
       "description": "A semantic sortable table, with inferred or explicitly formatted columns.",
       "forms": [
@@ -411,6 +544,8 @@
     "Dataset fields are literal own-property keys, not expressions.",
     "Charts preserve source order; date/number x values must increase.",
     "Line/area null y values create gaps; bar null y values are invalid.",
+    "Donut category/value fields must differ; category count is bounded, and all-zero values do not create equal slices.",
+    "Funnel fields must differ; shares and denominators are supplied, validated and displayed per row, with no sorting or status inference.",
     "Filters, maps, images, nested data and executable components are not supported in this release."
   ]
 }

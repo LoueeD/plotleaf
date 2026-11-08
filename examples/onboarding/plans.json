@@ -1,0 +1,14 @@
+[
+  {
+    "plan": "Pro",
+    "teams": 5100
+  },
+  {
+    "plan": "Team",
+    "teams": 1900
+  },
+  {
+    "plan": "Free",
+    "teams": 612
+  }
+]

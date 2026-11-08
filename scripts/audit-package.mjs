@@ -23,6 +23,10 @@ const approvedFiles = [
   "examples/adoption/report.md",
   "examples/adoption/adoption.json",
   "examples/adoption/plans.json",
+  "examples/onboarding/report.md",
+  "examples/onboarding/funnel.json",
+  "examples/onboarding/plans.json",
+  "examples/onboarding/signups.json",
   "skills/plotleaf/SKILL.md",
   "package.json",
 ]

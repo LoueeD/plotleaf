@@ -6,6 +6,8 @@ export const limits = {
   datasets: 64,
   rows: 100_000,
   chartRows: 10_000,
+  donutSlices: 8,
+  funnelStages: 20,
   tableRows: 1000,
   tableColumns: 40,
 } as const;

@@ -1,0 +1,26 @@
+{
+  "recorded": "2026-11-08",
+  "node": "22.23.3",
+  "bun": "1.4.4",
+  "definition": "Logical JavaScript bytes and separate Node/Bun node:zlib gzipSync measurements; build ceilings use Bun compression. Excludes CSS, notices and report data. No runtime speed or cross-machine performance claim.",
+  "assets": {
+    "base.js": {
+      "bytes": 970,
+      "budgetGzipBytes": 5120,
+      "m1Bytes": 970,
+      "nodeGzipBytes": 580,
+      "m1NodeGzipBytes": 580,
+      "bunGzipBytes": 580,
+      "m1BunGzipBytes": 580
+    },
+    "charts.js": {
+      "bytes": 601227,
+      "budgetGzipBytes": 215040,
+      "m1Bytes": 580985,
+      "nodeGzipBytes": 206411,
+      "m1NodeGzipBytes": 198916,
+      "bunGzipBytes": 208336,
+      "m1BunGzipBytes": 200782
+    }
+  }
+}
