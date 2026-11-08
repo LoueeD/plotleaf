@@ -1,6 +1,6 @@
 {
   "recorded": "2026-11-08",
-  "status": "M4 complete and owner-approved; final 0.3.0 release verification/publication in progress",
+  "status": "M4 complete; plotleaf 0.3.0 published and public npm/npx verification passed",
   "local_platform": "macOS arm64",
   "tooling": {
     "bun": "1.4.4",
@@ -128,6 +128,35 @@
       "sparkline_cells": 4
     },
     "verification": "Offline/source-removed composition check in Chromium/WebKit, both themes and 375/1440 px; actual HTTP preview also inspected.",
-    "review": "Owner visual review approved; publication authorized after final M4 validation."
+    "review": "Owner visual review approved; final release published and verified."
+  },
+  "release": {
+    "version": "0.3.0",
+    "source_commit": "2f7a36877996439948f75f4f375a747c345f5c92",
+    "tag": "v0.3.0",
+    "ci_url": "https://github.com/LoueeD/plotleaf/actions/runs/42535403949",
+    "jobs_passed": 11,
+    "files": 29,
+    "archive_bytes": 260718,
+    "unpacked_bytes": 799934,
+    "integrity": "sha512-haFz9z0SpuFx9+0P8Skt59DIC0l3W7FqC2b08ssYx6HJj1N3lAN4st3Mr8MoB6gxuPF4i4RjV9Jsa16/Jcenzw==",
+    "reviewed_compiled_assets_unchanged": true,
+    "local_ci_public_archives_identical": true,
+    "npm_latest": "0.3.0",
+    "public_archive_consumer": "passed",
+    "fresh_npx": {
+      "version": "0.3.0",
+      "invocation": "npx --yes plotleaf (unversioned)",
+      "freshCache": true,
+      "emptyUserAndGlobalConfig": true,
+      "bunOnPath": false,
+      "cwdOutsideRepository": true,
+      "schema": true,
+      "validation": true,
+      "exportBytes": 665535,
+      "metricComparisons": 7,
+      "imageCells": 4,
+      "sparklineCells": 4
+    }
   }
 }

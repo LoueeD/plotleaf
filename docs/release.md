@@ -1,10 +1,8 @@
 # Releasing plotleaf
 
-Use the npm registry and a Node-compatible package. Bun is a maintainer tool, not a consumer prerequisite. Current public examples are the explicitly fictional storefront, adoption and onboarding reports. Internal-project demos and owner-supplied design screenshots do not belong in a release.
+Use the npm registry and a Node-compatible package. Bun is a maintainer tool, not a consumer prerequisite. Current public examples are the explicitly fictional storefront, adoption, onboarding and catalogue reports, plus their cumulative showcase. Internal-project demos and owner-supplied design screenshots do not belong in a release.
 
-Current public release: **0.2.0 / M3**, published on 8 November 2026 after owner authorization following the preview review handoff. See the [release record](releases/0.2.0.md). See [M3 verification](m3-visualizations.md) for the new funnel/donut contracts, package audit and technical checks. Use a new version for every subsequent publication.
-
-Main now contains the unreleased **0.3.0 / M4 candidate**, adding the explicitly fictional catalogue and reviewed original PNG/JPEG illustrations. The [M4 evidence](m4-rich-tables.md) tracks implementation and completed owner review. The owner has now explicitly authorized publication after final M4 validation; registry success is still pending.
+Current public release: **0.3.0 / M4**, published on 8 November 2026 after owner visual approval and final M4 acceptance validation. See the [release record](releases/0.3.0.md) for exact source, CI, archive integrity and public verification. [M4 contracts](m4-rich-tables.md) cover local image/sparkline cells and the cumulative review report. Use a new version for every subsequent publication.
 
 Before publishing, run the repository typechecks, build, core tests and browser suite.
 
