@@ -1,14 +1,14 @@
 # Product capabilities and staged delivery
 
-Updated: 7 November 2026. **The initial MVP is published as `plotleaf@0.1.0`.** Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [release record](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
+Updated: 8 November 2026. **The initial MVP is published as `plotleaf@0.1.0`.** Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [release record](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
 
 ## Delivery position
 
 Delivered: Markdown/local JSON compilation, responsive grids, prepared metrics/comparisons, line/area/bar charts and literal targets, formatted/sortable tables, callouts, validation/schema discovery, live reload, deterministic single-file offline HTML and the authoring skill. The published renderer includes the owner-reviewed currency wrapping/whole-amount formatting fixes.
 
-Evidence: 46 core tests, 14 Chromium/WebKit checks, audited package checks on Node 22/24/26 and a clean public npm/npx install without Bun. This evidence is local to macOS arm64. A public source repository, the first remote CI run and Windows verification remain outstanding. The supplied onboarding reference is only partly delivered: its filters and funnel do not exist yet.
+The original local evidence covers 46 core tests, 14 Chromium/WebKit checks, audited package checks on Node 22/24/26 and a clean public npm/npx install without Bun on macOS arm64. The [source/CI foundation](source-ci.md) now adds public source, immutable release traceability and remote Linux/Windows verification; its evidence record tracks the platform results. The supplied onboarding reference is only partly delivered: its filters and funnel do not exist yet.
 
-**Recommended next milestone: release foundation**, then small visualization/table increments, prepared-view interactions, reuse and geography. The initial package is shipped; the broader V1 capability set is still in progress. A planning update does not change the published `0.1.0` artifact.
+**Recommended next milestone: small visualization/table increments**, then prepared-view interactions, reuse and geography. The initial package is shipped; the broader V1 capability set is still in progress. A planning update does not change the published `0.1.0` artifact.
 
 ## Product direction
 
@@ -28,7 +28,7 @@ Treat these as the intended product direction. The staging below keeps the first
 | --- | --- | --- | --- |
 | Phase Zero core contract | Delivered; follow-ups open | Grammar, registry, export/security/runtime checks, measurements and design references. | Results are recorded. Matching-version TSRS evaluation and the future input-state fixture remain open; neither is claimed complete. |
 | Initial MVP | Published: `0.1.0` | Markdown, 1–4-column grids, prepared metrics/comparisons, line/area/bar and targets, formatted/sortable tables, callouts; validate/preview/build/schema and authoring guide. | Public npm/npx verification, offline browser checks, owner visual review and exact-archive integrity recorded. |
-| Release foundation | Next, recommended | Public source repository, source/release traceability, remote Linux CI and Windows verification. | Source for the published version is inspectable; existing CI passes remotely; platform gaps are resolved or documented accurately. |
+| Release foundation | Delivered: 8 November 2026 | Public source repository, immutable `v0.1.0` baseline, pinned CI, shared-archive Node 22/24/26 consumers on Linux/Windows and platform core/browser checks. | [Source/CI evidence](source-ci.md) records reproduction, actual platform results and limitations. |
 | V1 visualization/table increments | Planned; not started | Deliver donut/funnel in a small slice, then safe image/sparkline cells in separate changes. Existing scalar formats/sorting are already shipped. | Prepared data contracts, accessible alternatives, bounded local assets and owner-reviewed output. Resolve the donut bundle budget before including its runtime. |
 | V1 interaction increment | Planned; contract fixture first | Dropdown, text/number input, toggle, segmented choice and supported date-range selection; explicit bindings, reset/no-match states and prepared views. | One real region/range transition is specified before implementation. Bound metrics, charts, funnel, tables and alternatives update coherently offline. |
 | V1 reuse increment | Planned | Versioned declarative compositions, typed props and reusable definitions in companion JSON. Prepared subtotal rows with explicit scope. | One composition is reused in two reports; cycles/unknown props fail; exports work without definition files and subtotals retain their declared scope. |
@@ -39,15 +39,9 @@ The V1 increments are ordered defaults; their estimates must follow the MVP resu
 
 ## Next delivery slice
 
-Keep the next batch focused on release foundation:
+The source/CI foundation is delivered, with all 11 remote jobs passing on Linux/Windows. Public source is [LoueeD/plotleaf](https://github.com/LoueeD/plotleaf), and `v0.1.0` reproduces the published artifact. Source/issue links are on main for a future package version. Keep the manual owner visual-review step and exact-tarball audit/consumer checks for renderer releases. Continue using fictional examples only; a plan or CI change does not require npm publication.
 
-- Establish the public source repository and a reproducible source baseline for `0.1.0`; repository ownership/name still needs to be decided. The current checkout has no Git repository or remote.
-- Run the existing Linux CI configuration remotely: official/candidate typechecks, deterministic generated files, Node 22/24/26 consumer checks and Chromium/WebKit export/preview checks. Fix actual failures before adding tooling.
-- Exercise CLI install, path containment, build/export, watch/recovery and shutdown on Windows. Extend the CI platform coverage after those checks are made portable.
-- Add the source/issue links to package metadata once real URLs exist. Any npm update uses a new version; do not republish `0.1.0` or publish merely because this plan changed.
-- Keep the existing manual visual-review step and exact-tarball audit/consumer checks for renderer releases. Continue using fictional examples only.
-
-Once that foundation is in place, the first feature slice should be funnel/progress and donut with narrow registry/data contracts. Funnel values/denominators/status remain author-prepared. The prospective donut runtime measured about 203.2 KiB gzip against a 200 KiB target; settle selective runtime delivery or an explicit budget revision before shipping it. Do not add a bundler abstraction or map library to solve that small gap.
+The first feature slice should be funnel/progress and donut with narrow registry/data contracts. Funnel values/denominators/status remain author-prepared. The prospective donut runtime measured about 203.2 KiB gzip against a 200 KiB target; settle selective runtime delivery or an explicit budget revision before shipping it. Do not add a bundler abstraction or map library to solve that small gap.
 
 The interaction contract can be prepared independently as a small documented fixture: one region/range transition with ready-to-render metric, series, funnel and table values. Implement one native selector and its prepared-view bindings before expanding to every control type. Rich table cells should land in separate changes; images/sparklines do not require a full data-grid engine. Dates and effort estimates are not committed until these slices are scoped against the code and platform results.
 

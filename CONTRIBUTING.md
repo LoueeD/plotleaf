@@ -34,7 +34,7 @@ The [verification workflow](.github/workflows/ci.yml) runs on pushes to `main`, 
 | Offline `file://` reports, tooltips, sorting, themes, narrow currency layout, preview recovery | Linux and Windows | Chromium and WebKit / Node 22 |
 | `v0.1.0` source build compared byte for byte with the public archive and pinned SHA-512 | Linux | Bun 1.4.4 / Node 22 |
 
-The Linux build creates one audited archive used by all six consumer jobs. Browser and Windows core jobs use the same prebuilt assets. CI uploads the package audit and browser failure artifacts for inspection. A POSIX named-pipe test is explicitly skipped on Windows; symlink/junction and hardlink protections remain tested there. Windows process termination differs from POSIX signals, so the test harness accepts Node's forced termination status there.
+The Linux build creates one audited archive used by all six consumer jobs. Browser and Windows core jobs use the same prebuilt assets. CI uploads the package audit and browser failure artifacts for inspection. A POSIX named-pipe test is explicitly skipped on Windows; symlink/junction and hardlink protections remain tested there. Windows process termination differs from POSIX signals, so the test harness accepts forced termination as an exit status or a SIGTERM event and asserts that the server has closed.
 
 ## Source and release traceability
 

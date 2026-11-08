@@ -14,9 +14,9 @@ The **first MVP is published as `plotleaf@0.1.0`**. Read [the implementation res
 
 Implemented: safe Markdown directives, local JSON validation, responsive grids, metrics/comparisons, line/area/bar charts with literal targets, formatted/sortable tables, callouts, live preview/reload, self-contained HTML export, component specifications and a report-authoring skill. Filters, maps, donut/funnel, rich table cells and reusable compositions remain future increments. The public package is available through `npx plotleaf`.
 
-Distinguish measured results, configured CI and unrun platform checks. The local evidence covers macOS arm64, Node 22/24/26 and Chromium/WebKit. CI is configured but has not run remotely. Keep this section synchronized with delivered scope.
+Distinguish measured results, configured CI and unrun platform checks. The local evidence covers macOS arm64, Node 22/24/26 and Chromium/WebKit. Remote Linux/Windows CI passes all 11 jobs, including six Node consumer jobs and both browser suites; see [source/CI evidence](docs/source-ci.md) for counts and limitations. Keep this section synchronized with delivered scope.
 
-The next recommended delivery milestone is release foundation: public source/release traceability, the first remote CI run and Windows verification. Feature increments remain planned in the [delivery roadmap](docs/product-roadmap.md), beginning with small visualization/table slices and an explicit prepared-view fixture before reader inputs. These are recommendations, not completed work or committed release dates.
+The source/CI foundation is implemented: [public repository](https://github.com/LoueeD/plotleaf), immutable `v0.1.0` source baseline, pinned read-only CI, one audited archive tested across Linux/Windows on Node 22/24/26, platform core tests and offline Chromium/WebKit checks. Consult [verification evidence](docs/source-ci.md) before claiming platform results. Feature increments remain planned in the [delivery roadmap](docs/product-roadmap.md), beginning with small visualization/table slices and an explicit prepared-view fixture before reader inputs. No release dates are committed.
 
 Release name: **plotleaf**, selected by the owner on 7 November 2026. The public package and CLI must remain unscoped and single-word: `npx plotleaf report.md`. Version `0.1.0` is published and verified from the public registry after owner visual approval. See the [release record](docs/releases/0.1.0.md) and [naming decision](docs/naming.md). Future changes need a new version; do not republish an existing version.
 
@@ -147,6 +147,8 @@ bun run test:browser
 ```
 
 Build before integration checks. Install Playwright's Chromium/WebKit browsers before the browser suite. `bunfig.toml` scopes core discovery; Playwright has separate discovery. `PLOTLEAF_NODE` selects the actual Node executable used by integration/browser tests. The consumer smoke test packs/installs the artifact with npm, removes Bun from its PATH and invokes `npx`, including from outside the repository. It needs registry access initially; `PLOTLEAF_OFFLINE=1` uses the warmed npm cache. A passing Bun suite alone does not prove Node compatibility.
+
+Require passing remote CI for the candidate source commit and preserve immutable release tags. The `v0.1.0` tag rebuilds all 18 published files byte for byte; main includes later unreleased repository metadata. Follow [CONTRIBUTING.md](CONTRIBUTING.md) for the platform matrix and source reproduction.
 
 Publishing uses the reviewed tarball, not a freshly repacked directory. `bun run audit:package path/to/plotleaf.tgz` inspects the archive's exact file list and content and writes its SHA-512 manifest. `PLOTLEAF_PACKAGE_TARBALL=/absolute/path/plotleaf.tgz bun run test:consumer` verifies that same artifact. See [release instructions](docs/release.md). Pattern checks supplement manual content review; do not present them as a general guarantee that secrets cannot exist.
 

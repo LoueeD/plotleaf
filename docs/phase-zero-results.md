@@ -1,6 +1,6 @@
 # Phase Zero and first MVP results
 
-Recorded: 7 November 2026, macOS arm64 on Apple M4. The initial MVP is published as `plotleaf@0.1.0` and verified from a fresh public npm installation. Configured GitHub Actions have not run remotely.
+Recorded: 7 November 2026, macOS arm64 on Apple M4. The initial MVP is published as `plotleaf@0.1.0` and verified from a fresh public npm installation. These are the original local measurements; subsequent remote platform checks are recorded in [source/CI evidence](source-ci.md).
 
 ## Selected architecture
 
@@ -95,6 +95,6 @@ The measurement script replaces the raw runtime-results JSON. Consumer checks ca
 
 ## Remaining work
 
-Configured Linux CI has not run remotely, and Windows has not been verified. Browser auto-opening uses the mature `open` package; headless suites exercise `--no-open`. The public npm release and registry invocation are verified. Source repository URLs and remote CI remain separate work.
+The [source/CI foundation](source-ci.md) adds public source, the immutable `v0.1.0` baseline, remote Linux/Windows verification and source/issue metadata. Consult that evidence record for actual platform results. The initial measurements above remain the original local snapshot. Browser auto-opening uses the mature `open` package; headless suites exercise `--no-open`. The public npm release and registry invocation are verified.
 
 The first MVP deliberately omits filters/prepared-view bindings, donut/funnel, image/sparkline/subtotal cells, maps/GeoJSON and reusable compositions. Those remain the [roadmap](product-roadmap.md), with their own data, interaction, security and size gates. Before adding shared input state, complete one concrete region/range prepared-view fixture. No account, hosted service, SQL, embedded AI, MCP server or arbitrary report execution is required.

@@ -31,7 +31,7 @@ Phase Zero ends with an evidence-backed technical contract and a small implement
 | Future interaction contract | Paper fixture of one region/range transition and its prepared data | KPIs, chart, funnel and table can stay consistent without SQL or arbitrary expressions; runtime/framework choice is revisited only with evidence. |
 | Decision record | Results appended to this document | Each gate has evidence, a selected option and any remaining limitation. |
 
-Research, guidance, reference inventory, the core grammar/export/security/package gates and the first MVP are delivered. Local measurements and results are in [the decision record](phase-zero-results.md). Matching-version TSRS conformance/performance, the future filter paper fixture, remote CI and cross-platform verification remain open. The initial MVP is published and verified from the public npm registry.
+Research, guidance, reference inventory, the core grammar/export/security/package gates and the first MVP are delivered. Local measurements and results are in [the decision record](phase-zero-results.md). Matching-version TSRS conformance/performance and the future filter paper fixture remain open. The [source/CI foundation](source-ci.md) adds remote Linux/Windows verification and immutable source traceability. The initial MVP is published and verified from the public npm registry.
 
 The original spike budget was approximately four focused engineering hours. Keep unresolved gates explicit and narrow implementation scope when needed; do not hide uncertainty behind abstractions.
 
@@ -492,9 +492,9 @@ Continue to exclude all explicitly out-of-scope platform features: hosting integ
 | Product principles / exclusions | Established by owner | Preserve in implementation reviews. |
 | Design authority | Three references preserved; owner-reviewed MVP published with responsive currency fixes | Every later renderer release needs owner visual review; onboarding filters/funnel remain unbuilt. |
 | Expanded capabilities | Staged roadmap delivered | Prioritize increments after the revised MVP; no filters/maps/reuse implementation claimed. |
-| Consumer runtime / development tools | Packed checks pass on Node 22/24/26; Bun 1.4.4 pinned | Remote Linux CI and Windows verification remain open. |
+| Consumer runtime / development tools | Packed checks pass on Node 22/24/26; Bun 1.4.4 pinned | Platform matrix and measured remote results are recorded in [source/CI evidence](source-ci.md). |
 | Package asset bundler | Bun.build selected; Node ESM and browser IIFEs pass | Watch future output regressions; no competing bundler installed. |
-| Core / consumer / browser tests | 46 core and 14 Chromium/WebKit checks pass locally; consumer checks exclude Bun | Run configured CI after repository setup. Vitest remains deferred. |
+| Core / consumer / browser tests | 46 core and 14 Chromium/WebKit checks pass locally; consumer checks exclude Bun | Linux/Windows CI is implemented; see [source/CI evidence](source-ci.md). Vitest remains deferred. |
 | Typechecker | Official TypeScript authoritative; TSRS passes same configurations with fast disabled | Matching-version conformance and repeated time/memory comparison remain open. |
 | Directive DSL / remark | Implemented with source-aware recovery lint | Extend fixtures when syntax changes; preserve literal-only language. |
 | Static renderer / no framework | Implemented; offline, theme and resize checks pass | Revisit only with a real future shared-input fixture. |
@@ -505,4 +505,4 @@ Continue to exclude all explicitly out-of-scope platform features: hosting integ
 | Versions/licenses/performance | Pinned versions, retained notices and local measurements recorded | No comparative checker-speed or cross-machine performance claim. |
 | AGENTS.md / documentation / authoring skill | Delivered and synchronized with actual commands | Keep future capability claims separate from delivered features. |
 
-The first MVP is published as `plotleaf@0.1.0` after owner visual review and fresh public npm/npx verification. The [delivery roadmap](product-roadmap.md) now recommends public source/release traceability and remote CI/platform verification next, followed by small feature increments. A concrete prepared-view fixture must precede reader-input implementation. See [implementation evidence and remaining limits](phase-zero-results.md).
+The first MVP is published as `plotleaf@0.1.0` after owner visual review and fresh public npm/npx verification. The [source/CI foundation](source-ci.md) establishes public source/release traceability and remote platform verification. The [delivery roadmap](product-roadmap.md) keeps small feature increments next. A concrete prepared-view fixture must precede reader-input implementation. See [implementation evidence and remaining limits](phase-zero-results.md).
