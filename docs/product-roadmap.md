@@ -1,6 +1,6 @@
 # Product capabilities and staged delivery
 
-Updated: 8 November 2026. **The current release is `plotleaf@0.3.0`, including M4.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.3.0.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
+Updated: 8 November 2026. **The current release is `plotleaf@0.3.1`, including M4 and the agent-discovery patch.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.3.1.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
 
 ## Delivery position
 
@@ -40,7 +40,7 @@ The V1 increments are ordered defaults; their estimates must follow the MVP resu
 
 ## Agent discovery patch before M5
 
-The unreleased 0.3.1 source candidate adds a copy/paste report-authoring prompt to the README and `npx plotleaf guide`. The command prints the already bundled `skills/plotleaf/SKILL.md` from its package location; `schema` remains the exact component API. The prompt falls back to the versioned public 0.3.0 guide for existing npm users. No skill installer, project scaffolding, additional dependency, renderer change or M5 interaction implementation is needed. Publication is a separate step.
+Published [0.3.1](releases/0.3.1.md) adds a copy/paste report-authoring prompt to the README and `npx plotleaf guide`. The command prints the already bundled `skills/plotleaf/SKILL.md` from its package location; `schema` remains the exact component API. The prompt falls back to the versioned public 0.3.0 guide for existing npm users. No skill installer, project scaffolding, additional dependency, renderer change or M5 interaction implementation is needed. The owner authorized publication; final-source CI, exact public archive and fresh anonymous npx guide/schema/validate/build checks pass.
 
 ## Next delivery slice
 
