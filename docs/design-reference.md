@@ -36,7 +36,7 @@ Controls use restrained outlines or a pale grouped surface. The active segment i
 | Counts, percentages and changes in one table | Optional explicit column children, labels, formats, sign display and declared value semantics. | Weekend MVP; advanced cells later. |
 | Narrative findings | Ordinary Markdown headings, paragraphs and emphasis, without wrapping every finding in a card. | Weekend MVP. |
 | Region segments/date control | Shared input state, explicit bindings, reset/empty states and correct cross-component updates. | V1 interaction increment. |
-| Funnel by stage | Prepared numerator/denominator/percentage/status per stage, with accessible labels. Do not guess the denominator or target status. | M3 implemented; owner review pending. |
+| Funnel by stage | Prepared numerator/denominator/percentage/status per stage, with accessible labels. Do not guess the denominator or target status. | M3 published as 0.2.0 after the preview review handoff. |
 | Breadcrumbs | Visual context only; they do not require navigation, routing or a multi-page application. | No engine feature implied. |
 
 The requested sparklines, image cells, subtotals, maps and reusable components are product requirements described in [the roadmap](product-roadmap.md). They are not visible evidence about styling in these screenshots.

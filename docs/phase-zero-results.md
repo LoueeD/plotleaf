@@ -99,4 +99,4 @@ The [source/CI foundation](source-ci.md) adds public source, the immutable `v0.1
 
 The first MVP deliberately omits filters/prepared-view bindings, donut/funnel, image/sparkline/subtotal cells, maps/GeoJSON and reusable compositions. Those remain the [roadmap](product-roadmap.md), with their own data, interaction, security and size gates. Before adding shared input state, complete one concrete region/range prepared-view fixture. No account, hosted service, SQL, embedded AI, MCP server or arbitrary report execution is required.
 
-The later [M3 visualization candidate](m3-visualizations.md) implements donut and prepared funnel/progress views in unreleased 0.2.0. Its tests, bundle decision, fictional onboarding example and pending owner visual review are recorded separately from the M1 snapshot above.
+The later [M3 visualization release](m3-visualizations.md) publishes donut and prepared funnel/progress views in 0.2.0. Its tests, bundle decision, fictional onboarding example and completed publication are recorded separately from the M1 snapshot above.

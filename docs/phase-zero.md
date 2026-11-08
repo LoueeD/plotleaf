@@ -164,7 +164,7 @@ For example, the reference's mixed count/percentage table can be expressed witho
 
 Its prepared `qoq` values are ratios such as `0.41`, displayed as `+41%`. The engine does not calculate quarter-over-quarter change from raw events.
 
-The implemented, unreleased [M3 visualization follow-up](m3-visualizations.md) adds `donut` with `data`, `category`, `value`, `title`, plus a native prepared funnel/progress-stage component matching reference 01. Donut values must be nonnegative and categories unique; an all-zero dataset is an empty state. Funnel percentages/status are prepared rather than inferred from an arbitrary stage denominator. Both are trusted renderers; M3 now specifies and validates their explicit prepared-data contracts. There is no separate `section` or `divider` component.
+The published [M3 visualization follow-up](m3-visualizations.md) adds `donut` with `data`, `category`, `value`, `title`, plus a native prepared funnel/progress-stage component matching reference 01. Donut values must be nonnegative and categories unique; an all-zero dataset is an empty state. Funnel percentages/status are prepared rather than inferred from an arbitrary stage denominator. Both are trusted renderers; M3 now specifies and validates their explicit prepared-data contracts. There is no separate `section` or `divider` component.
 
 ### Data semantics
 
@@ -490,7 +490,7 @@ Continue to exclude all explicitly out-of-scope platform features: hosting integ
 | Item | Current status | Next evidence |
 | --- | --- | --- |
 | Product principles / exclusions | Established by owner | Preserve in implementation reviews. |
-| Design authority | Three references preserved; owner-reviewed MVP published with responsive currency fixes | Every later renderer release needs owner visual review; onboarding filters remain unbuilt; M3 funnel/donut are implemented as an unreleased candidate pending owner review. |
+| Design authority | Three references preserved; owner-reviewed MVP published with responsive currency fixes | Every later renderer release needs owner visual review; onboarding filters remain unbuilt; M3 funnel/donut are published as 0.2.0 after the preview review handoff. |
 | Expanded capabilities | Staged roadmap delivered | Prioritize increments after the revised MVP; no filters/maps/reuse implementation claimed. |
 | Consumer runtime / development tools | Packed checks pass on Node 22/24/26; Bun 1.4.4 pinned | Platform matrix and measured remote results are recorded in [source/CI evidence](source-ci.md). |
 | Package asset bundler | Bun.build selected; Node ESM and browser IIFEs pass | Watch future output regressions; no competing bundler installed. |

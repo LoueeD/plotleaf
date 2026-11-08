@@ -2,7 +2,7 @@
 
 Use the npm registry and a Node-compatible package. Bun is a maintainer tool, not a consumer prerequisite. Current public examples are the explicitly fictional storefront, adoption and onboarding reports. Internal-project demos and owner-supplied design screenshots do not belong in a release.
 
-Current release: **0.2.0 / M3**, authorized by the owner after the preview review handoff; registry publication is in progress. See [M3 verification](m3-visualizations.md) for the new funnel/donut contracts, package audit and technical checks. The public release remains 0.1.0.
+Current public release: **0.2.0 / M3**, published on 8 November 2026 after owner authorization following the preview review handoff. See the [release record](releases/0.2.0.md). See [M3 verification](m3-visualizations.md) for the new funnel/donut contracts, package audit and technical checks. Use a new version for every subsequent publication.
 
 Before publishing, run the repository typechecks, build, core tests and browser suite.
 
@@ -34,4 +34,4 @@ Public source lives at [LoueeD/plotleaf](https://github.com/LoueeD/plotleaf). Be
 
 Use a new version for changes after `0.1.0`; the examples above show the original release, so substitute the candidate version in every archive/command. Record the source commit, owner review, audit integrity and CI run with each release. Tag the approved source without moving existing tags, then publish that exact archive. Once published, independently verify the public archive and installed command.
 
-The immutable `v0.1.0` tag reproduces all 18 original published files. Its pinned-archive comparison runs in CI through `scripts/verify-published.mjs`. Repository metadata added on main after that baseline will appear in a future npm version; it does not alter the published `0.1.0` package. GitHub release pages and automatic npm publication are not required.
+The immutable `v0.1.0` tag reproduces all 18 original published files. Its pinned-archive comparison runs in CI through `scripts/verify-published.mjs`. Repository metadata added after that baseline is included in 0.2.0; it does not alter the published `0.1.0` package. GitHub release pages and automatic npm publication are not required.

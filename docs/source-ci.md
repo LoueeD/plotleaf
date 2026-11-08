@@ -1,6 +1,6 @@
 # Source and CI foundation
 
-Recorded: 8 November 2026. Public source: [LoueeD/plotleaf](https://github.com/LoueeD/plotleaf). The existing npm release remains `plotleaf@0.1.0`; this milestone does not publish another package version or add report components.
+Recorded: 8 November 2026. Public source: [LoueeD/plotleaf](https://github.com/LoueeD/plotleaf). At M2 completion the npm release was `plotleaf@0.1.0`; M2 did not publish another version or add components. M3 subsequently published [0.2.0](releases/0.2.0.md).
 
 ## Release traceability
 
