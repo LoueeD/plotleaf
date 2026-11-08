@@ -1,6 +1,6 @@
 {
   "recorded": "2026-11-08",
-  "status": "unpublished 0.3.0 candidate; owner visual review pending",
+  "status": "M4 complete and owner-approved; final 0.3.0 release verification/publication in progress",
   "local_platform": "macOS arm64",
   "tooling": {
     "bun": "1.4.4",
@@ -128,6 +128,6 @@
       "sparkline_cells": 4
     },
     "verification": "Offline/source-removed composition check in Chromium/WebKit, both themes and 375/1440 px; actual HTTP preview also inspected.",
-    "review": "Owner visual review pending; no npm publication or release tag."
+    "review": "Owner visual review approved; publication authorized after final M4 validation."
   }
 }

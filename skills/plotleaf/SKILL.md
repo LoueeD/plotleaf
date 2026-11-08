@@ -13,7 +13,7 @@ Use an installed `plotleaf` CLI or `npx plotleaf`. In an unpublished source chec
 
 Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Donut and funnel require plotleaf 0.2.0 or newer; check the installed CLI's schema when using an older version.
 
-Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. The 0.3.0 source candidate adds explicit image/sparkline column kinds. Public 0.2.0 does not support those kinds; use the matching source CLI until 0.3.0 is released. Filters, maps, subtotals and executable/custom components remain future capabilities.
+Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Image/sparkline column kinds require 0.3.0 or newer; check the installed CLI version and schema. Filters, maps, subtotals and executable/custom components remain future capabilities.
 
 ## Author prepared content
 
@@ -63,7 +63,7 @@ Literal attributes are quoted strings, decoded by the component schema. `::` is 
 - Funnel stage names are unique nonblank strings, with at most 20 stages in source order. Each stage can have its own denominator; explain that choice in prose. Status values are `on-target`, `below-target`, `at-risk` or `neutral`. Omit the status mapping for neutral styling; the engine never infers business status. All mapped fields must differ.
 - Use the full-value data disclosures to check counts behind compact funnel labels. Both components retain readable HTML data without JavaScript. Keep the denominator of any nearby conversion KPI explicit when it differs from the funnel baseline.
 
-## Rich tables (0.3.0 source candidate)
+## Rich tables (0.3.0 or newer)
 
 ```markdown
 :::table{data="./products.json" title="Products"}

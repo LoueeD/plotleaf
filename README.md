@@ -12,7 +12,7 @@ A report is one Markdown file, optionally accompanied by local JSON datasets. No
 
 The initial MVP includes validation, live preview/reload, self-contained HTML export and a generated component specification. All bundled examples use fictional data.
 
-Public npm provides **0.2.0**, including donut charts and prepared funnel/progress views. Main contains the unreleased **0.3.0 / M4 rich-table candidate**, adding local PNG/JPEG image cells and static sparklines. Use a source build for those columns while owner visual review is pending.
+**0.3.0** adds local PNG/JPEG image cells, static sparklines and a cumulative example report. Donut charts and prepared funnel/progress views are available since 0.2.0. Check your installed CLI version or schema before using newer components.
 
 Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Filters, maps, subtotals and reusable compositions remain planned increments.
 
