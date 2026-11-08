@@ -26,6 +26,13 @@ async function settleChartLayout(page: Page): Promise<void> {
         ),
     )
     .toBeLessThan(2);
+  // ECharts updates the SVG viewport before its painter flushes resized paths.
+  await page.evaluate(
+    () =>
+      new Promise<void>((resolve) => {
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+      }),
+  );
 }
 function build(source: string, output: string): void {
   const result = spawnSync(

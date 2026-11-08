@@ -2,6 +2,8 @@
 
 Use the npm registry and a Node-compatible package. Bun is a maintainer tool, not a consumer prerequisite. Current public examples are the explicitly fictional storefront and adoption reports. Internal-project demos and owner-supplied design screenshots do not belong in a release.
 
+Current source candidate: **0.2.0 / M3**, unreleased and awaiting owner visual review. See [M3 verification](m3-visualizations.md) for the new funnel/donut contracts, package audit and technical checks. The public release remains 0.1.0.
+
 Before publishing, run the repository typechecks, build, core tests and browser suite.
 
 The owner must also complete a manual visual review of the running preview. Keep publication paused while that review is pending, including after a renderer fix. Automated checks and agent screenshot inspection are supporting evidence, not owner acceptance. Any renderer change invalidates the previously reviewed artifact: rebuild, audit and test the replacement before a future publish.
