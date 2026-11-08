@@ -97,5 +97,37 @@
       "bun_on_consumer_path": false
     },
     "immutable_0_1_0_source_reproduction": "passed"
+  },
+  "baseline": "Initial M4 source 7521945; see cumulative_preview_follow_up for the current candidate.",
+  "cumulative_preview_follow_up": {
+    "source_commit": "5b55421c2d6ec04045c3b639832477d657d47ead",
+    "remote_ci_url": "https://github.com/LoueeD/plotleaf/actions/runs/42534957061",
+    "jobs_passed": 11,
+    "report": "examples/report.md",
+    "browser_checks_per_platform": 34,
+    "core_linux": {
+      "passed": 116,
+      "skipped": 0
+    },
+    "core_windows": {
+      "passed": 114,
+      "skipped": 2
+    },
+    "installed_consumers": "Linux/Windows \u00d7 Node 22/24/26, same audited archive, without Bun or development dependencies",
+    "archive": {
+      "files": 29,
+      "bytes": 260772,
+      "integrity": "sha512-WtS0giN7XlJK26p4FrLV8eDonOsouJgKxwHbrJZkG4lmEhh71TeLcZE9ZD86oBONQm16JNsm4ztA3nk3la9nqA=="
+    },
+    "showcase_html_bytes": 665535,
+    "catalogue_html_bytes": 33711,
+    "showcase_components": {
+      "green_metric_comparisons": 7,
+      "interactive_charts": 4,
+      "image_cells": 4,
+      "sparkline_cells": 4
+    },
+    "verification": "Offline/source-removed composition check in Chromium/WebKit, both themes and 375/1440 px; actual HTTP preview also inspected.",
+    "review": "Owner visual review pending; no npm publication or release tag."
   }
 }
