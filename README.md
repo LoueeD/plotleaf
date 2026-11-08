@@ -33,7 +33,7 @@ Build `npx --yes plotleaf build report.md --out report.html` and give me
 the source and portable HTML paths, with any data limitations.
 ```
 
-The prompt works with published 0.3.0 through the linked guide. The `guide` command is implemented in the unreleased **0.3.1 candidate**; use a source build to try it before publication.
+The `guide` command is available in **0.3.1 or newer**. The prompt also works with 0.3.0 through the linked authoring guide.
 
 ## Status
 
