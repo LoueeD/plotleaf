@@ -39,7 +39,7 @@ for (const table of document.querySelectorAll<HTMLTableElement>(
         return (descending ? -comparison : comparison) || a.index - b.index;
       });
       body.replaceChildren(...sorted.map((item) => item.row));
-      table.querySelectorAll("thead th").forEach((header) => {
+      table.querySelectorAll("thead th[aria-sort]").forEach((header) => {
         const selected = header.contains(button);
         header.setAttribute(
           "aria-sort",

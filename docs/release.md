@@ -4,6 +4,8 @@ Use the npm registry and a Node-compatible package. Bun is a maintainer tool, no
 
 Current public release: **0.2.0 / M3**, published on 8 November 2026 after owner authorization following the preview review handoff. See the [release record](releases/0.2.0.md). See [M3 verification](m3-visualizations.md) for the new funnel/donut contracts, package audit and technical checks. Use a new version for every subsequent publication.
 
+Main now contains the unreleased **0.3.0 / M4 candidate**, adding the explicitly fictional catalogue and reviewed original PNG/JPEG illustrations. The [M4 evidence](m4-rich-tables.md) tracks implementation and pending review. This implementation task does not authorize publication or a release tag.
+
 Before publishing, run the repository typechecks, build, core tests and browser suite.
 
 The owner must also complete a manual visual review of the running preview. Keep publication paused while that review is pending, including after a renderer fix. Automated checks and agent screenshot inspection are supporting evidence, not owner acceptance. Any renderer change invalidates the previously reviewed artifact: rebuild, audit and test the replacement before a future publish.
@@ -17,7 +19,7 @@ node scripts/audit-package.mjs .cache/releases/plotleaf-0.1.0.tgz
 PLOTLEAF_PACKAGE_TARBALL="$PWD/.cache/releases/plotleaf-0.1.0.tgz" bun run test:consumer
 ```
 
-The audit enumerates every file, checks all public example reports identify fictional data, rejects internal demo context/local paths/source maps/credential-shaped strings and records SHA-512 integrity. Manually review the README, examples, metadata, compiled CLI/runtime and license notices. The approved list deliberately excludes source tests, generated report HTML, caches, reference images and development/planning documents. Change it only for an intentional public addition. Pattern checks cannot replace content review.
+The audit pins the exact hashes of approved example rasters and enumerates every file, checks all public example reports identify fictional data, rejects internal demo context/local paths/source maps/credential-shaped strings and records SHA-512 integrity. Manually review the README, examples, metadata, compiled CLI/runtime and license notices. The approved list deliberately excludes source tests, generated report HTML, caches, reference images and development/planning documents. Change it only for an intentional public addition. Pattern checks cannot replace content review.
 
 Check the logged-in npm identity, live name/version and authentication. Publish the exact audited/tested archive:
 

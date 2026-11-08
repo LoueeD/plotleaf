@@ -10,4 +10,9 @@ export const limits = {
   funnelStages: 20,
   tableRows: 1000,
   tableColumns: 40,
+  sparklinePoints: 64,
+  imageFiles: 64,
+  imageBytes: 1024 ** 2,
+  imageDimension: 4096,
+  imagePixels: 4_000_000,
 } as const;

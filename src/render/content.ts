@@ -2,8 +2,15 @@ import { unified } from "unified";
 import remarkRehype from "remark-rehype";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
-import type { Element, Text, Properties, Root } from "hast";
-import type { Block, ComponentBlock, Report } from "../compiler/ir.js";
+import type { Element, Root } from "hast";
+import type {
+  Block,
+  ComponentBlock,
+  Report,
+  TableRow,
+} from "../compiler/ir.js";
+import { h, t, type Child } from "./tree.js";
+import { columnScale, richCell } from "./table-cells.js";
 import type { ColumnProps } from "../compiler/registry.js";
 import type {
   Cell,
@@ -16,13 +23,6 @@ import { parseDate } from "../compiler/data.js";
 import { serializeData } from "../shared/serialize.js";
 import { funnelStatuses } from "../shared/payload.js";
 
-type Child = Element | Text;
-const t = (value: unknown): Text => ({ type: "text", value: String(value) });
-const h = (
-  tagName: string,
-  properties: Properties = {},
-  children: Child[] = [],
-): Element => ({ type: "element", tagName, properties, children });
 const markdown = unified().use(remarkRehype);
 const serializer = unified()
   .use(rehypeSanitize, {
@@ -36,6 +36,10 @@ const serializer = unified()
       "button",
       "caption",
       "meter",
+      "svg",
+      "use",
+      "path",
+      "circle",
     ],
     attributes: {
       ...defaultSchema.attributes,
@@ -61,6 +65,10 @@ const serializer = unified()
       button: ["type", "disabled", "ariaLabel", "dataColumn"],
       section: ["className", "ariaLabel"],
       meter: ["min", "max", "value", "className", "ariaLabel"],
+      svg: ["className", "viewBox", "width", "height", "role", "ariaLabel"],
+      use: ["href"],
+      path: ["d"],
+      circle: ["cx", "cy", "r"],
       ul: ["className", "role"],
       ol: ["start", "className", "role"],
       li: ["className", "dataStatus"],
@@ -93,21 +101,30 @@ function cellText(value: Cell, column: ColumnProps): string {
 }
 
 function table(
-  rows: Row[],
+  rows: TableRow[],
   columns: ColumnProps[],
   title: string,
   id: string,
   sortable = true,
 ): Element {
+  const scales = columns.map((column) =>
+    column.kind === "sparkline" ? columnScale(rows, column.field) : undefined,
+  );
+  const canSort = columns.map(
+    (column) =>
+      sortable &&
+      (!column.kind || column.kind === "scalar" || Boolean(column.sortBy)),
+  );
   const numeric = columns.map(
     (column) =>
+      column.kind === "sparkline" ||
       rows.some((row) => typeof row[column.field] === "number") ||
       Boolean(column.format),
   );
   const caption = h("caption", {}, [t(title)]);
   const headers = columns.map((column, index) => {
     const name = column.label ?? label(column.field);
-    const content = sortable
+    const content = canSort[index]
       ? h(
           "button",
           {
@@ -129,7 +146,7 @@ function table(
       {
         scope: "col",
         className: numeric[index] ? ["numeric"] : [],
-        ...(sortable ? { ariaSort: "none" } : {}),
+        ...(canSort[index] ? { ariaSort: "none" } : {}),
       },
       [content],
     );
@@ -138,16 +155,20 @@ function table(
   const tableRows = rows.map((row) => {
     const cells = columns.map((column, index) => {
       const value = row[column.field] ?? null;
+      const rich = value !== null && typeof value === "object";
+      const raw = rich ? (value.sort ?? null) : value;
       return h(
         "td",
         {
           className: numeric[index] ? ["numeric"] : [],
-          dataRaw: serializeData(value),
+          ...(canSort[index] ? { dataRaw: serializeData(raw) } : {}),
           ...(typeof value === "number"
             ? { dataSentiment: valueSentiment(value, column.semantics) }
             : {}),
         },
-        [t(cellText(value, column))],
+        rich
+          ? richCell(value, column, scales[index])
+          : [t(cellText(value, column))],
       );
     });
     return h("tr", {}, cells);

@@ -41,6 +41,8 @@ export async function compileReport(input: string): Promise<Compilation> {
       bytes,
     );
     await resolver.resolve(report.blocks);
+    if (resolver.images.embedded.size)
+      report.images = [...resolver.images.embedded.values()];
     return { ...result(), ...(!diagnostics.hasErrors ? { report } : {}) };
   } catch (error) {
     diagnostics.add(

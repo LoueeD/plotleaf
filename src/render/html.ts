@@ -54,10 +54,15 @@ export function renderHtml(
   revision = 0,
 ): string {
   const content = renderContent(report);
+  // Raster bytes are generated from validated local files. Symbols deduplicate
+  // images without scripts, data paths in cells or relaxed link protocols.
+  const images = report.images?.length
+    ? `<svg class="image-definitions" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>${report.images.map((image) => `<symbol id="${escapeHtml(image.id)}" viewBox="0 0 64 48"><image href="data:${image.mime};base64,${image.base64}" width="64" height="48" preserveAspectRatio="xMidYMid meet"/></symbol>`).join("")}</defs></svg>`
+    : "";
   return documentHtml(
     report.metadata.title,
     report.metadata.description,
-    content.html,
+    images + content.html,
     assets.styles,
     [content.hasCharts ? assets.charts : assets.base],
     preview,

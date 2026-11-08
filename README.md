@@ -12,9 +12,9 @@ A report is one Markdown file, optionally accompanied by local JSON datasets. No
 
 The initial MVP includes validation, live preview/reload, self-contained HTML export and a generated component specification. All bundled examples use fictional data.
 
-Version **0.2.0** adds donut charts and prepared funnel/progress views to the Markdown report language.
+Public npm provides **0.2.0**, including donut charts and prepared funnel/progress views. Main contains the unreleased **0.3.0 / M4 rich-table candidate**, adding local PNG/JPEG image cells and static sparklines. Use a source build for those columns while owner visual review is pending.
 
-Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Filters, rich table cells, maps and reusable compositions remain planned increments.
+Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Filters, maps, subtotals and reusable compositions remain planned increments.
 
 ## Quick start
 
@@ -79,7 +79,7 @@ Attributes are literal values, not JavaScript. Keep leaf directives on one line 
 
 Numbers, comparisons, trends and findings are prepared by the author. `percent` uses ratios (`0.12` → 12%); `percentage-points` uses point values (`0.8` → 0.8 pt); `currency:GBP` uses major units. Whole currency amounts omit `.00`; nonzero cents retain two decimal places. Formatting is `en-GB`; date display is UTC. An increase does not imply positive business sentiment.
 
-Use `schema` for current property schemas, child rules and input limits. The installed package includes `schema/components.json`, generated from the validation registry, and `skills/plotleaf/SKILL.md`, a reusable report-authoring guide. Public examples under `examples/storefront/`, `examples/adoption/` and `examples/onboarding/` contain only fictional data.
+Use `schema` for current property schemas, child rules and input limits. The installed package includes `schema/components.json`, generated from the validation registry, and `skills/plotleaf/SKILL.md`, a reusable report-authoring guide. Public examples under `examples/storefront/`, `examples/adoption/`, `examples/onboarding/` and `examples/catalog/` contain only fictional data. Catalogue illustrations are original, purpose-built raster assets.
 
 ## Donut and funnel
 
@@ -94,9 +94,26 @@ Funnel data supplies each stage explicitly, for example `{"stage":"Activated","t
 
 Try the fictional `examples/onboarding/report.md` from a source checkout. See [M3 contracts and tradeoffs](https://github.com/LoueeD/plotleaf/blob/main/docs/m3-visualizations.md).
 
+## Image and sparkline columns
+
+```markdown
+:::table{data="./products.json" title="Product performance"}
+::column{field="image" label="Preview" kind="image" alt="description"}
+::column{field="product" label="Product"}
+::column{field="weekly_orders" label="Weekly orders" kind="sparkline" sortBy="last_week"}
+::column{field="revenue" label="Revenue" format="currency:USD"}
+:::
+```
+
+An image value is a relative PNG/JPEG path or null; `alt` names its row's text-alternative field. The fixed thumbnail box is 64 × 48. Images are bounded, validated and embedded once per unique content hash, with no source paths or runtime requests. Remote/data URLs, active SVG and animated images are rejected.
+
+Only explicitly declared sparkline fields may contain arrays: at most 64 finite numbers/nulls in sample order. Rows share the observed y scale for that column. Nulls create gaps; a last-sample label and native value disclosure remain readable without JavaScript. Charts and scalar/inferred tables keep the flat scalar data contract.
+
+Rich headers are plain text unless `sortBy` names a scalar field; scalar columns retain raw-value sorting. Alternatives, explicit sort keys and embedded image metadata are readable in the export. Try the fictional `examples/catalog/report.md` from a source build. See [M4 contracts](https://github.com/LoueeD/plotleaf/blob/main/docs/m4-rich-tables.md) for limits and validation details.
+
 ## Data and security boundaries
 
-Prepare JSON arrays of flat scalar records. Charts preserve input order and do not calculate, join or aggregate data. Date/number x values must be unique and increasing; line/area nulls are gaps and bar nulls are errors. Tables sort raw typed values. Explicit table columns also select the fields exported; an inferred table includes every source field.
+Prepare JSON arrays of flat scalar records; only explicitly declared sparkline fields permit bounded numeric/null sequences. Charts preserve input order and do not calculate, join or aggregate data. Date/number x values must be unique and increasing; line/area nulls are gaps and bar nulls are errors. Tables sort raw typed values. Explicit table columns also select the fields exported; an inferred table includes every source field.
 
 Local JSON must stay within the report directory, including after resolving symlinks. Raw HTML, remote assets/data, executable components and report-authored code are rejected. Script/data escaping, sanitization, size limits and safe output writes are part of compilation. Invalid reports do not replace an existing export.
 
@@ -115,7 +132,7 @@ node dist/cli.js validate examples/storefront/report.md --json
 node dist/cli.js build examples/storefront/report.md
 ```
 
-The first CLI command opens a browser and watches the Markdown and referenced JSON. Add `--no-open` to print the URL without launching a browser. Ctrl-C stops the server. A failed edit shows diagnostics and recovers after you fix it.
+The first CLI command opens a browser and watches the Markdown, referenced JSON and local table images. Add `--no-open` to print the URL without launching a browser. Ctrl-C stops the server. A failed edit shows diagnostics and recovers after you fix it.
 
 Open `examples/storefront/report.html` after export, or try the narrative example in `examples/adoption/report.md`.
 

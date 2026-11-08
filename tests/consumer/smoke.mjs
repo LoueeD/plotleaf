@@ -206,15 +206,50 @@ try {
   assert(onboardingHtml.includes('"kind":"donut"'));
   assert(onboardingHtml.includes("At risk"));
   assert(!onboardingHtml.includes(onboarding));
-  preview = spawn(
-    process.execPath,
-    [cli, "dev", onboardingReport, "--no-open"],
-    {
-      cwd: directory,
-      env,
-      stdio: ["ignore", "pipe", "pipe"],
-    },
+  const catalog = path.join(directory, "catalog");
+  await cp(
+    path.join(directory, "node_modules/plotleaf/examples/catalog"),
+    catalog,
+    { recursive: true },
   );
+  const catalogReport = path.join(catalog, "report.md");
+  assert.equal(
+    JSON.parse(
+      run(process.execPath, [
+        npxCli,
+        "--no-install",
+        "plotleaf",
+        "validate",
+        catalogReport,
+        "--json",
+      ]),
+    ).valid,
+    true,
+  );
+  const catalogOutput = path.join(directory, "catalog.html");
+  run(process.execPath, [
+    npxCli,
+    "--no-install",
+    "plotleaf",
+    "build",
+    catalogReport,
+    "--out",
+    catalogOutput,
+  ]);
+  const catalogHtml = await readFile(catalogOutput, "utf8");
+  assert.equal(catalogHtml.match(/class="table-image"/g)?.length, 4);
+  assert.equal(catalogHtml.match(/class="sparkline-chart"/g)?.length, 4);
+  assert.equal(
+    catalogHtml.match(/data:image\/(?:png|jpeg);base64,/g)?.length,
+    3,
+  );
+  assert(!catalogHtml.includes("/assets/"));
+  assert(!catalogHtml.includes('id="plotleaf-data"'));
+  preview = spawn(process.execPath, [cli, "dev", catalogReport, "--no-open"], {
+    cwd: directory,
+    env,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
   const url = await new Promise((resolve, reject) => {
     let output = "";
     const timer = setTimeout(
@@ -240,8 +275,8 @@ try {
       }
     });
   });
-  assert((await (await fetch(url)).text()).includes("PLG Onboarding"));
-  assert.equal((await fetch(url + "/funnel.json")).status, 404);
+  assert((await (await fetch(url)).text()).includes("Product Performance"));
+  assert.equal((await fetch(url + "/assets/linen-tote.png")).status, 404);
   const metrics = {
     node: process.versions.node,
     tarballBytes: audited.bytes,

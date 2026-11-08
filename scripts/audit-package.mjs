@@ -27,11 +27,26 @@ const approvedFiles = [
   "examples/onboarding/funnel.json",
   "examples/onboarding/plans.json",
   "examples/onboarding/signups.json",
+  "examples/catalog/report.md",
+  "examples/catalog/products.json",
+  "examples/catalog/assets/desk-lamp.jpg",
+  "examples/catalog/assets/field-notebook.png",
+  "examples/catalog/assets/linen-tote.png",
   "skills/plotleaf/SKILL.md",
   "package.json",
 ]
   .map((filename) => `package/${filename}`)
   .sort();
+
+// Purpose-built fictional raster examples; changing bytes requires explicit content review.
+const approvedImages = {
+  "package/examples/catalog/assets/desk-lamp.jpg":
+    "8d07d95e3fc7177fa2814d635ce0fae889d4fd7b9e89c86bc811368f5eb11dee",
+  "package/examples/catalog/assets/field-notebook.png":
+    "9e2606a8c586bf96063f2a024c7ffabea9f6dd0a248023b9dba65991e057edeb",
+  "package/examples/catalog/assets/linen-tote.png":
+    "074d37c40215aa359eaf850ee358079295afbde060c3e3727eb9a7f6308596e0",
+};
 
 const prohibited = [
   ["retired project name", /\btablio\b|dataTablio|TABLIO_/i],
@@ -47,9 +62,9 @@ const prohibited = [
   ],
 ];
 
-function tar(args) {
+function tar(args, binary = false) {
   const result = spawnSync("tar", args, {
-    encoding: "utf8",
+    encoding: binary ? undefined : "utf8",
     maxBuffer: 4 * 1024 ** 2,
   });
   assert.equal(result.status, 0, result.stderr || result.error?.message);
@@ -65,6 +80,15 @@ export async function auditPackage(filename) {
     "Tarball differs from the reviewed public file list.",
   );
   for (const filename of files) {
+    if (Object.hasOwn(approvedImages, filename)) {
+      const bytes = tar(["-xOf", archive, filename], true);
+      assert.equal(
+        createHash("sha256").update(bytes).digest("hex"),
+        approvedImages[filename],
+        `${filename}: raster example differs from the reviewed content.`,
+      );
+      continue;
+    }
     const content = tar(["-xOf", archive, filename]);
     for (const [reason, pattern] of prohibited) {
       assert(
@@ -99,6 +123,7 @@ export async function auditPackage(filename) {
       "exact public file list",
       "no retired branding",
       "fictional examples",
+      "reviewed raster example hashes",
       "internal context and local paths",
       "credential patterns",
       "no source maps",

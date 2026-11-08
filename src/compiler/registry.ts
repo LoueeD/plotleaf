@@ -144,10 +144,14 @@ export const registry = {
   column: {
     forms: ["leaf"],
     children: [],
-    description: "An explicit field, label and format inside a table.",
+    description:
+      "A scalar, local image or bounded sparkline column. Omitted kind means scalar.",
     schema: z.strictObject({
       field: text,
       label: text.optional(),
+      kind: z.enum(["scalar", "image", "sparkline"]).optional(),
+      alt: text.optional(),
+      sortBy: text.optional(),
       format: format.optional(),
       sign: z.enum(["auto", "always"]).default("auto"),
       semantics: z
@@ -156,6 +160,14 @@ export const registry = {
     }),
     example:
       '::column{field="change" label="Δ QoQ" format="percent" sign="always" semantics="higher-is-better"}',
+    dataRules: {
+      image:
+        "Local static PNG/JPEG path or null. alt names a nonblank string field for each image. Fixed 64 × 48 display box; deduplicated and embedded offline. Paths resolve from the report directory.",
+      sparkline:
+        "Only explicitly declared sparkline fields may contain arrays: at most 64 finite numbers/nulls, in sample order. Nulls are gaps. Shared observed y scale per column; no aggregation or resampling.",
+      sortBy:
+        "Optional scalar field for image/sparkline sorting. Without it a rich column has a plain header. Scalar columns sort their own raw values. Sort keys are readable in the export.",
+    },
   },
   callout: {
     forms: ["container"],
@@ -184,7 +196,8 @@ export function componentSpec() {
       "Literal strings decoded according to each property schema. No JavaScript expressions.",
     limits,
     data: {
-      shape: "array of flat JSON records",
+      shape:
+        "array of flat JSON records; explicit table sparkline columns permit bounded numeric/null arrays only in their declared fields",
       resolution: "relative to the report directory; local .json files only",
       percent: "ratios: 0.12 displays as 12%",
       percentagePoints: "point values: 0.8 displays as 0.8 pt",
@@ -217,7 +230,8 @@ export function componentSpec() {
       "Line/area null y values create gaps; bar null y values are invalid.",
       "Donut category/value fields must differ; category count is bounded, and all-zero values do not create equal slices.",
       "Funnel fields must differ; shares and denominators are supplied, validated and displayed per row, with no sorting or status inference.",
-      "Filters, maps, images, nested data and executable components are not supported in this release.",
+      "Only explicit image columns can load local static PNG/JPEG; every resource stays within the report root and shared byte limits.",
+      "Filters, maps, arbitrary nested data and executable components are not supported in this release.",
     ],
   };
 }
@@ -249,6 +263,29 @@ export function decodeProps(
     };
   const props = result.data;
   const errors: string[] = [];
+  if (name === "column") {
+    const column = props as PropsByName["column"];
+    const kind = column.kind ?? "scalar";
+    if (kind === "image" && !column.alt)
+      errors.push("image columns require an alt field.");
+    if (kind !== "image" && column.alt)
+      errors.push("alt is only supported on image columns.");
+    if (kind === "image" && column.format)
+      errors.push("Image columns cannot use numeric formatting.");
+    if (
+      kind !== "scalar" &&
+      (column.sign !== "auto" || column.semantics !== "neutral")
+    )
+      errors.push("sign and semantics apply only to scalar columns.");
+    if (kind === "scalar" && column.sortBy)
+      errors.push(
+        "Scalar columns sort their own field; sortBy is for image/sparkline columns.",
+      );
+    if (column.alt === column.field || column.sortBy === column.field)
+      errors.push(
+        "alt and sortBy must reference fields different from the rich cell field.",
+      );
+  }
   if (name === "donut" || name === "funnel") {
     const fields = Object.entries(props)
       .filter(

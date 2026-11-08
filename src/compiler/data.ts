@@ -1,59 +1,15 @@
-import path from "node:path";
-import { open, realpath, stat } from "node:fs/promises";
-import type { Block, ComponentBlock } from "./ir.js";
+import type { Block, ComponentBlock, RichCell, TableRow } from "./ir.js";
+import { LocalFileError, ReportFiles } from "./files.js";
+import { ImageResolver } from "./images.js";
+export { contained, readBounded } from "./files.js";
 import type { ColumnProps } from "./registry.js";
-import { funnelStatuses, type Cell, type Row } from "../shared/payload.js";
+import { funnelStatuses, type Cell } from "../shared/payload.js";
 import { Diagnostics } from "./diagnostics.js";
 import { limits } from "../shared/limits.js";
 
 export { limits } from "../shared/limits.js";
+type SourceRow = Record<string, Cell | (number | null)[]>;
 const reserved = new Set(["__proto__", "constructor", "prototype"]);
-
-export function contained(root: string, filename: string): boolean {
-  const relative = path.relative(root, filename);
-  return (
-    relative === "" ||
-    (!path.isAbsolute(relative) &&
-      relative !== ".." &&
-      !relative.startsWith(`..${path.sep}`))
-  );
-}
-
-export async function readBounded(
-  filename: string,
-  maximum: number,
-): Promise<{ text: string; bytes: number }> {
-  if (!(await stat(filename)).isFile())
-    throw new Error("Expected a regular file.");
-  const file = await open(filename, "r");
-  try {
-    const stat = await file.stat();
-    if (!stat.isFile()) throw new Error("Expected a regular file.");
-    if (stat.size > maximum)
-      throw new Error(
-        `File exceeds the ${Math.floor(maximum / 1024)} KiB size limit.`,
-      );
-    const chunks: Buffer[] = [];
-    let bytes = 0;
-    while (bytes <= maximum) {
-      const buffer = Buffer.alloc(Math.min(64 * 1024, maximum + 1 - bytes));
-      const result = await file.read(buffer, 0, buffer.length, null);
-      if (!result.bytesRead) break;
-      chunks.push(buffer.subarray(0, result.bytesRead));
-      bytes += result.bytesRead;
-    }
-    if (bytes > maximum)
-      throw new Error("File grew beyond the size limit while reading.");
-    return {
-      text: new TextDecoder("utf-8", { fatal: true }).decode(
-        Buffer.concat(chunks, bytes),
-      ),
-      bytes,
-    };
-  } finally {
-    await file.close();
-  }
-}
 
 export function parseDate(value: string): number | undefined {
   const date = value.slice(0, 10);
@@ -76,18 +32,26 @@ export function parseDate(value: string): number | undefined {
 }
 
 export class DataResolver {
-  private readonly cache = new Map<string, Row[]>();
+  private readonly cache = new Map<
+    string,
+    { rows: SourceRow[]; arrays: Map<string, number> }
+  >();
+  private readonly files: ReportFiles;
+  readonly images: ImageResolver;
   constructor(
     readonly root: string,
     readonly diagnostics: Diagnostics,
     readonly dependencies: Set<string>,
-    private totalBytes = 0,
-  ) {}
+    totalBytes = 0,
+  ) {
+    this.files = new ReportFiles(root, dependencies, totalBytes);
+    this.images = new ImageResolver(this.files);
+  }
 
   async load(
     reference: string,
     block: ComponentBlock,
-  ): Promise<Row[] | undefined> {
+  ): Promise<SourceRow[] | undefined> {
     const fail = (code: string, message: string, hint?: string): undefined => {
       this.diagnostics.add(
         code,
@@ -97,124 +61,119 @@ export class DataResolver {
       );
       return;
     };
-    if (
-      path.isAbsolute(reference) ||
-      /^[A-Za-z][A-Za-z\d+.-]*:/.test(reference) ||
-      reference.includes("\\") ||
-      /%[\da-f]{2}/i.test(reference) ||
-      reference.includes("\0")
-    )
-      return fail("E_DATA_PATH", "Use a plain relative local .json path.");
-    const candidate = path.resolve(this.root, reference);
-    if (!contained(this.root, candidate))
-      return fail(
-        "E_DATA_PATH",
-        "Reference escapes the report directory.",
-        "Place prepared JSON beside the report or in one of its subdirectories.",
-      );
-    if (
-      path
-        .relative(this.root, candidate)
-        .split(path.sep)
-        .some((segment) => segment.startsWith("."))
-    )
-      return fail(
-        "E_DATA_PATH",
-        "Hidden files and directories are not allowed.",
-      );
-    if (path.extname(candidate).toLowerCase() !== ".json")
-      return fail("E_DATA_PATH", "Datasets must be .json files.");
-    this.dependencies.add(candidate);
     let canonical: string;
     try {
-      canonical = await realpath(candidate);
-    } catch {
-      return fail(
-        "E_DATA_READ",
-        "Cannot read the referenced dataset.",
-        "Create the file at this path or correct the data property.",
-      );
-    }
-    if (
-      !contained(this.root, canonical) ||
-      path
-        .relative(this.root, canonical)
-        .split(path.sep)
-        .some((segment) => segment.startsWith("."))
-    )
-      return fail(
-        "E_DATA_PATH",
-        "The resolved file or symlink escapes the permitted report files.",
-      );
-    if (path.extname(canonical).toLowerCase() !== ".json")
-      return fail(
-        "E_DATA_PATH",
-        "The resolved file must also have a .json extension.",
-      );
-    this.dependencies.add(canonical);
-    const cached = this.cache.get(canonical);
-    if (cached) return cached;
-    if (this.cache.size >= limits.datasets)
-      return fail(
-        "E_DATA_LIMIT",
-        `At most ${limits.datasets} datasets are supported.`,
-      );
-    let input: { text: string; bytes: number };
-    try {
-      input = await readBounded(
-        canonical,
-        Math.min(limits.jsonBytes, limits.totalBytes - this.totalBytes),
-      );
+      canonical = await this.files.resolve(reference, [".json"]);
     } catch (error) {
       return fail(
-        "E_DATA_READ",
-        error instanceof Error ? error.message : "Could not read data.",
+        error instanceof LocalFileError && error.kind === "path"
+          ? "E_DATA_PATH"
+          : "E_DATA_READ",
+        error instanceof Error ? error.message : "Cannot resolve the dataset.",
+        "Place prepared JSON within the report directory and correct the data property.",
       );
     }
-    this.totalBytes += input.bytes;
-    let parsed: unknown;
-    try {
-      parsed = JSON.parse(input.text);
-    } catch {
-      return fail(
-        "E_DATA_JSON",
-        "Invalid JSON.",
-        "Use a JSON array of flat records, without comments or trailing commas.",
-      );
-    }
-    if (!Array.isArray(parsed))
-      return fail("E_DATA_SHAPE", "Expected an array of flat JSON records.");
-    if (parsed.length > limits.rows)
-      return fail(
-        "E_DATA_LIMIT",
-        `Dataset exceeds ${limits.rows.toLocaleString("en-GB")} rows.`,
-        "Prepare a smaller aggregate dataset before rendering.",
-      );
-    for (const [index, row] of parsed.entries()) {
-      if (!row || typeof row !== "object" || Array.isArray(row))
-        return fail("E_DATA_SHAPE", `Row ${index + 1} is not a record.`);
-      for (const [key, value] of Object.entries(row)) {
-        if (reserved.has(key))
-          return fail(
-            "E_DATA_KEY",
-            `Row ${index + 1} contains the reserved key ${JSON.stringify(key)}.`,
-          );
-        if (!(
-          value === null ||
-          typeof value === "string" ||
-          typeof value === "boolean" ||
-          (typeof value === "number" && Number.isFinite(value))
-        ))
-          return fail(
-            "E_DATA_SHAPE",
-            `Row ${index + 1}, field ${JSON.stringify(key)} must contain a finite number, string, boolean or null.`,
-            "Prepare flat scalar records. Nested cells and sparkline data are planned separately.",
-          );
+    let dataset = this.cache.get(canonical);
+    if (!dataset) {
+      if (this.cache.size >= limits.datasets)
+        return fail(
+          "E_DATA_LIMIT",
+          `At most ${limits.datasets} datasets are supported.`,
+        );
+      let text: string;
+      try {
+        text = new TextDecoder("utf-8", { fatal: true }).decode(
+          await this.files.read(canonical, limits.jsonBytes),
+        );
+      } catch (error) {
+        return fail(
+          "E_DATA_READ",
+          error instanceof Error ? error.message : "Could not read data.",
+        );
       }
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        return fail(
+          "E_DATA_JSON",
+          "Invalid JSON.",
+          "Use a JSON array of records, without comments or trailing commas.",
+        );
+      }
+      if (!Array.isArray(parsed))
+        return fail("E_DATA_SHAPE", "Expected an array of flat JSON records.");
+      if (parsed.length > limits.rows)
+        return fail(
+          "E_DATA_LIMIT",
+          `Dataset exceeds ${limits.rows.toLocaleString("en-GB")} rows.`,
+          "Prepare a smaller dataset before rendering.",
+        );
+      const arrays = new Map<string, number>();
+      for (const [index, row] of parsed.entries()) {
+        if (!row || typeof row !== "object" || Array.isArray(row))
+          return fail("E_DATA_SHAPE", `Row ${index + 1} is not a record.`);
+        for (const [key, value] of Object.entries(row)) {
+          if (reserved.has(key))
+            return fail(
+              "E_DATA_KEY",
+              `Row ${index + 1} contains the reserved key ${JSON.stringify(key)}.`,
+            );
+          if (Array.isArray(value)) {
+            if (value.length > limits.sparklinePoints)
+              return fail(
+                "E_DATA_LIMIT",
+                `Row ${index + 1}, field ${JSON.stringify(key)} exceeds ${limits.sparklinePoints} sparkline points.`,
+                "Prepare a bounded sequence; values are never truncated.",
+              );
+            if (
+              value.some(
+                (item) =>
+                  item !== null &&
+                  !(typeof item === "number" && Number.isFinite(item)),
+              )
+            )
+              return fail(
+                "E_DATA_SHAPE",
+                `Row ${index + 1}, field ${JSON.stringify(key)} must contain only finite numbers or null gaps.`,
+                "Only declared sparkline columns support sequences; nested objects and sequences are invalid.",
+              );
+            if (!arrays.has(key)) arrays.set(key, index);
+          } else if (!(
+            value === null ||
+            typeof value === "string" ||
+            typeof value === "boolean" ||
+            (typeof value === "number" && Number.isFinite(value))
+          ))
+            return fail(
+              "E_DATA_SHAPE",
+              `Row ${index + 1}, field ${JSON.stringify(key)} must contain a finite number, string, boolean or null.`,
+              "Prepare flat scalar records; use an explicit sparkline column for bounded numeric/null sequences.",
+            );
+        }
+      }
+      dataset = { rows: parsed as SourceRow[], arrays };
+      this.cache.set(canonical, dataset);
     }
-    const rows = parsed as Row[];
-    this.cache.set(canonical, rows);
-    return rows;
+    const declared = new Set(
+      block.name === "table"
+        ? block.children.flatMap((child) =>
+            child.type === "component" &&
+            child.name === "column" &&
+            child.props.kind === "sparkline"
+              ? [child.props.field]
+              : [],
+          )
+        : [],
+    );
+    for (const [field, index] of dataset.arrays)
+      if (!declared.has(field))
+        return fail(
+          "E_DATA_SHAPE",
+          `Row ${index + 1}, field ${JSON.stringify(field)} is a sequence without an explicit sparkline column.`,
+          'Use a table column with kind="sparkline" for that field. Charts and scalar tables require flat scalar datasets.',
+        );
+    return dataset.rows;
   }
 
   async resolve(blocks: Block[]): Promise<void> {
@@ -238,7 +197,7 @@ export class DataResolver {
               "Field validation requires at least one record.",
               "warning",
             );
-          if (block.name === "table") this.resolveTable(block, rows);
+          if (block.name === "table") await this.resolveTable(block, rows);
           else if (block.name === "donut" || block.name === "funnel")
             this.resolveParts(block, rows);
           else this.resolveChart(block, rows);
@@ -248,7 +207,11 @@ export class DataResolver {
     }
   }
 
-  private field(rows: Row[], name: string, block: ComponentBlock): boolean {
+  private field(
+    rows: SourceRow[],
+    name: string,
+    block: ComponentBlock,
+  ): boolean {
     const index = rows.findIndex((row) => !Object.hasOwn(row, name));
     if (index < 0) return true;
     const available = Object.keys(rows[index] ?? {});
@@ -263,7 +226,7 @@ export class DataResolver {
 
   private resolveChart(
     block: Extract<ComponentBlock, { name: "line" | "area" | "bar" }>,
-    rows: Row[],
+    rows: SourceRow[],
   ): void {
     const { x, y } = block.props;
     if (rows.length > limits.chartRows) {
@@ -327,7 +290,7 @@ export class DataResolver {
 
   private resolveParts(
     block: Extract<ComponentBlock, { name: "donut" | "funnel" }>,
-    rows: Row[],
+    rows: SourceRow[],
   ): void {
     const props = block.props;
     const maximum =
@@ -446,10 +409,10 @@ export class DataResolver {
     );
   }
 
-  private resolveTable(
+  private async resolveTable(
     block: Extract<ComponentBlock, { name: "table" }>,
-    rows: Row[],
-  ): void {
+    rows: SourceRow[],
+  ): Promise<void> {
     if (rows.length > limits.tableRows) {
       this.diagnostics.add(
         "E_DATA_LIMIT",
@@ -480,12 +443,16 @@ export class DataResolver {
       );
       return;
     }
-    if (new Set(columns.map((column) => column.field)).size !== columns.length)
+    if (
+      new Set(columns.map((column) => column.field)).size !== columns.length
+    ) {
       this.diagnostics.add(
         "E_TABLE_COLUMN",
         "A table cannot declare the same column field twice.",
         block.position,
       );
+      return;
+    }
     for (const [index, row] of rows.entries())
       if (
         Object.keys(row).length !== inferred.length ||
@@ -498,38 +465,150 @@ export class DataResolver {
         );
         return;
       }
+    const prepared: TableRow[] = rows.map(() => ({}));
     for (const column of columns) {
-      if (!this.field(rows, column.field, block)) continue;
-      const types = new Set(
-        rows
-          .map((row) => row[column.field])
-          .filter((value) => value !== null)
-          .map((value) => typeof value),
-      );
-      if (types.size > 1)
+      const origin =
+        explicit.find((child) => child.props.field === column.field) ?? block;
+      const fields = [
+        column.field,
+        ...(column.alt ? [column.alt] : []),
+        ...(column.sortBy ? [column.sortBy] : []),
+      ];
+      if (fields.some((field) => !this.field(rows, field, origin))) continue;
+      const fail = (
+        code: string,
+        row: number,
+        message: string,
+        hint?: string,
+      ): void =>
         this.diagnostics.add(
-          "E_DATA_TYPE",
-          `Table field ${JSON.stringify(column.field)} has mixed non-null types.`,
-          block.position,
+          code,
+          `${block.props.data}, row ${row + 1}, field ${JSON.stringify(column.field)}: ${message}`,
+          origin.position,
+          hint,
         );
-      if (
-        (column.format ||
-          column.sign !== "auto" ||
-          column.semantics !== "neutral") &&
-        types.size &&
-        !types.has("number")
-      )
-        this.diagnostics.add(
-          "E_TABLE_FORMAT",
-          `Numeric formatting/sign/semantics cannot be applied to ${JSON.stringify(column.field)}.`,
-          block.position,
+      const kind = column.kind ?? "scalar";
+      if (kind === "scalar") {
+        const types = new Set(
+          rows
+            .map((row) => row[column.field])
+            .filter((value) => value !== null)
+            .map((value) => typeof value),
         );
+        if (types.size > 1)
+          this.diagnostics.add(
+            "E_DATA_TYPE",
+            `Table field ${JSON.stringify(column.field)} has mixed non-null types.`,
+            origin.position,
+          );
+        if (
+          (column.format ||
+            column.sign !== "auto" ||
+            column.semantics !== "neutral") &&
+          types.size &&
+          !types.has("number")
+        )
+          this.diagnostics.add(
+            "E_TABLE_FORMAT",
+            `Numeric formatting/sign/semantics cannot be applied to ${JSON.stringify(column.field)}.`,
+            origin.position,
+          );
+      }
+      let sortType: string | undefined;
+      for (const [index, row] of rows.entries()) {
+        const value = row[column.field]!;
+        const sort = column.sortBy ? row[column.sortBy] : undefined;
+        if (column.sortBy && (Array.isArray(sort) || sort === undefined)) {
+          fail("E_TABLE_SORT", index, "sortBy must name a scalar field.");
+          continue;
+        }
+        if (sort !== undefined && sort !== null) {
+          if (sortType && sortType !== typeof sort) {
+            fail(
+              "E_TABLE_SORT",
+              index,
+              "sortBy values must have consistent non-null types.",
+            );
+            continue;
+          }
+          sortType = typeof sort;
+        }
+        if (kind === "scalar") {
+          prepared[index]![column.field] = value as Cell;
+          continue;
+        }
+        let rich: RichCell;
+        if (kind === "sparkline") {
+          if (value !== null && !Array.isArray(value)) {
+            fail(
+              "E_DATA_TYPE",
+              index,
+              "Sparkline values must be a bounded numeric/null array or null.",
+            );
+            continue;
+          }
+          rich = {
+            kind: "sparkline",
+            values: value ?? [],
+            ...(column.sortBy ? { sort: sort as Cell } : {}),
+          };
+        } else {
+          const alt = row[column.alt!];
+          if (
+            (value !== null &&
+              (typeof alt !== "string" || !alt.trim() || alt.length > 1000)) ||
+            (value === null && alt !== null && typeof alt !== "string")
+          ) {
+            fail(
+              "E_TABLE_IMAGE",
+              index,
+              "alt must name a nonblank string of at most 1000 characters for each image.",
+            );
+            continue;
+          }
+          if (value === null) {
+            prepared[index]![column.field] = {
+              kind: "image",
+              imageId: null,
+              alt: "",
+              ...(column.sortBy ? { sort: sort as Cell } : {}),
+            };
+            continue;
+          }
+          if (typeof value !== "string" || !value.trim()) {
+            fail(
+              "E_TABLE_IMAGE",
+              index,
+              "Image values must be a plain local PNG/JPEG path or null.",
+            );
+            continue;
+          }
+          try {
+            const image = await this.images.load(value);
+            rich = {
+              kind: "image",
+              imageId: image.id,
+              alt: alt as string,
+              ...(column.sortBy ? { sort: sort as Cell } : {}),
+            };
+          } catch (error) {
+            fail(
+              error instanceof LocalFileError
+                ? error.kind === "path"
+                  ? "E_ASSET_PATH"
+                  : "E_ASSET_READ"
+                : "E_ASSET_IMAGE",
+              index,
+              `${value}: ${error instanceof Error ? error.message : "Cannot read image."}`,
+              "Use a bounded static PNG/JPEG inside the report directory, with a matching extension.",
+            );
+            continue;
+          }
+        }
+        prepared[index]![column.field] = rich;
+      }
     }
     block.columns = columns;
-    block.rows = rows.map((row) =>
-      Object.fromEntries(
-        columns.map((column) => [column.field, row[column.field] as Cell]),
-      ),
-    );
+    block.rows = prepared;
   }
 }

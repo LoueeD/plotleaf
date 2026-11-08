@@ -12,10 +12,15 @@
     "donutSlices": 8,
     "funnelStages": 20,
     "tableRows": 1000,
-    "tableColumns": 40
+    "tableColumns": 40,
+    "sparklinePoints": 64,
+    "imageFiles": 64,
+    "imageBytes": 1048576,
+    "imageDimension": 4096,
+    "imagePixels": 4000000
   },
   "data": {
-    "shape": "array of flat JSON records",
+    "shape": "array of flat JSON records; explicit table sparkline columns permit bounded numeric/null arrays only in their declared fields",
     "resolution": "relative to the report directory; local .json files only",
     "percent": "ratios: 0.12 displays as 12%",
     "percentagePoints": "point values: 0.8 displays as 0.8 pt",
@@ -451,7 +456,7 @@
       "example": ":::table{data=\"./plans.json\" title=\"By plan\"}\n::column{field=\"plan\" label=\"Plan\"}\n::column{field=\"change\" label=\"Δ QoQ\" format=\"percent\" sign=\"always\"}\n:::"
     },
     "column": {
-      "description": "An explicit field, label and format inside a table.",
+      "description": "A scalar, local image or bounded sparkline column. Omitted kind means scalar.",
       "forms": [
         "leaf"
       ],
@@ -466,6 +471,24 @@
             "maxLength": 1000
           },
           "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "scalar",
+              "image",
+              "sparkline"
+            ]
+          },
+          "alt": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "sortBy": {
             "type": "string",
             "minLength": 1,
             "maxLength": 1000
@@ -499,7 +522,12 @@
         ],
         "additionalProperties": false
       },
-      "example": "::column{field=\"change\" label=\"Δ QoQ\" format=\"percent\" sign=\"always\" semantics=\"higher-is-better\"}"
+      "example": "::column{field=\"change\" label=\"Δ QoQ\" format=\"percent\" sign=\"always\" semantics=\"higher-is-better\"}",
+      "dataRules": {
+        "image": "Local static PNG/JPEG path or null. alt names a nonblank string field for each image. Fixed 64 × 48 display box; deduplicated and embedded offline. Paths resolve from the report directory.",
+        "sparkline": "Only explicitly declared sparkline fields may contain arrays: at most 64 finite numbers/nulls, in sample order. Nulls are gaps. Shared observed y scale per column; no aggregation or resampling.",
+        "sortBy": "Optional scalar field for image/sparkline sorting. Without it a rich column has a plain header. Scalar columns sort their own raw values. Sort keys are readable in the export."
+      }
     },
     "callout": {
       "description": "A contextual note or warning containing ordinary Markdown.",
@@ -546,6 +574,7 @@
     "Line/area null y values create gaps; bar null y values are invalid.",
     "Donut category/value fields must differ; category count is bounded, and all-zero values do not create equal slices.",
     "Funnel fields must differ; shares and denominators are supplied, validated and displayed per row, with no sorting or status inference.",
-    "Filters, maps, images, nested data and executable components are not supported in this release."
+    "Only explicit image columns can load local static PNG/JPEG; every resource stays within the report root and shared byte limits.",
+    "Filters, maps, arbitrary nested data and executable components are not supported in this release."
   ]
 }

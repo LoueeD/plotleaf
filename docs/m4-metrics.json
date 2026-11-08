@@ -1,0 +1,63 @@
+{
+  "recorded": "2026-11-08",
+  "status": "unpublished 0.3.0 candidate; owner visual review pending",
+  "local_platform": "macOS arm64",
+  "tooling": {
+    "bun": "1.4.4",
+    "node": "22.23.3",
+    "playwright": "1.65.0"
+  },
+  "checks": {
+    "core_passed": 116,
+    "core_skipped": 0,
+    "browser_passed": 32,
+    "browser_engines": [
+      "Chromium",
+      "WebKit"
+    ],
+    "official_typescript": "passed; three configurations",
+    "tsrs": "passed; three configurations, --fast false",
+    "skill_metadata": "passed",
+    "archive_files": 27,
+    "installed_consumer": "npm/npx validate/build/preview without Bun or development dependencies"
+  },
+  "catalogue": {
+    "html_bytes": 32900,
+    "rows": 4,
+    "image_cells": 4,
+    "unique_embedded_rasters": 3,
+    "sparkline_cells": 4,
+    "chart_runtime": false
+  },
+  "assets": [
+    {
+      "name": "base.js",
+      "raw_bytes": 981
+    },
+    {
+      "name": "charts.js",
+      "raw_bytes": 601238
+    },
+    {
+      "name": "styles.css",
+      "raw_bytes": 12788
+    }
+  ],
+  "gzip_kib_reported_by_bun_build": {
+    "base": 0.6,
+    "charts": 203.5
+  },
+  "installed_consumer": {
+    "node": "22.23.3",
+    "exportedHtmlBytes": 638450,
+    "installedFileBytes": 11101649,
+    "runtimePackages": 103,
+    "definition": "Logical regular-file bytes after npm install --omit=dev; includes plotleaf and production dependencies, excludes symlink targets counted twice and filesystem allocation overhead."
+  },
+  "limitations": [
+    "Header/container validation does not decode raster pixels.",
+    "Image bytes and metadata, alternatives and explicit sort keys are readable by recipients.",
+    "Local measurements do not establish remote platform results.",
+    "Automated and agent visual checks do not replace owner review."
+  ]
+}

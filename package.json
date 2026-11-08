@@ -1,6 +1,6 @@
 {
   "name": "plotleaf",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Beautiful, interactive reports from Markdown and JSON. Built for agents.",
   "type": "module",
   "license": "MIT",
@@ -32,6 +32,10 @@
     "examples/adoption/*.json",
     "examples/onboarding/*.md",
     "examples/onboarding/*.json",
+    "examples/catalog/*.md",
+    "examples/catalog/*.json",
+    "examples/catalog/assets/*.png",
+    "examples/catalog/assets/*.jpg",
     "skills/plotleaf/SKILL.md",
     "README.md",
     "LICENSE",
@@ -50,6 +54,7 @@
   },
   "dependencies": {
     "chokidar": "6.0.0",
+    "image-size": "2.1.0",
     "open": "11.0.4",
     "rehype-sanitize": "6.0.0",
     "rehype-stringify": "10.0.1",

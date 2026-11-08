@@ -11,9 +11,9 @@ Use an installed `plotleaf` CLI or `npx plotleaf`. In an unpublished source chec
 
 ## Discover the contract
 
-Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components in 0.2.0 include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Donut and funnel require plotleaf 0.2.0 or newer; check the installed CLI's schema when using an older version.
+Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Donut and funnel require plotleaf 0.2.0 or newer; check the installed CLI's schema when using an older version.
 
-Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Filters, maps, image/sparkline cells and executable/custom components are future capabilities, not supported syntax.
+Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. The 0.3.0 source candidate adds explicit image/sparkline column kinds. Public 0.2.0 does not support those kinds; use the matching source CLI until 0.3.0 is released. Filters, maps, subtotals and executable/custom components remain future capabilities.
 
 ## Author prepared content
 
@@ -43,10 +43,10 @@ An overview of the prepared dataset, its period and relevant findings.
 
 Literal attributes are quoted strings, decoded by the component schema. `::` is a leaf; `:::` encloses a container. Close every container explicitly. Use a longer outer fence (`::::grid`) when placing another container, such as a table, inside it. Put components at the document root or in allowed component containers, not inline or inside lists/blockquotes. `column` belongs only inside a table. A plain `::table{data="./file.json"}` infers all fields; explicit columns select/order/format fields and exclude unused columns from export.
 
-- Datasets are JSON arrays of flat scalar records. Paths resolve from the Markdown file's directory. Keep them there or in subdirectories; remote, hidden, absolute and outside-root/symlink paths are rejected.
+- Datasets are JSON arrays of flat scalar records, except explicitly declared table sparkline fields. Paths resolve from the Markdown file's directory. Keep them there or in subdirectories; remote, hidden, absolute and outside-root/symlink paths are rejected.
 - Chart fields are literal keys. Charts do not aggregate, join or sort. Prepare a distinct category per bar; date/number x values must be unique and increasing. `xType="date"` accepts real `YYYY-MM-DD` dates or timestamps with an explicit zone. Dates are displayed in UTC.
 - y values are finite JSON numbers. Line/area nulls create gaps; bar nulls are invalid. Missing fields are errors. Empty arrays produce an explicit no-data state and a warning.
-- Table records have consistent keys and non-null types per column. Scalar values stay text; no HTML cell templates. Sorting uses raw values. Use a smaller prepared summary if validation reports table/point limits; the engine never truncates silently.
+- Table records have consistent keys and non-null types per column. Scalar values stay text; rich cells use explicit column kinds, never HTML templates. Sorting uses raw values. Use a smaller prepared summary if validation reports table/point limits; the engine never truncates silently.
 - Numeric formats are `number`, `percent`, `percentage-points` and `currency:GBP` (validated ISO code). Percent uses ratios (`0.12` → 12%); percentage-points uses point values (`0.8` → 0.8 pt); currency uses major units. Whole currency amounts omit `.00`; nonzero cents retain two decimal places. Formatting uses `en-GB`.
 - Metrics, comparisons and business sentiment are supplied by the agent. An increase is not automatically positive. Comparison direction and sentiment are independent; both require comparison text when explicitly supplied. Numeric table changes can declare `higher-is-better` or `lower-is-better` semantics.
 - Include data period, provenance and limitations in the prose where they help readers assess the report. Do not invent findings or imply filters/refresh that the file does not provide.
@@ -63,6 +63,23 @@ Literal attributes are quoted strings, decoded by the component schema. `::` is 
 - Funnel stage names are unique nonblank strings, with at most 20 stages in source order. Each stage can have its own denominator; explain that choice in prose. Status values are `on-target`, `below-target`, `at-risk` or `neutral`. Omit the status mapping for neutral styling; the engine never infers business status. All mapped fields must differ.
 - Use the full-value data disclosures to check counts behind compact funnel labels. Both components retain readable HTML data without JavaScript. Keep the denominator of any nearby conversion KPI explicit when it differs from the funnel baseline.
 
+## Rich tables (0.3.0 source candidate)
+
+```markdown
+:::table{data="./products.json" title="Products"}
+::column{field="image" kind="image" alt="description" label="Preview"}
+::column{field="product" label="Product"}
+::column{field="weekly_orders" kind="sparkline" sortBy="last_week" label="Weekly orders"}
+:::
+```
+
+- Omitted `kind` means scalar. Images require an `alt` field containing a nonblank string for each non-null image; null image cells may have null alternatives. Image fields contain a local static PNG/JPEG path or null, resolved from the Markdown directory. Do not supply SVG, GIF/WebP, remote/data URLs or absolute/hidden/outside-root paths. The display box is 64 × 48; prepare images within the schema's byte/dimension/reference limits.
+- Each unique image is embedded once. Its complete original bytes and metadata are readable by recipients; prepare assets for that disclosure. Alternatives are text, not markup. No image styling or numeric-format properties are supported.
+- Sparkline fields contain at most 64 finite numbers/nulls or null. Only explicitly declared sparkline fields may contain sequences. Use a separate flat dataset for a chart or an inferred/scalar table. Nested objects/arrays and numeric strings are invalid; rows retain consistent keys.
+- Sparkline x positions follow sample order. All rows in the same column share its observed min/max y scale. Nulls are gaps; last-sample labels remain missing when the final sample is null. Empty/all-null series show no invented values. Use `format` for numeric labels; sign/sentiment settings apply only to scalar columns.
+- Rich columns are unsortable unless `sortBy` names a separate scalar field with consistent non-null types. Prepare any sort key explicitly, such as `last_week`; it is readable in the export. The engine does not compare arrays or derive a total/trend. Scalar columns keep their existing raw-value sort.
+- Check image alternatives, line gaps/shared scale, keyboard value disclosures, row sorting, both themes and narrow table scrolling. Images/sparklines remain visible without JavaScript. The fictional catalogue example demonstrates this syntax.
+
 ## Validate, preview and export
 
 ```bash
@@ -71,7 +88,7 @@ npx plotleaf dev report.md --no-open
 npx plotleaf build report.md --out ./report.html
 ```
 
-Repair diagnostics using their code, one-based source location, message and hint, then validate again. Preview watches Markdown and referenced JSON; an invalid edit displays diagnostics and recovers after repair. Omit `--no-open` to open a browser. No backend/account is required.
+Repair diagnostics using their code, one-based source location, message and hint, then validate again. Preview watches Markdown, referenced JSON and local table images; an invalid edit displays diagnostics and recovers after repair. Omit `--no-open` to open a browser. No backend/account is required.
 
 Export is one self-contained interactive HTML file. Check it after copying it away from sources and disabling networking. Charts require JavaScript; prose, metrics, tables and native chart-data disclosures remain readable without it. All displayed/embedded values are readable by recipients: collapsing a table or hiding a field visually is not redaction. Prepare sensitive data before rendering; explicit-column tables and chart field projection help avoid exporting unused fields.
 

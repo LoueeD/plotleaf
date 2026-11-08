@@ -74,9 +74,9 @@ export function parseReport(
     if (node.type === "image" || node.type === "imageReference")
       diagnostics.add(
         "E_IMAGE_UNSUPPORTED",
-        "Report images are not supported in this initial release.",
+        "Markdown images are not supported; use an explicit image column in a table.",
         node.position,
-        "Use a text link; local raster images are planned for the rich-table increment.",
+        'Use ::column{field="image" kind="image" alt="description"} inside a table for local PNG/JPEG images, or use a text link.',
       );
     if (node.type === "link" || node.type === "definition") {
       const url = node.url ?? "";
