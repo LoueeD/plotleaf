@@ -1,0 +1,26 @@
+[
+  {
+    "category": "Apparel",
+    "orders": 5680,
+    "revenue": 323760,
+    "change": 0.184
+  },
+  {
+    "category": "Home",
+    "orders": 3240,
+    "revenue": 252720,
+    "change": 0.123
+  },
+  {
+    "category": "Accessories",
+    "orders": 2360,
+    "revenue": 165200,
+    "change": 0.328
+  },
+  {
+    "category": "Outdoors",
+    "orders": 1200,
+    "revenue": 82480,
+    "change": 0.176
+  }
+]

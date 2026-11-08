@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.cache/
+test-results/
+playwright-report/
+*.tgz
+examples/**/*.html
+.DS_Store
+docs/design/references/
+.env
+.env.*
+.npmrc
+.agents/
+.codex/
+.aws/

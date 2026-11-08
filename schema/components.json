@@ -1,0 +1,416 @@
+{
+  "version": 1,
+  "syntax": "markdown-directives",
+  "attributes": "Literal strings decoded according to each property schema. No JavaScript expressions.",
+  "limits": {
+    "markdownBytes": 1048576,
+    "jsonBytes": 10485760,
+    "totalBytes": 26214400,
+    "datasets": 64,
+    "rows": 100000,
+    "chartRows": 10000,
+    "tableRows": 1000,
+    "tableColumns": 40
+  },
+  "data": {
+    "shape": "array of flat JSON records",
+    "resolution": "relative to the report directory; local .json files only",
+    "percent": "ratios: 0.12 displays as 12%",
+    "percentagePoints": "point values: 0.8 displays as 0.8 pt",
+    "currency": "major units; omit .00 on whole amounts, preserve nonzero cents",
+    "locale": "en-GB",
+    "timeZone": "UTC"
+  },
+  "components": {
+    "grid": {
+      "description": "A responsive row of one to four components.",
+      "forms": [
+        "container"
+      ],
+      "children": [
+        "metric",
+        "line",
+        "area",
+        "bar",
+        "table",
+        "callout"
+      ],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "columns": {
+            "default": 2,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 4
+          }
+        },
+        "required": [
+          "columns"
+        ],
+        "additionalProperties": false
+      },
+      "example": ":::grid{columns=\"4\"}\n::metric{label=\"Teams\" value=\"1492\"}\n:::"
+    },
+    "metric": {
+      "description": "A prepared numeric value with optional comparison, direction and sentiment.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "value": {
+            "type": "number"
+          },
+          "format": {
+            "default": "number",
+            "type": "string",
+            "pattern": "^(number|percent|percentage-points|currency:[A-Z]{3})$"
+          },
+          "comparison": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "direction": {
+            "type": "string",
+            "enum": [
+              "up",
+              "down",
+              "flat"
+            ]
+          },
+          "sentiment": {
+            "default": "neutral",
+            "type": "string",
+            "enum": [
+              "positive",
+              "negative",
+              "neutral"
+            ]
+          }
+        },
+        "required": [
+          "label",
+          "value",
+          "format",
+          "sentiment"
+        ],
+        "additionalProperties": false
+      },
+      "example": "::metric{label=\"Conversion\" value=\"0.103\" format=\"percent\"}"
+    },
+    "line": {
+      "description": "An interactive single-series line chart from local JSON.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "x": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "y": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "format": {
+            "default": "number",
+            "type": "string",
+            "pattern": "^(number|percent|percentage-points|currency:[A-Z]{3})$"
+          },
+          "xType": {
+            "default": "category",
+            "type": "string",
+            "enum": [
+              "category",
+              "date",
+              "number"
+            ]
+          },
+          "target": {
+            "type": "number"
+          },
+          "targetLabel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "data",
+          "x",
+          "y",
+          "title",
+          "format",
+          "xType"
+        ],
+        "additionalProperties": false
+      },
+      "example": "::line{data=\"./usage.json\" x=\"date\" y=\"teams\" xType=\"date\" title=\"Active teams\"}"
+    },
+    "area": {
+      "description": "A line chart with a restrained area fill.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "x": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "y": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "format": {
+            "default": "number",
+            "type": "string",
+            "pattern": "^(number|percent|percentage-points|currency:[A-Z]{3})$"
+          },
+          "xType": {
+            "default": "category",
+            "type": "string",
+            "enum": [
+              "category",
+              "date",
+              "number"
+            ]
+          },
+          "target": {
+            "type": "number"
+          },
+          "targetLabel": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "data",
+          "x",
+          "y",
+          "title",
+          "format",
+          "xType"
+        ],
+        "additionalProperties": false
+      },
+      "example": "::area{data=\"./usage.json\" x=\"date\" y=\"teams\" xType=\"date\" title=\"Active teams\" target=\"1600\"}"
+    },
+    "bar": {
+      "description": "An interactive category bar chart with a zero baseline.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "x": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "y": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "format": {
+            "default": "number",
+            "type": "string",
+            "pattern": "^(number|percent|percentage-points|currency:[A-Z]{3})$"
+          }
+        },
+        "required": [
+          "data",
+          "x",
+          "y",
+          "title",
+          "format"
+        ],
+        "additionalProperties": false
+      },
+      "example": "::bar{data=\"./errors.json\" x=\"category\" y=\"count\" title=\"Errors by category\"}"
+    },
+    "table": {
+      "description": "A semantic sortable table, with inferred or explicitly formatted columns.",
+      "forms": [
+        "leaf",
+        "container"
+      ],
+      "children": [
+        "column"
+      ],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "example": ":::table{data=\"./plans.json\" title=\"By plan\"}\n::column{field=\"plan\" label=\"Plan\"}\n::column{field=\"change\" label=\"Δ QoQ\" format=\"percent\" sign=\"always\"}\n:::"
+    },
+    "column": {
+      "description": "An explicit field, label and format inside a table.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "format": {
+            "type": "string",
+            "pattern": "^(number|percent|percentage-points|currency:[A-Z]{3})$"
+          },
+          "sign": {
+            "default": "auto",
+            "type": "string",
+            "enum": [
+              "auto",
+              "always"
+            ]
+          },
+          "semantics": {
+            "default": "neutral",
+            "type": "string",
+            "enum": [
+              "neutral",
+              "higher-is-better",
+              "lower-is-better"
+            ]
+          }
+        },
+        "required": [
+          "field",
+          "sign",
+          "semantics"
+        ],
+        "additionalProperties": false
+      },
+      "example": "::column{field=\"change\" label=\"Δ QoQ\" format=\"percent\" sign=\"always\" semantics=\"higher-is-better\"}"
+    },
+    "callout": {
+      "description": "A contextual note or warning containing ordinary Markdown.",
+      "forms": [
+        "container"
+      ],
+      "children": [
+        "markdown"
+      ],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "tone": {
+            "default": "note",
+            "type": "string",
+            "enum": [
+              "note",
+              "warning"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "tone"
+        ],
+        "additionalProperties": false
+      },
+      "example": ":::callout{title=\"Coverage\"}\nSeven complete days of prepared data.\n:::"
+    }
+  },
+  "rules": [
+    "Use explicit closing fences for containers.",
+    "Components are standalone blocks, not inline/list/blockquote content.",
+    "column is only allowed inside table; grids cannot nest.",
+    "direction and explicitly supplied sentiment require metric comparison text.",
+    "targetLabel requires target.",
+    "Dataset fields are literal own-property keys, not expressions.",
+    "Charts preserve source order; date/number x values must increase.",
+    "Line/area null y values create gaps; bar null y values are invalid.",
+    "Filters, maps, images, nested data and executable components are not supported in this release."
+  ]
+}

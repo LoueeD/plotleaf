@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["bun"],
+    "lib": ["ES2023", "DOM"],
+    "allowImportingTsExtensions": true
+  },
+  "include": [
+    "scripts/**/*.ts",
+    "tests/core/**/*.ts",
+    "tests/browser/**/*.ts",
+    "playwright.config.ts"
+  ],
+  "exclude": []
+}

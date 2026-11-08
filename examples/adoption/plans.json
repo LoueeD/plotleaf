@@ -1,0 +1,5 @@
+[
+  { "plan": "Pro", "teams": 884, "change": 0.41, "alerts": 2140 },
+  { "plan": "Team", "teams": 432, "change": 0.22, "alerts": 861 },
+  { "plan": "Free", "teams": 176, "change": 0.09, "alerts": 291 }
+]

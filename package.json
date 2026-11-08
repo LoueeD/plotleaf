@@ -1,0 +1,72 @@
+{
+  "name": "plotleaf",
+  "version": "0.1.0",
+  "description": "Beautiful, interactive reports from Markdown and JSON. Built for agents.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "plotleaf": "./dist/cli.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "packageManager": "bun@1.4.4",
+  "files": [
+    "dist/cli.js",
+    "dist/assets/base.js",
+    "dist/assets/charts.js",
+    "dist/assets/styles.css",
+    "dist/assets/notices.txt",
+    "schema/components.json",
+    "examples/storefront/*.md",
+    "examples/storefront/*.json",
+    "examples/adoption/*.md",
+    "examples/adoption/*.json",
+    "skills/plotleaf/SKILL.md",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.txt"
+  ],
+  "scripts": {
+    "format": "bun fmt src scripts tests playwright.config.ts package.json tsconfig.json tsconfig.browser.json tsconfig.dev.json bunfig.toml .github/workflows/ci.yml",
+    "build": "bun scripts/build.ts",
+    "typecheck": "bun node_modules/typescript/bin/tsc --noEmit -p tsconfig.json && bun node_modules/typescript/bin/tsc --noEmit -p tsconfig.browser.json && bun node_modules/typescript/bin/tsc --noEmit -p tsconfig.dev.json",
+    "typecheck:tsrs": "bun node_modules/tsrs/bin/tsrs --noEmit --fast false -p tsconfig.json && bun node_modules/tsrs/bin/tsrs --noEmit --fast false -p tsconfig.browser.json && bun node_modules/tsrs/bin/tsrs --noEmit --fast false -p tsconfig.dev.json",
+    "test": "bun test",
+    "test:browser": "node node_modules/@playwright/test/cli.js test",
+    "test:consumer": "node tests/consumer/smoke.mjs",
+    "check": "bun run typecheck && bun run build && bun run test && bun run test:consumer",
+    "audit:package": "node scripts/audit-package.mjs"
+  },
+  "dependencies": {
+    "chokidar": "6.0.0",
+    "open": "11.0.4",
+    "rehype-sanitize": "6.0.0",
+    "rehype-stringify": "10.0.1",
+    "remark-directive": "4.0.0",
+    "remark-frontmatter": "5.0.0",
+    "remark-parse": "11.0.0",
+    "remark-rehype": "11.1.2",
+    "unified": "11.0.5",
+    "yaml": "2.9.1",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.0",
+    "@types/bun": "1.4.4",
+    "@types/hast": "3.0.5",
+    "@types/mdast": "4.0.4",
+    "@types/node": "22.20.5",
+    "echarts": "6.1.0",
+    "tsrs": "0.23.0-ts7.1.0-beta",
+    "typescript": "7.0.2"
+  },
+  "keywords": [
+    "markdown",
+    "reports",
+    "data-visualization",
+    "charts",
+    "cli",
+    "agents"
+  ]
+}

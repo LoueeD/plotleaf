@@ -1,0 +1,27 @@
+{
+  "checkedAt": "2026-11-07T21:09:46.765Z",
+  "candidates": [
+    {
+      "name": "plotleaf",
+      "registryStatus": 404,
+      "searchStatus": 200,
+      "npmSearchMatches": [],
+      "publishAcceptance": "not verified"
+    },
+    {
+      "name": "folavo",
+      "registryStatus": 404,
+      "searchStatus": 200,
+      "npmSearchMatches": [],
+      "publishAcceptance": "not verified"
+    },
+    {
+      "name": "foliolet",
+      "registryStatus": 404,
+      "searchStatus": 200,
+      "npmSearchMatches": [],
+      "publishAcceptance": "not verified"
+    }
+  ],
+  "limitation": "A missing package is not proof of npm publish acceptance. No candidate was registered or published."
+}
