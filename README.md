@@ -8,6 +8,33 @@ Beautiful, interactive reports from Markdown and prepared JSON. Built for coding
 
 A report is one Markdown file, optionally accompanied by local JSON datasets. No application, configuration file, account, database or hosted service. Export one HTML file that keeps working offline.
 
+## Start with your coding agent
+
+Copy this into your agent and replace the report brief:
+
+```text
+Create a polished, interactive report with plotleaf.
+
+Report brief: [Describe the report and point to the data you want to use.]
+
+Use Node 22+ and npx; no app scaffolding, Bun or account is needed.
+First run `npx --yes plotleaf --help`. If it lists `guide`, read
+`npx --yes plotleaf guide`. Otherwise read the authoring guide at:
+https://raw.githubusercontent.com/LoueeD/plotleaf/v0.3.0/skills/plotleaf/SKILL.md
+Then run `npx --yes plotleaf schema` for the installed component API.
+
+Use the data I provide; don't invent values or findings. If the brief or
+data is missing, ask for what's needed. Prepare one report.md and any local
+JSON/assets it needs, following the guide and installed schema.
+
+Run `npx --yes plotleaf validate report.md --json` and fix all errors.
+Start `npx --yes plotleaf dev report.md --no-open` and give me the preview URL.
+Build `npx --yes plotleaf build report.md --out report.html` and give me
+the source and portable HTML paths, with any data limitations.
+```
+
+The prompt works with published 0.3.0 through the linked guide. The `guide` command is implemented in the unreleased **0.3.1 candidate**; use a source build to try it before publication.
+
 ## Status
 
 The initial MVP includes validation, live preview/reload, self-contained HTML export and a generated component specification. All bundled examples use fictional data.
@@ -29,6 +56,8 @@ npx plotleaf schema
 ```
 
 `plotleaf report.md` is an alias for `dev`. `build` defaults to `report.html` beside the source. Relative dataset paths resolve from the Markdown file's directory; an explicit `--out` resolves from the caller's working directory. Exports contain no preview connection and need no source files at viewing time.
+
+For agent discovery, `npx plotleaf guide` (0.3.1+) prints the bundled report-authoring guide as Markdown, and `npx plotleaf schema` prints the component specification as JSON. The guide is the same `skills/plotleaf/SKILL.md` shipped with the package. These commands print documentation without creating files, changing project configuration or starting a server; once installed, they read local package content.
 
 ## A report
 

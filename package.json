@@ -1,6 +1,6 @@
 {
   "name": "plotleaf",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Beautiful, interactive reports from Markdown and JSON. Built for agents.",
   "type": "module",
   "license": "MIT",

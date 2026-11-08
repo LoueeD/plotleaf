@@ -145,6 +145,19 @@ try {
     run(process.execPath, [cli, "--version"]).trim(),
     JSON.parse(await readFile(path.join(root, "package.json"), "utf8")).version,
   );
+  const guide = run(process.execPath, [
+    npxCli,
+    "--no-install",
+    "plotleaf",
+    "guide",
+  ]);
+  assert.equal(
+    guide,
+    await readFile(
+      path.join(directory, "node_modules/plotleaf/skills/plotleaf/SKILL.md"),
+      "utf8",
+    ),
+  );
   const validation = JSON.parse(
     run(process.execPath, [
       npxCli,

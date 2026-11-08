@@ -38,6 +38,10 @@ Treat these as the intended product direction. The staging below keeps the first
 
 The V1 increments are ordered defaults; their estimates must follow the MVP results. Maps and arbitrary new renderer extensibility are planned beyond the weekend and initial V1 increments. They are not permanently out of scope. The original exclusions for accounts, SQL/connectors, hosting, embedded AI/MCP, visual editing, collaboration and scheduled refresh still apply.
 
+## Agent discovery patch before M5
+
+The unreleased 0.3.1 source candidate adds a copy/paste report-authoring prompt to the README and `npx plotleaf guide`. The command prints the already bundled `skills/plotleaf/SKILL.md` from its package location; `schema` remains the exact component API. The prompt falls back to the versioned public 0.3.0 guide for existing npm users. No skill installer, project scaffolding, additional dependency, renderer change or M5 interaction implementation is needed. Publication is a separate step.
+
 ## Next delivery slice
 
 The source/CI foundation is delivered, with all 11 remote jobs passing on Linux/Windows. Public source is [LoueeD/plotleaf](https://github.com/LoueeD/plotleaf), and `v0.1.0` reproduces the published artifact. Source/issue links are included in 0.2.0. Keep `examples/report.md` as the cumulative owner-review report at the same live preview URL; add milestone features there while retaining earlier demonstrations. Keep the manual owner visual-review step and exact-tarball audit/consumer checks for renderer releases. Continue using fictional examples only; a plan or CI change does not require npm publication.

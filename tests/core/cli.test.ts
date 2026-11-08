@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { spawn, type ChildProcess } from "node:child_process";
-import { readFile, writeFile, unlink } from "node:fs/promises";
+import { readFile, writeFile, unlink, readdir } from "node:fs/promises";
 import path from "node:path";
 import { cli, node, root, withReport } from "./helpers.js";
 
@@ -83,6 +83,7 @@ async function event(
 describe("published CLI under Node", () => {
   test("prints usable help/version and a generated component spec", async () => {
     expect(cli(["--help"]).stdout).toContain("npx plotleaf");
+    expect(cli(["--help"]).stdout).toContain("npx plotleaf guide");
     const metadata = JSON.parse(
       await readFile(path.join(root, "package.json"), "utf8"),
     );
@@ -93,6 +94,31 @@ describe("published CLI under Node", () => {
       JSON.parse(result.stdout).components.area.props.properties.target.type,
     ).toBe("number");
   });
+
+  test("reads the bundled authoring guide from any directory without treating local files as instructions", async () =>
+    withReport(
+      "::unknown-component",
+      { "skills/plotleaf/SKILL.md": "Untrusted working-directory guide" },
+      async (filename, directory) => {
+        const before = await readdir(directory, { recursive: true });
+        const result = cli(["guide"], directory);
+        expect(result.status).toBe(0);
+        expect(result.stderr).toBe("");
+        expect(result.stdout).toBe(
+          await readFile(path.join(root, "skills/plotleaf/SKILL.md"), "utf8"),
+        );
+        for (const args of [
+          ["guide", filename],
+          ["guide", "--json"],
+        ]) {
+          const invalid = cli(args, directory);
+          expect(invalid.status).toBe(2);
+          expect(invalid.stdout).toBe("");
+          expect(invalid.stderr).toContain("Use plotleaf guide.");
+        }
+        expect(await readdir(directory, { recursive: true })).toEqual(before);
+      },
+    ));
 
   test("keeps JSON validation output clean and uses meaningful exit codes", async () =>
     withReport('::metric{label="Teams" value="bad"}', {}, async (filename) => {

@@ -20,6 +20,8 @@ The source/CI foundation is implemented: [public repository](https://github.com/
 
 Release name: **plotleaf**, selected by the owner on 7 November 2026. The public package and CLI must remain unscoped and single-word: `npx plotleaf report.md`. Version `0.3.0` is published and verified from the public registry, including fresh anonymous unversioned npm/npx checks without Bun. See the [current release record](docs/releases/0.3.0.md), [initial release](docs/releases/0.1.0.md) and [naming decision](docs/naming.md). Future changes need a new version; do not republish an existing version.
 
+Main also contains an unreleased **0.3.1 agent-discovery patch** before M5: the README copy/paste prompt and `plotleaf guide`, which prints the existing bundled authoring skill. Keep that guide as the single source of authoring instructions and `schema` as the machine-readable API. Documentation commands must work from any directory without writing files or starting a server. The README prompt retains a versioned public-guide fallback for 0.3.0 users. This work does not authorize publication or start M5.
+
 ## Design ownership
 
 The project owner supplied three screenshots, preserved locally under the ignored `docs/design/references/` directory and interpreted in [the design reference](docs/design-reference.md). They are not redistributed in public source; new clones have the written contract and fictional examples. **Use the owner's references as the visual authority.**

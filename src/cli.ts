@@ -17,6 +17,7 @@ Usage:
   npx plotleaf dev <report.md> [--no-open] [--port 3000]
   npx plotleaf validate <report.md> [--json]   Validate syntax and local data
   npx plotleaf build <report.md> [--out report.html]
+  npx plotleaf guide                          Read the report-authoring guide
   npx plotleaf schema                         Print component specifications
 
 Options:
@@ -63,16 +64,23 @@ async function main(): Promise<void> {
     return;
   }
   const first = positionals[0]!;
-  const known = ["dev", "validate", "build", "schema"];
+  const known = ["dev", "validate", "build", "schema", "guide"];
   const command = known.includes(first) ? first : "dev";
   const filename = known.includes(first) ? positionals[1] : first;
   const extras = positionals.slice(known.includes(first) ? 2 : 1);
-  if (command === "schema") {
+  if (command === "schema" || command === "guide") {
     if (positionals.length !== 1 || Object.keys(values).length)
       throw new Error(
-        "schema does not accept a report or options. Use plotleaf schema.",
+        `${command} does not accept a report or options. Use plotleaf ${command}.`,
       );
-    console.log(JSON.stringify(componentSpec(), null, 2));
+    if (command === "guide")
+      process.stdout.write(
+        await readFile(
+          new URL("../skills/plotleaf/SKILL.md", import.meta.url),
+          "utf8",
+        ),
+      );
+    else console.log(JSON.stringify(componentSpec(), null, 2));
     return;
   }
   if (!filename || extras.length)
