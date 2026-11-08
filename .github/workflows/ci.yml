@@ -112,7 +112,12 @@ jobs:
         with:
           name: plotleaf-dist
           path: dist/
-      - run: node node_modules/@playwright/test/cli.js install --with-deps chromium webkit
+      - name: Install Linux browsers and system dependencies
+        if: runner.os == 'Linux'
+        run: node node_modules/@playwright/test/cli.js install --with-deps chromium webkit
+      - name: Install Windows browsers
+        if: runner.os == 'Windows'
+        run: node node_modules/@playwright/test/cli.js install chromium webkit
       - run: bun run test:browser
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
