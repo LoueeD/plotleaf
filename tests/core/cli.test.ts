@@ -47,17 +47,22 @@ async function preview(
           child.kill("SIGKILL");
           reject(new Error("Preview did not stop cleanly."));
         }, 5000);
-        child.once("exit", (code) => {
+        child.once("exit", (code, signal) => {
           clearTimeout(timer);
           // Node forcibly terminates SIGTERM targets on Windows; it does not
           // deliver the POSIX signal to the CLI's graceful-shutdown handler.
-          if (code === 0 || (process.platform === "win32" && code === 1))
+          if (
+            code === 0 ||
+            (process.platform === "win32" &&
+              (code === 1 || (code === null && signal === "SIGTERM")))
+          )
             resolve();
-          else reject(new Error(`Preview stopped with ${code}`));
+          else reject(new Error(`Preview stopped with ${code} (${signal})`));
         });
       });
       child.kill("SIGTERM");
       await stopped;
+      await expect(fetch(url)).rejects.toThrow();
     },
   };
 }
