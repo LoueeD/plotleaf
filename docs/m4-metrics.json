@@ -57,7 +57,45 @@
   "limitations": [
     "Header/container validation does not decode raster pixels.",
     "Image bytes and metadata, alternatives and explicit sort keys are readable by recipients.",
-    "Local measurements do not establish remote platform results.",
     "Automated and agent visual checks do not replace owner review."
-  ]
+  ],
+  "archive": {
+    "bytes": 260004,
+    "integrity": "sha512-eK6pvSMQysRf6Q49vUGFajznXvVFbS3xEH/K5qyx5B9F8Q5b/KrcXGb+nbGli/yx/fCYUjhMVaiwih2MQHmkbA==",
+    "unpacked_bytes": 792435,
+    "matches_ci_archive_byte_for_byte": true
+  },
+  "remote_ci": {
+    "url": "https://github.com/LoueeD/plotleaf/actions/runs/42534065972",
+    "source_commit": "7521945feca2c38097af4ffa464735fd9ca60183",
+    "jobs_passed": 11,
+    "core_linux": {
+      "passed": 116,
+      "skipped": 0
+    },
+    "core_windows": {
+      "passed": 114,
+      "skipped": 2,
+      "reason": "POSIX named-pipe fixtures"
+    },
+    "browsers_per_platform": 32,
+    "browser_platforms": [
+      "Linux",
+      "Windows"
+    ],
+    "installed_consumers": {
+      "platforms": [
+        "Linux",
+        "Windows"
+      ],
+      "node": [
+        "22",
+        "24",
+        "26"
+      ],
+      "shared_audited_archive": true,
+      "bun_on_consumer_path": false
+    },
+    "immutable_0_1_0_source_reproduction": "passed"
+  }
 }

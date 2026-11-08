@@ -43,4 +43,4 @@ Source tracking excludes caches, generated HTML, build output, local account/too
 
 The [release procedure](release.md) requires passing CI for the candidate source, the exact-archive audit/consumer check and the owner's manual review of renderer changes in the running preview. Tests and agent screenshot inspection do not approve publication. Any renderer change after approval requires another review of the replacement artifact.
 
-The next product increment remains a narrowly scoped visualization/table slice. Filters require a concrete prepared-view transition fixture first; maps, reusable compositions and broader platform features remain staged in [the roadmap](product-roadmap.md).
+M3 subsequently published 0.2.0; the M4 rich-table source candidate is now technically verified across the same 11-job matrix. See [M4 results](m4-rich-tables.md) for its updated test counts, 27-file archive and pending owner review. These later results do not change the M2 evidence above. M5 filters require a concrete prepared-view transition fixture first; maps, reusable compositions and broader platform features remain staged in [the roadmap](product-roadmap.md).

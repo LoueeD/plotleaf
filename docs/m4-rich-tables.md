@@ -1,6 +1,6 @@
 # M4: image and sparkline table cells
 
-Updated: 8 November 2026. M1–M3 are complete; npm provides `plotleaf@0.2.0`. M4 is implemented in the unreleased `0.3.0` candidate, pending final technical verification and owner visual review. Use the source CLI to try these columns before publication.
+Updated: 8 November 2026. M1–M3 are complete; npm provides `plotleaf@0.2.0`. M4 is implemented in the unreleased `0.3.0` candidate, technically verified and pending owner visual review. Use the source CLI to try these columns before publication.
 
 ## Scope
 
@@ -62,7 +62,7 @@ The fictional [catalogue report](../examples/catalog/report.md) uses four rows, 
 
 Preview watches attempted and canonical image paths. Replacing image bytes updates its generated ID; deletion or invalid replacement shows diagnostics; restoring the file recovers. The report export is still one self-contained HTML file and renders after its source directory is removed. A table-only catalogue uses the small base runtime, not ECharts. The existing 5 KiB base / 210 KiB chart gzip ceilings remain enforced.
 
-Local verification passes: official TypeScript and TSRS across all three configurations; **116 core/compiler/security/Node tests**; **32 Chromium/WebKit checks**; the **27-file package audit**; and an installed npm/npx consumer on Node 22.23.3 without Bun or development dependencies. Agent inspection covers desktop light/dark and mobile dark output. Remote Linux/Windows verification is pending and will be recorded here after completion. No npm publication or 0.3.0 release tag is authorized by this implementation task.
+Local verification passes: official TypeScript and TSRS across all three configurations; **116 core/compiler/security/Node tests**; **32 Chromium/WebKit checks**; the **27-file package audit**; and an installed npm/npx consumer on Node 22.23.3 without Bun or development dependencies. Agent inspection covers desktop light/dark and mobile dark output. [Remote run 42534065972](https://github.com/LoueeD/plotleaf/actions/runs/42534065972) passes all **11 jobs** for source `7521945feca2c38097af4ffa464735fd9ca60183`: Linux build/typechecks/core (**116 pass**), Windows core (**114 pass, 2 POSIX-only FIFO skips**), six installed npm/npx consumers on Linux/Windows × Node 22/24/26, **32 browser checks on each platform** across Chromium/WebKit, and immutable 0.1.0 source reproduction. All six consumer jobs use one audited Linux-built archive, which matches the local candidate byte for byte. CI never publishes. No npm publication or 0.3.0 release tag is authorized by this implementation task.
 
 The catalogue export measures about **32.1 KiB**, with four image cells and only three embedded rasters. The base asset remains about **0.6 KiB gzip**, and charts remain about **203.5 KiB gzip** using Bun. The installed production package tree measures about **10.6 MiB** in logical regular-file bytes on macOS arm64/Node 22 (103 package manifests, including plotleaf). This includes Markdown/compiler dependencies, not just browser output; it is not a filesystem allocation measurement. See [local measurements](m4-metrics.json).
 
