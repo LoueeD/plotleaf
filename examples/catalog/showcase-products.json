@@ -1,0 +1,78 @@
+[
+  {
+    "product": "Linen tote",
+    "image": "./catalog/assets/linen-tote.png",
+    "image_alt": "Illustration of a sand-coloured linen tote",
+    "weekly_orders": [
+      42,
+      47,
+      44,
+      56,
+      59,
+      63,
+      68,
+      74
+    ],
+    "orders": 453,
+    "revenue": 18120,
+    "change": 0.182,
+    "last_week": 74
+  },
+  {
+    "product": "Desk lamp",
+    "image": "./catalog/assets/desk-lamp.jpg",
+    "image_alt": "Illustration of a blue desk lamp",
+    "weekly_orders": [
+      38,
+      35,
+      39,
+      null,
+      46,
+      44,
+      49,
+      53
+    ],
+    "orders": 304,
+    "revenue": 27360,
+    "change": 0.124,
+    "last_week": 53
+  },
+  {
+    "product": "Field notebook",
+    "image": "./catalog/assets/field-notebook.png",
+    "image_alt": "Illustration of a green field notebook",
+    "weekly_orders": [
+      60,
+      63,
+      59,
+      64,
+      62,
+      69,
+      72,
+      78
+    ],
+    "orders": 527,
+    "revenue": 10540,
+    "change": 0.068,
+    "last_week": 78
+  },
+  {
+    "product": "Linen tote — natural",
+    "image": "./catalog/assets/linen-tote.png",
+    "image_alt": "Illustration of the same sand-coloured linen tote in a second product row",
+    "weekly_orders": [
+      18,
+      21,
+      20,
+      24,
+      23,
+      27,
+      29,
+      31
+    ],
+    "orders": 193,
+    "revenue": 7720,
+    "change": 0.094,
+    "last_week": 31
+  }
+]

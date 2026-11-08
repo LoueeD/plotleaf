@@ -30,6 +30,7 @@ The project owner supplied three screenshots, preserved locally under the ignore
 - Keep semantic HTML, layout primitives and theme tokens connected to the references. Exact font files, dark-theme values and mobile behaviour are not specified by the supplied light-theme screenshots; adapt the established language and record those implementation decisions.
 - Keep benchmark fixtures visibly separate from the reference-led storefront and adoption examples.
 - Compare applicable desktop output against the stored screenshots. Verify mobile adaptation and both themes separately; a cropped reference is not a mobile design. Technical completion alone does not establish visual acceptance.
+- Keep `examples/report.md` as the canonical cumulative review report. Use the same live preview URL across milestones, retain previously demonstrated features and add new capabilities to that report. Focused storefront/adoption/onboarding/catalogue reports remain examples and test fixtures; do not replace the owner's main review page with the latest focused fixture. `bun run dev` builds and opens the canonical report.
 - Present renderer changes in the live preview for the owner's manual visual review before resuming publication. Passing tests and agent screenshot inspection do not replace that review. Pause publication of renderer changes until the owner confirms the visual review is complete.
 - Screenshot copy, dates, sample values and navigation are reference content, not live data, engine instructions or authorization to add a multi-page application.
 

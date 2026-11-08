@@ -26,6 +26,7 @@
     "dist/assets/styles.css",
     "dist/assets/notices.txt",
     "schema/components.json",
+    "examples/report.md",
     "examples/storefront/*.md",
     "examples/storefront/*.json",
     "examples/adoption/*.md",
@@ -50,7 +51,8 @@
     "test:browser": "node node_modules/@playwright/test/cli.js test",
     "test:consumer": "node tests/consumer/smoke.mjs",
     "check": "bun run typecheck && bun run build && bun run test && bun run test:consumer",
-    "audit:package": "node scripts/audit-package.mjs"
+    "audit:package": "node scripts/audit-package.mjs",
+    "dev": "bun run build && node dist/cli.js dev examples/report.md"
   },
   "dependencies": {
     "chokidar": "6.0.0",

@@ -8,10 +8,12 @@ description: A fictional catalogue with embedded product images and weekly order
 A fictional store's product performance over **eight weeks ending 1 November 2026**. All data, comparisons and product illustrations are synthetic and prepared for this example.
 
 :::grid{columns="3"}
-::metric{label="Orders" value="1477"}
-::metric{label="Revenue" value="63740" format="currency:USD"}
-::metric{label="Products" value="4"}
+::metric{label="Orders" value="1477" comparison="18.2% vs previous eight weeks" direction="up" sentiment="positive"}
+::metric{label="Revenue" value="63740" format="currency:USD" comparison="20% vs previous eight weeks" direction="up" sentiment="positive"}
+::metric{label="Products" value="4" comparison="1 more than previous period" direction="up" sentiment="positive"}
 :::
+
+The fictional comparison period contains **1,250 orders**, **US$53,120 revenue** and **three products**. Changes above are prepared and rounded by the example author.
 
 ## Product detail
 

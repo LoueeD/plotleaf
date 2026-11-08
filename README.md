@@ -127,14 +127,14 @@ Use Bun 1.4.4 for development and Node 22+ for the published CLI/runtime checks:
 bun install --frozen-lockfile
 bun run build
 
-node dist/cli.js examples/storefront/report.md
+node dist/cli.js examples/report.md
 node dist/cli.js validate examples/storefront/report.md --json
 node dist/cli.js build examples/storefront/report.md
 ```
 
 The first CLI command opens a browser and watches the Markdown, referenced JSON and local table images. Add `--no-open` to print the URL without launching a browser. Ctrl-C stops the server. A failed edit shows diagnostics and recovers after you fix it.
 
-Open `examples/storefront/report.html` after export, or try the narrative example in `examples/adoption/report.md`.
+Use `bun run dev` for the cumulative review report in `examples/report.md`. It keeps metrics/comparisons, area/line/bar/donut charts, targets, funnel stages, scalar tables, image cells, sparklines, prose and callouts together as milestones are added. It reuses the focused examples' datasets and image assets; their separate periods and populations remain explicit. Focused examples, including the narrative report in `examples/adoption/report.md`, remain available.
 
 ## Development and verification
 

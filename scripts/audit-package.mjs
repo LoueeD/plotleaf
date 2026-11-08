@@ -16,6 +16,7 @@ const approvedFiles = [
   "dist/assets/styles.css",
   "dist/assets/notices.txt",
   "schema/components.json",
+  "examples/report.md",
   "examples/storefront/report.md",
   "examples/storefront/orders.json",
   "examples/storefront/returns.json",
@@ -29,6 +30,7 @@ const approvedFiles = [
   "examples/onboarding/signups.json",
   "examples/catalog/report.md",
   "examples/catalog/products.json",
+  "examples/catalog/showcase-products.json",
   "examples/catalog/assets/desk-lamp.jpg",
   "examples/catalog/assets/field-notebook.png",
   "examples/catalog/assets/linen-tote.png",
@@ -96,7 +98,7 @@ export async function auditPackage(filename) {
         `${filename}: ${reason} found; review before publishing.`,
       );
     }
-    if (/^package\/examples\/.*\/report\.md$/.test(filename)) {
+    if (/^package\/examples\/(?:.*\/)?report\.md$/.test(filename)) {
       assert(
         /fictional/i.test(content),
         `${filename}: public examples must explicitly identify fictional data.`,

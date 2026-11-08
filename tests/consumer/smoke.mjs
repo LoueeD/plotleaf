@@ -245,7 +245,28 @@ try {
   );
   assert(!catalogHtml.includes("/assets/"));
   assert(!catalogHtml.includes('id="plotleaf-data"'));
-  preview = spawn(process.execPath, [cli, "dev", catalogReport, "--no-open"], {
+  const showcase = path.join(directory, "showcase");
+  await cp(path.join(directory, "node_modules/plotleaf/examples"), showcase, {
+    recursive: true,
+  });
+  const showcaseReport = path.join(showcase, "report.md");
+  const showcaseOutput = path.join(directory, "showcase.html");
+  run(process.execPath, [
+    npxCli,
+    "--no-install",
+    "plotleaf",
+    "build",
+    showcaseReport,
+    "--out",
+    showcaseOutput,
+  ]);
+  const showcaseHtml = await readFile(showcaseOutput, "utf8");
+  assert.equal(showcaseHtml.match(/class="metric-comparison"/g)?.length, 7);
+  assert.equal(showcaseHtml.match(/class="table-image"/g)?.length, 4);
+  assert(showcaseHtml.includes('"kind":"donut"'));
+  assert(showcaseHtml.includes('"kind":"line"'));
+  assert(showcaseHtml.includes("Funnel by stage"));
+  preview = spawn(process.execPath, [cli, "dev", showcaseReport, "--no-open"], {
     cwd: directory,
     env,
     stdio: ["ignore", "pipe", "pipe"],
@@ -275,8 +296,11 @@ try {
       }
     });
   });
-  assert((await (await fetch(url)).text()).includes("Product Performance"));
-  assert.equal((await fetch(url + "/assets/linen-tote.png")).status, 404);
+  assert((await (await fetch(url)).text()).includes("Storefront Overview"));
+  assert.equal(
+    (await fetch(url + "/catalog/assets/linen-tote.png")).status,
+    404,
+  );
   const metrics = {
     node: process.versions.node,
     tarballBytes: audited.bytes,
