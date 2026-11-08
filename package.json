@@ -4,6 +4,14 @@
   "description": "Beautiful, interactive reports from Markdown and JSON. Built for agents.",
   "type": "module",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LoueeD/plotleaf.git"
+  },
+  "homepage": "https://github.com/LoueeD/plotleaf#readme",
+  "bugs": {
+    "url": "https://github.com/LoueeD/plotleaf/issues"
+  },
   "bin": {
     "plotleaf": "./dist/cli.js"
   },

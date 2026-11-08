@@ -26,4 +26,10 @@ npm publish .cache/releases/plotleaf-0.1.0.tgz --access public --tag latest --re
 
 Use npm's interactive authentication if required; never place account credentials or OTP values in project files. After publication, verify registry integrity against the reviewed archive and run an independent `npx --yes plotleaf@0.1.0` validation/build/preview from a temporary directory with no Bun on PATH. Update local delivery status only after registry success. Do not republish or change an existing version's contents.
 
-Source repository creation, GitHub release pages and automatic publishing workflows are separate tasks; there is no configured Git remote in this checkout yet.
+## Source and CI gate
+
+Public source lives at [LoueeD/plotleaf](https://github.com/LoueeD/plotleaf). Before a future release, require a passing [verification workflow](https://github.com/LoueeD/plotleaf/actions/workflows/ci.yml) for the exact source commit: Linux/Windows consumers on Node 22/24/26, compiler/security/watch tests and Chromium/WebKit checks. CI never publishes. Manual owner visual review remains a separate release gate.
+
+Use a new version for changes after `0.1.0`; the examples above show the original release, so substitute the candidate version in every archive/command. Record the source commit, owner review, audit integrity and CI run with each release. Tag the approved source without moving existing tags, then publish that exact archive. Once published, independently verify the public archive and installed command.
+
+The immutable `v0.1.0` tag reproduces all 18 original published files. Its pinned-archive comparison runs in CI through `scripts/verify-published.mjs`. Repository metadata added on main after that baseline will appear in a future npm version; it does not alter the published `0.1.0` package. GitHub release pages and automatic npm publication are not required.

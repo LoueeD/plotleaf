@@ -4,6 +4,8 @@ Beautiful, interactive reports from Markdown and prepared JSON. Built for coding
 
 **The agent does the thinking. We do the rendering.**
 
+[Source](https://github.com/LoueeD/plotleaf) · [Issues](https://github.com/LoueeD/plotleaf/issues) · [Verification](https://github.com/LoueeD/plotleaf/actions/workflows/ci.yml) · [Contributing](https://github.com/LoueeD/plotleaf/blob/main/CONTRIBUTING.md)
+
 A report is one Markdown file, optionally accompanied by local JSON datasets. No application, configuration file, account, database or hosted service. Export one HTML file that keeps working offline.
 
 ## Status
@@ -119,3 +121,5 @@ Build before running integration tests. Consumer checks need npm/registry access
 Bun builds a Node-target ESM executable and browser-target IIFE assets. The browser graph contains modular ECharts and plain TypeScript, with no UI framework. TSRS is a development-only candidate; official TypeScript checking remains authoritative. Engine guidance and planning notes belong to the source checkout and are excluded from the npm artifact.
 
 MIT licensed. Bundled chart licenses/notices are retained in the package and exported HTML.
+
+See [CONTRIBUTING.md](https://github.com/LoueeD/plotleaf/blob/main/CONTRIBUTING.md) for the platform matrix and contribution workflow. The `v0.1.0` source tag reproduces the published npm archive; subsequent source changes require a new package version before release. Renderer releases require the owner's manual visual review of the running preview, in addition to automated checks.
