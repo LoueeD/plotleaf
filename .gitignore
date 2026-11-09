@@ -13,3 +13,8 @@ docs/design/references/
 .agents/
 .codex/
 .aws/
+# Private Astro website and local Cloudflare state
+site/.astro/
+site/.wrangler/
+site/.dev.vars
+site/.dev.vars.*

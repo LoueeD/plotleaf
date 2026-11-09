@@ -1,0 +1,21 @@
+{
+  "name": "plotleaf-site",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "packageManager": "bun@1.4.4",
+  "scripts": {
+    "dev": "astro dev --host 127.0.0.1",
+    "build": "astro build",
+    "preview": "wrangler dev",
+    "deploy": "astro build && node scripts/check-build.mjs && wrangler deploy",
+    "check": "node scripts/check-build.mjs",
+    "types": "wrangler types --include-runtime false"
+  },
+  "devDependencies": {
+    "astro": "7.4.8",
+    "wrangler": "4.159.0"
+  }
+}

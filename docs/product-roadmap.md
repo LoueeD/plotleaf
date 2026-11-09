@@ -42,6 +42,10 @@ The V1 increments are ordered defaults; their estimates must follow the MVP resu
 
 Published [0.3.1](releases/0.3.1.md) adds a copy/paste report-authoring prompt to the README and `npx plotleaf guide`. The command prints the already bundled `skills/plotleaf/SKILL.md` from its package location; `schema` remains the exact component API. The user-facing prompt delegates setup, syntax discovery, validation, export and preview instructions to the agent through the guide command. No skill installer, project scaffolding, additional dependency, renderer change or M5 interaction implementation is needed. The owner authorized publication; final-source CI, exact public archive and fresh anonymous npx guide/schema/validate/build checks pass.
 
+## Minimal website
+
+The owner explicitly authorized a minimal Astro website in the same repository under `site/`, deployed to [https://plotleaf-site.loueed.workers.dev](https://plotleaf-site.loueed.workers.dev). Its `/agent` route imports the existing authoring guide and `/schema.json` imports the generated component specification. Site tooling is private and isolated from the engine/npm package; reports still require no hosted infrastructure. The agent prompt now links directly to the live guide. This does not implement M5 or add report hosting integrations. See [website setup](site.md).
+
 ## Next delivery slice
 
 The source/CI foundation is delivered, with all 11 remote jobs passing on Linux/Windows. Public source is [LoueeD/plotleaf](https://github.com/LoueeD/plotleaf), and `v0.1.0` reproduces the published artifact. Source/issue links are included in 0.2.0. Keep `examples/report.md` as the cumulative owner-review report at the same live preview URL; add milestone features there while retaining earlier demonstrations. Keep the manual owner visual-review step and exact-tarball audit/consumer checks for renderer releases. Continue using fictional examples only; a plan or CI change does not require npm publication.

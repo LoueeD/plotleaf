@@ -4,7 +4,7 @@ Beautiful, interactive reports from Markdown and prepared JSON. Built for coding
 
 **The agent does the thinking. We do the rendering.**
 
-[Source](https://github.com/LoueeD/plotleaf) · [Issues](https://github.com/LoueeD/plotleaf/issues) · [Verification](https://github.com/LoueeD/plotleaf/actions/workflows/ci.yml) · [Contributing](https://github.com/LoueeD/plotleaf/blob/main/CONTRIBUTING.md)
+[Website](https://plotleaf-site.loueed.workers.dev) · [Source](https://github.com/LoueeD/plotleaf) · [Issues](https://github.com/LoueeD/plotleaf/issues) · [Verification](https://github.com/LoueeD/plotleaf/actions/workflows/ci.yml) · [Contributing](https://github.com/LoueeD/plotleaf/blob/main/CONTRIBUTING.md)
 
 A report is one Markdown file, optionally accompanied by local JSON datasets. No application, configuration file, account, database or hosted service. Export one HTML file that keeps working offline.
 
@@ -13,12 +13,9 @@ A report is one Markdown file, optionally accompanied by local JSON datasets. No
 Copy this into your coding agent and describe your report:
 
 ```text
-Create a beautiful, interactive report using Plotleaf.
-
-Report: [Describe what you want to explore and provide your data.]
-
-Follow the guide from `npx plotleaf guide`. Validate the report, build a
-standalone HTML file, and show me how to preview it.
+Build a beautiful, interactive report with Plotleaf.
+Here's what I want to explore: [Your brief and data]
+Follow https://plotleaf-site.loueed.workers.dev/agent and give me a preview and a standalone HTML report.
 ```
 
 ## Status
