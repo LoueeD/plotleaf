@@ -7,7 +7,7 @@ description: Create and revise plotleaf Markdown reports from prepared JSON, the
 
 Create one Markdown file with optional local JSON datasets. The agent retrieves, analyses and prepares data; plotleaf renders it. Do not scaffold an application or put analysis code, SQL, JavaScript expressions or scripts into the report.
 
-Use an installed `plotleaf` CLI or `npx plotleaf`. In an unpublished source checkout, build it with `bun run build` and use `node dist/cli.js` from the package root instead of fetching an npm release.
+Use an installed `plotleaf` CLI or `npx plotleaf`. The CLI requires Node 22 or newer; Bun is not required for report authors. In an unpublished source checkout, build it with `bun run build` and use `node dist/cli.js` from the package root instead of fetching an npm release.
 
 ## Discover the contract
 

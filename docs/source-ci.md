@@ -16,6 +16,12 @@ Run those commands from a separate clone of the tag, not by resetting an active 
 
 Source/issue metadata and contributor documentation were added after the release baseline. They will enter npm with a new version. Never move `v0.1.0` or republish the existing version to retrofit repository metadata.
 
+## Runner selection
+
+Keep `ubuntu-latest` for the current Linux jobs. GitHub's standard hosted runners are free for this public repository; `ubuntu-latest` provides 4 CPUs and 16 GB RAM, while `ubuntu-slim` provides 1 CPU and 5 GB RAM in an unprivileged container with a hard 15-minute job limit. [GitHub runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners#single-cpu-runners).
+
+Our browser suite uses two workers, installs browser/system dependencies and permits a 20-minute job timeout. The build job also runs both type checkers and the full core suite. Keep the existing environment and capacity for these jobs. Slim is a candidate for a measured trial of lightweight Node consumer or documentation checks, rather than a blanket replacement. No workflow runner has been changed by this documentation update.
+
 ## Verification
 
 The [workflow](../.github/workflows/ci.yml) builds on Linux, checks both type checkers and generated files, runs core tests, and audits one npm archive. All six Node 22/24/26 consumer jobs install that same archive on Linux/Windows without Bun or dev dependencies. Windows core tests and Linux/Windows Chromium/WebKit jobs use the same prebuilt assets. GitHub Actions are pinned to verified commits, workflow permissions are read-only, and no step publishes to npm.

@@ -40,7 +40,7 @@ The V1 increments are ordered defaults; their estimates must follow the MVP resu
 
 ## Agent discovery patch before M5
 
-Published [0.3.1](releases/0.3.1.md) adds a copy/paste report-authoring prompt to the README and `npx plotleaf guide`. The command prints the already bundled `skills/plotleaf/SKILL.md` from its package location; `schema` remains the exact component API. The prompt falls back to the versioned public 0.3.0 guide for existing npm users. No skill installer, project scaffolding, additional dependency, renderer change or M5 interaction implementation is needed. The owner authorized publication; final-source CI, exact public archive and fresh anonymous npx guide/schema/validate/build checks pass.
+Published [0.3.1](releases/0.3.1.md) adds a copy/paste report-authoring prompt to the README and `npx plotleaf guide`. The command prints the already bundled `skills/plotleaf/SKILL.md` from its package location; `schema` remains the exact component API. The user-facing prompt delegates setup, syntax discovery, validation, export and preview instructions to the agent through the guide command. No skill installer, project scaffolding, additional dependency, renderer change or M5 interaction implementation is needed. The owner authorized publication; final-source CI, exact public archive and fresh anonymous npx guide/schema/validate/build checks pass.
 
 ## Next delivery slice
 

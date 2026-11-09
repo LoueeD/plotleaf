@@ -10,30 +10,16 @@ A report is one Markdown file, optionally accompanied by local JSON datasets. No
 
 ## Start with your coding agent
 
-Copy this into your agent and replace the report brief:
+Copy this into your coding agent and describe your report:
 
 ```text
-Create a polished, interactive report with plotleaf.
+Create a beautiful, interactive report using Plotleaf.
 
-Report brief: [Describe the report and point to the data you want to use.]
+Report: [Describe what you want to explore and provide your data.]
 
-Use Node 22+ and npx; no app scaffolding, Bun or account is needed.
-First run `npx --yes plotleaf --help`. If it lists `guide`, read
-`npx --yes plotleaf guide`. Otherwise read the authoring guide at:
-https://raw.githubusercontent.com/LoueeD/plotleaf/v0.3.0/skills/plotleaf/SKILL.md
-Then run `npx --yes plotleaf schema` for the installed component API.
-
-Use the data I provide; don't invent values or findings. If the brief or
-data is missing, ask for what's needed. Prepare one report.md and any local
-JSON/assets it needs, following the guide and installed schema.
-
-Run `npx --yes plotleaf validate report.md --json` and fix all errors.
-Start `npx --yes plotleaf dev report.md --no-open` and give me the preview URL.
-Build `npx --yes plotleaf build report.md --out report.html` and give me
-the source and portable HTML paths, with any data limitations.
+Follow the guide from `npx plotleaf guide`. Validate the report, build a
+standalone HTML file, and show me how to preview it.
 ```
-
-The `guide` command is available in **0.3.1 or newer**. The prompt also works with 0.3.0 through the linked authoring guide.
 
 ## Status
 
