@@ -1,12 +1,12 @@
 # Product capabilities and staged delivery
 
-Updated: 10 November 2026. **The current release is `plotleaf@0.3.2`, including M4, agent discovery and links to the website/docs/examples/playground.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.3.2.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
+Updated: 10 November 2026. **The current release is `plotleaf@0.4.0`, including M5 scoped prepared views, earlier components and the website/docs/examples/playground.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.4.0.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
 
 ## Delivery position
 
 Delivered: Markdown/local JSON compilation, responsive grids, prepared metrics/comparisons, line/area/bar charts and literal targets, formatted/sortable tables, callouts, validation/schema discovery, live reload, deterministic single-file offline HTML and the authoring skill. The published renderer includes the owner-reviewed currency wrapping/whole-amount formatting fixes.
 
-The original local evidence covers 46 core tests, 14 Chromium/WebKit checks, audited package checks on Node 22/24/26 and a clean public npm/npx install without Bun on macOS arm64. The [source/CI foundation](source-ci.md) now adds public source, immutable release traceability and remote Linux/Windows verification; its evidence record tracks the platform results. M3 publishes its prepared funnel and donut views in `0.2.0`; arbitrary row queries remain unbuilt; scoped prepared views are implemented in the M5 candidate. [M3 contracts and review status](m3-visualizations.md) include the completed technical and publication checks.
+The original local evidence covers 46 core tests, 14 Chromium/WebKit checks, audited package checks on Node 22/24/26 and a clean public npm/npx install without Bun on macOS arm64. The [source/CI foundation](source-ci.md) now adds public source, immutable release traceability and remote Linux/Windows verification; its evidence record tracks the platform results. M3 publishes its prepared funnel and donut views in `0.2.0`; arbitrary row queries remain unbuilt; scoped prepared views are published in M5/0.4.0. [M3 contracts and review status](m3-visualizations.md) include the completed technical and publication checks.
 
 **M1–M4 are complete. M4 rich table cells and the cumulative review report are published as `0.3.0`**, technically verified and owner-approved. Prepared-view interactions, reuse and geography follow. The initial package is shipped; the broader V1 capability set is still in progress. A planning update does not change the published `0.1.0` artifact.
 
@@ -31,7 +31,7 @@ Treat these as the intended product direction. The staging below keeps the first
 | M2 — Release foundation | Delivered: 8 November 2026 | Public source repository, immutable `v0.1.0` baseline, pinned CI, shared-archive Node 22/24/26 consumers on Linux/Windows and platform core/browser checks. | [Source/CI evidence](source-ci.md) records reproduction, actual platform results and limitations. |
 | M3 — Visualization increment | Published: `0.2.0`, 8 November 2026 | Prepared funnel/progress stages, bounded donut categories, native data alternatives and fictional onboarding example. | [M3 evidence](m3-visualizations.md); chart budget explicitly revised to 210 KiB gzip and enforced by build. Owner authorized publication after the preview review handoff. |
 | M4 — Rich table cells | Published: `0.3.0`, 8 November 2026 | Local PNG/JPEG cells, deduplicated offline assets, bounded static sparklines with shared column scales and explicit scalar sort keys. | [M4 contracts and evidence](m4-rich-tables.md): 116 local/Linux core tests, 114 Windows passes + two skips, 34 browser checks per platform, all 11 CI jobs, audited 29-file archive and cumulative review report. Owner visual acceptance, final CI, exact public archive and fresh anonymous npx verification are complete. |
-| M5 — Interaction increment | Implemented in 0.4.0 candidate; review/release pending | Dropdown, text/number input, toggle, segmented choice and supported date-range selection; explicit bindings, reset/no-match states and prepared views. | One real region/range transition is specified before implementation. Bound metrics, charts, funnel, tables and alternatives update coherently offline. |
+| M5 — Interaction increment | Published as 0.4.0 | Dropdown, text/number input, toggle, segmented choice and supported date-range selection; explicit bindings, reset/no-match states and prepared views. | One real region/range transition is specified before implementation. Bound metrics, charts, funnel, tables and alternatives update coherently offline. |
 | M6 — Reuse increment | Planned | Versioned declarative compositions, typed props and reusable definitions in companion JSON. Prepared subtotal rows with explicit scope. | One composition is reused in two reports; cycles/unknown props fail; exports work without definition files and subtotals retain their declared scope. |
 | M7 — Geographic increment | Later, planned | Local GeoJSON/region maps, then point-density heatmaps and selection linked to input state. | Offline fixtures, bounded geometry, accessible selection alternatives and a separate bundle/performance budget. |
 | Advanced extensions | Deferred | New trusted renderers, broader table engines, reducers or view frameworks only when demonstrated needs justify them. | An explicit trust/packaging decision; no arbitrary report JavaScript or incidental plugin platform. |
@@ -52,7 +52,9 @@ The source/CI foundation is delivered, with all 11 remote jobs passing on Linux/
 
 M3 is published as `0.2.0`: prepared funnel/progress stages and donut views through the existing registry/data contracts. The single chart runtime measures about 203.5 KiB gzip under the explicitly revised 210 KiB build ceiling. Native funnel-only reports retain the small base runtime. The owner authorized this renderer release after the preview handoff; future renderer changes require another manual review; passing CI is a separate technical gate. M4 now implements both local image and static sparkline column kinds in the existing native table; see [its contract](m4-rich-tables.md). The owner approved the cumulative preview; final M4 validation, publication and public verification are complete in [release 0.3.0](releases/0.3.0.md).
 
-The interaction contract can be prepared independently as a small documented fixture: one region/range transition with ready-to-render metric, series, funnel and table values. Implement one native selector and its prepared-view bindings before expanding to every control type. M4 images/sparklines use native table markup and no data-grid engine; preserve this boundary during later interaction work. Dates and effort estimates are not committed until these slices are scoped against the code and platform results.
+M5 is delivered as 0.4.0 after owner visual review. A real region/range transition and six native controls select complete agent-prepared views, keeping metrics, charts, funnel, table and alternatives coherent offline. There is no arbitrary row query or analytics engine. The cumulative report and website retain all earlier demonstrations; public package and live site verification pass. See [M5 contracts](m5-interactions.md) and [release evidence](releases/0.4.0.md).
+
+M6 is next: versioned declarative compositions with typed props and companion JSON definitions, plus agent-prepared subtotal rows with explicit scope. Begin with a reusable composition fixture used by two reports and a subtotal sorting/scope fixture. Do not add arbitrary report JavaScript, a plugin platform or a table engine without a demonstrated need.
 
 Matching-version TSRS conformance/speed measurement remains an optional development-tool follow-up while official TypeScript stays authoritative. It does not block the published renderer or justify weakening release checks. A documentation website, new UI framework, MCP server or deployment service is not needed for the next batch.
 
@@ -159,12 +161,12 @@ Preserve minimal authoring and excellent diagnostics as these features land. If 
 
 ### Website documentation and playground
 
-The website now provides canonical authoring docs, a generated component reference, five real example exports and four editable browser projects. The browser playground shares the compiler/renderer, supports Markdown/JSON up to 1 MiB and 16 JSON files, and downloads standalone HTML without uploading report data. Image imports remain CLI-only. This supporting authoring workflow does not complete or expand M5 reader inputs. See [website architecture and checks](site.md).
+The website now provides canonical authoring docs, a generated component reference, six real example exports and five editable browser projects. The browser playground shares the compiler/renderer, supports Markdown/JSON up to 1 MiB and 16 JSON files, and downloads standalone HTML without uploading report data. Image imports remain CLI-only. M5 adds scoped prepared-view reader controls through this same shared engine. See [website architecture and checks](site.md).
 
 
-## M5 candidate
+## M5 delivered
 
-The 0.4.0 candidate implements a scoped `explore` directive with six native control
+Version 0.4.0 implements a scoped `explore` directive with six native control
 types and complete agent-prepared view bundles. The region/range fixture updates
 metrics, comparisons, charts, funnel, table and alternatives together; a second
 scope demonstrates segmented/toggle/text/number inputs. Unsupported combinations
@@ -173,5 +175,5 @@ readable without JavaScript. Arbitrary row predicates, analytics/reducers and
 unbounded date ranges remain outside this first prepared-view contract.
 
 The cumulative report, authoring skill, generated component specification and
-website/playground are being updated. Visual owner review and release checks
-remain pending; public npm remains 0.3.2. See [M5 contracts](m5-interactions.md).
+website/playground are updated and deployed. Owner visual review, release checks
+and independent public verification pass; public npm latest is 0.4.0. See [M5 contracts](m5-interactions.md).

@@ -1,6 +1,6 @@
 # M5 — prepared-view interactions
 
-Implemented in the 0.4.0 candidate. Public release remains 0.3.2 until owner visual review and release gates complete.
+Published as 0.4.0 on 10 November 2026 after owner visual review and all release gates.
 
 ## Contract and transition fixture
 
@@ -39,7 +39,7 @@ Without JavaScript, the declared default view and data alternatives remain reada
 - Exact release archive passes audit/Node consumers and candidate-source CI. Owner visual review precedes renderer publication.
 
 
-## Local candidate verification
+## Verification
 
 - Official TypeScript and TSRS pass for the engine; browser/worker site types pass.
 - 153 core/compiler/security/CLI checks pass, including 24 prepared-view tests.
@@ -48,7 +48,7 @@ Without JavaScript, the declared default view and data alternatives remain reada
 - Build budgets remain within their existing limits: base runtime about 1.3 KiB gzip, chart runtime about 204.3 KiB gzip (5/210 KiB ceilings).
 - The final 32-file candidate archive matches current build/source files exactly. Node 22/24/26 installed-consumer checks and remote candidate-source CI are verified before the review handoff.
 
-The owner-review report stays at `http://127.0.0.1:51114/`, with the new exploration sections appended. The local website playground is `http://127.0.0.1:8787/playground/?example=interactions`. These are local review surfaces, not public deployment evidence. Website deployment and npm publication remain pending manual visual acceptance.
+The owner-review report stays at `http://127.0.0.1:51114/`, with the new exploration sections appended. The local website playground is `http://127.0.0.1:8787/playground/?example=interactions`. These are local review surfaces, not public deployment evidence. The owner approved visual review; the public website is deployed and npm 0.4.0 is published.
 
 
-Final candidate source `ceffd6d4ad709b3750c8ee2c8eb0f705fd017c85` passes all [11 engine CI jobs](https://github.com/LoueeD/plotleaf/actions/runs/42906308955) and [website CI](https://github.com/LoueeD/plotleaf/actions/runs/42906308469). The final archive matches the CI-tested bytes and installed Node 22/24/26 consumers pass. [Release evidence](releases/0.4.0.md) records the integrity and pending owner review gate. Implementation and local website updates are complete; public deployment/publication remain pending visual approval.
+Final candidate source `ceffd6d4ad709b3750c8ee2c8eb0f705fd017c85` passes all [11 engine CI jobs](https://github.com/LoueeD/plotleaf/actions/runs/42906308955) and [website CI](https://github.com/LoueeD/plotleaf/actions/runs/42906308469). The final archive matches the CI-tested bytes and installed Node 22/24/26 consumers pass. [Release evidence](releases/0.4.0.md) records the integrity, owner approval, website deployment and independent public package verification. M5 implementation, website updates and publication are complete.

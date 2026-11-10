@@ -49,8 +49,8 @@ This workspace revision is deployed as Cloudflare version `702c862f-974b-4b10-b6
 
 [Engine CI](https://github.com/LoueeD/plotleaf/actions/runs/42890567548) also passes all 11 jobs for the workspace source, including the unchanged reporting engine suites and six installed Node consumers.
 
-## M5 website candidate
+## M5 website deployment
 
-The local 0.4.0 candidate adds a sixth downloadable report and fifth editable project: scoped prepared-view interactions. Human docs and `/agent` reuse the updated authoring skill; `/schema.json` and the component reference expose the new registry contract. Browser playground tests edit a prepared-view JSON bundle and verify the selected metric and charts change. It uses the same compiler/renderer as CLI exports, with no uploaded data or additional application framework.
+Version 0.4.0 adds a sixth downloadable report and fifth editable project: scoped prepared-view interactions. Human docs and `/agent` reuse the updated authoring skill; `/schema.json` and the component reference expose the new registry contract. Browser playground tests edit a prepared-view JSON bundle and verify the selected metric and charts change. It uses the same compiler/renderer as CLI exports, with no uploaded data or additional application framework.
 
-Public deployment remains pending owner visual review of the renderer and the release checks. The website workspace and its 640px reading layouts remain unchanged.
+The owner approved visual review and all release checks pass. The website is deployed as Cloudflare version `426236b8-c6b8-4f4f-9680-ac8753bd1845`; all 10 live Chromium/WebKit checks pass, and live guide/schema bodies exactly match their canonical sources. The website workspace and its 640px reading layouts are retained. npm 0.4.0 is published and independently verified; see [release evidence](releases/0.4.0.md).
