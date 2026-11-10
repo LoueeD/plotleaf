@@ -23,4 +23,5 @@ This is the explicitly authorized, private Astro website for Plotleaf. It is sep
 - Verify real compilation, diagnostics/recovery, malicious text isolation, byte equality with CLI exports, offline HTML, both browsers/themes and mobile widths. Site CI installs root and site dependencies independently and runs browser checks.
 - This authoring playground does not implement reader filters or advance M5. Website deployment does not authorize npm publication.
 
-- Keep ordinary page content centered at 640px. Documentation sidebars sit outside that measure on wide screens and flow above content on smaller screens. Examples and playground workspaces may expand to 1464px; their introductory text retains the 640px measure.
+- Keep ordinary page content, including the entire examples index, at 640px. Center documentation sidebar + 640px content together as an 860px group; its header/nav spans that group. Sidebar flows above content on smaller screens. Open example reports as full pages instead of scrolling gallery iframes.
+- The playground is a separate full-viewport workspace: top toolbar including site navigation, adjacent resizable editor/preview panes, file tabs with a final add-JSON action, and a slim footer, all within 100dvh. Keep resizing pointer- and keyboard-accessible; preserve the opaque-origin preview sandbox.

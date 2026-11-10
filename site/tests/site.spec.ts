@@ -23,9 +23,12 @@ test("human docs, generated reference and real examples are readable across them
     .click();
   await expect(page.locator("#column")).toContainText("sparkline");
   await page.goto("/examples/");
-  const frame = page.frameLocator("iframe");
-  await expect(frame.locator(".metric-comparison")).toHaveCount(7);
-  await expect(frame.locator(".chart-plot svg")).toHaveCount(4);
+  await expect(page.locator("iframe")).toHaveCount(0);
+  const reportPage = await page.context().newPage();
+  await reportPage.goto("/reports/showcase/");
+  await expect(reportPage.locator(".metric-comparison")).toHaveCount(7);
+  await expect(reportPage.locator(".chart-plot svg")).toHaveCount(4);
+  await reportPage.close();
   await expect(page.getByRole("link", { name: "View report" })).toHaveCount(4);
   for (const path of [
     "/",
@@ -78,7 +81,7 @@ test("browser compilation edits data, diagnoses failures, isolates previews and 
   await page.locator("#example-select").selectOption("sparklines");
   await ready(page);
   await expect(frame.locator(".sparkline-chart")).toHaveCount(4);
-  await page.locator("#file-select").selectOption("products.json");
+  await page.getByRole("tab", { name: "products.json", exact: true }).click();
   await page.locator("#source-editor").fill("{invalid");
   await expect(page.locator("#diagnostics")).toContainText("E_DATA_JSON");
   await expect(
@@ -112,7 +115,19 @@ test("browser compilation edits data, diagnoses failures, isolates previews and 
   await expect(frame.locator("tbody")).toContainText("PRIVATE_BROWSER_DATA");
   await expect(frame.locator("img")).toHaveCount(0);
   expect(await page.evaluate(() => "PWNED" in window)).toBe(false);
-  await page.locator("#file-select").selectOption("report.md");
+  await page.getByRole("tab", { name: "data.json", exact: true }).click();
+  await page
+    .locator("#source-editor")
+    .fill('[{"label":"Updated live","count":13}]');
+  await expect(frame.locator("tbody")).toContainText("Updated live");
+  await page.getByRole("tab", { name: "report.md", exact: true }).click();
+  await page
+    .locator("#source-editor")
+    .fill('# Edited heading\n\n::table{data="./data.json"}');
+  await expect(
+    frame.getByRole("heading", { name: "Edited heading" }),
+  ).toBeVisible();
+  await page.getByRole("tab", { name: "report.md", exact: true }).click();
   await page.locator("#source-editor").fill("<script>parent.PWNED=1</script>");
   await expect(page.locator("#diagnostics")).toContainText("E_RAW_HTML");
   await expect(page.locator("#report-preview")).toBeHidden();
@@ -162,4 +177,59 @@ test("browser-produced HTML matches CLI output and works independently offline",
   ).toContainText("Outdoors");
   expect(requests).toEqual([]);
   await context.close();
+});
+
+test("workspace fits viewport, resizes panes and adds editable JSON tabs", async ({
+  page,
+}) => {
+  await page.goto("/playground/");
+  await ready(page);
+  for (const width of [375, 768, 1440]) {
+    await page.setViewportSize({ width, height: 800 });
+    const sizes = await page.evaluate(() => ({
+      page: document.documentElement.scrollHeight,
+      footer: document.querySelector("footer")!.getBoundingClientRect().bottom,
+      editor: document.querySelector(".editor")!.getBoundingClientRect().height,
+      preview: document.querySelector(".preview-pane")!.getBoundingClientRect()
+        .height,
+    }));
+    expect(sizes.page).toBe(800);
+    expect(sizes.footer).toBeLessThanOrEqual(800);
+    expect(sizes.editor).toBeGreaterThan(300);
+    expect(sizes.preview).toBe(sizes.editor);
+  }
+  const before = (await page.locator(".editor").boundingBox())!.width;
+  const handle = await page
+    .getByRole("separator", { name: "Resize editor" })
+    .boundingBox();
+  await page.mouse.move(handle!.x + handle!.width / 2, handle!.y + 80);
+  await page.mouse.down();
+  await page.mouse.move(handle!.x + 180, handle!.y + 80);
+  await page.mouse.up();
+  expect((await page.locator(".editor").boundingBox())!.width).toBeGreaterThan(
+    before + 100,
+  );
+  await page.getByRole("separator").focus();
+  await page.keyboard.press("Home");
+  await expect(page.getByRole("separator")).toHaveAttribute(
+    "aria-valuenow",
+    "20",
+  );
+  await page
+    .getByRole("button", { name: "Add JSON file", exact: true })
+    .click();
+  await page.getByLabel("Filename").fill("notes.json");
+  await page.getByRole("button", { name: "Add file", exact: true }).click();
+  await expect(page.getByRole("tab", { name: "notes.json" })).toHaveAttribute(
+    "aria-selected",
+    "true",
+  );
+  await page.locator("#source-editor").fill('[{"note":"tab edit retained"}]');
+  await page.getByRole("tab", { name: "report.md", exact: true }).click();
+  await page.getByRole("tab", { name: "notes.json" }).click();
+  await expect(page.locator("#source-editor")).toHaveValue(
+    '[{"note":"tab edit retained"}]',
+  );
+  await page.getByRole("button", { name: "Remove selected JSON" }).click();
+  await expect(page.getByRole("tab", { name: "notes.json" })).toHaveCount(0);
 });

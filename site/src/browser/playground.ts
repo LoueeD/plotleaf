@@ -12,7 +12,8 @@ type Example = {
 const byId = <T extends HTMLElement>(id: string) =>
   document.getElementById(id) as T;
 const editor = byId<HTMLTextAreaElement>("source-editor");
-const fileSelect = byId<HTMLSelectElement>("file-select");
+const fileTabs = byId("file-tabs");
+let selectedFile = "report.md";
 const examples = byId<HTMLSelectElement>("example-select");
 const preview = byId<HTMLIFrameElement>("report-preview");
 const download = byId<HTMLButtonElement>("download-report");
@@ -136,16 +137,34 @@ function compile() {
   };
 }
 function storeEdit() {
-  if (fileSelect.value === "report.md") project.markdown = editor.value;
-  else project.files[fileSelect.value] = editor.value;
+  if (selectedFile === "report.md") project.markdown = editor.value;
+  else project.files[selectedFile] = editor.value;
 }
 function fillFiles(selected = "report.md") {
-  fileSelect.replaceChildren(
-    ...["report.md", ...Object.keys(project.files)].map(
-      (name) => new Option(name, name),
-    ),
+  selectedFile = selected;
+  fileTabs.replaceChildren(
+    ...["report.md", ...Object.keys(project.files)].map((name, index) => {
+      const tab = document.createElement("button");
+      tab.type = "button";
+      tab.role = "tab";
+      tab.id = `file-tab-${index}`;
+      tab.textContent = name;
+      tab.setAttribute("aria-selected", String(name === selected));
+      tab.setAttribute("aria-controls", "source-editor");
+      tab.tabIndex = name === selected ? 0 : -1;
+      tab.addEventListener("click", () => {
+        fillFiles(name);
+        fileTabs
+          .querySelector<HTMLButtonElement>('[aria-selected="true"]')!
+          .focus();
+      });
+      return tab;
+    }),
   );
-  fileSelect.value = selected;
+  editor.setAttribute(
+    "aria-labelledby",
+    fileTabs.querySelector('[aria-selected="true"]')!.id,
+  );
   editor.value =
     selected === "report.md" ? project.markdown : project.files[selected]!;
   byId<HTMLButtonElement>("delete-file").disabled = selected === "report.md";
@@ -153,6 +172,7 @@ function fillFiles(selected = "report.md") {
 }
 function loadExample() {
   const example = choices.find((item) => item.slug === examples.value)!;
+  if (!example) return;
   project = { markdown: example.markdown, files: { ...example.files } };
   fillFiles();
   compile();
@@ -167,31 +187,59 @@ editor.addEventListener("input", () => {
   clearTimeout(debounce);
   debounce = setTimeout(compile, 400);
 });
-fileSelect.addEventListener("change", () => fillFiles(fileSelect.value));
+fileTabs.addEventListener("keydown", (event) => {
+  if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+  event.preventDefault();
+  const tabs = [
+    ...fileTabs.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
+  ];
+  const index = tabs.findIndex(
+    (tab) => tab.getAttribute("aria-selected") === "true",
+  );
+  const next =
+    event.key === "Home"
+      ? 0
+      : event.key === "End"
+        ? tabs.length - 1
+        : (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) %
+          tabs.length;
+  fillFiles(tabs[next]!.textContent!);
+  fileTabs.querySelector<HTMLButtonElement>('[aria-selected="true"]')!.focus();
+});
 examples.addEventListener("change", loadExample);
 byId("reset-example").addEventListener("click", loadExample);
-byId("add-file").addEventListener("click", () => {
+const addDialog = byId<HTMLDialogElement>("add-file-dialog");
+byId("add-file-tab").addEventListener("click", () => {
+  byId("new-file-error").textContent = "";
+  addDialog.showModal();
+  byId<HTMLInputElement>("new-file").focus();
+});
+byId("cancel-add-file").addEventListener("click", () => addDialog.close());
+byId("add-file-form").addEventListener("submit", (event) => {
+  event.preventDefault();
   const input = byId<HTMLInputElement>("new-file");
   const name = input.value.trim();
   if (
     !/^[A-Za-z0-9][A-Za-z0-9_. -]*\.json$/.test(name) ||
     Object.hasOwn(project.files, name)
   ) {
-    error.textContent = "Choose a new plain JSON filename, such as data.json.";
+    byId("new-file-error").textContent =
+      "Choose a new plain JSON filename, such as data.json.";
     return;
   }
   if (Object.keys(project.files).length >= playgroundLimits.files) {
-    error.textContent = "At most 16 JSON files are supported.";
+    byId("new-file-error").textContent = "At most 16 JSON files are supported.";
     return;
   }
   project.files[name] = "[]";
   input.value = "";
+  addDialog.close();
   fillFiles(name);
   compile();
 });
 byId("delete-file").addEventListener("click", () => {
-  if (fileSelect.value === "report.md") return;
-  delete project.files[fileSelect.value];
+  if (selectedFile === "report.md") return;
+  delete project.files[selectedFile];
   fillFiles();
   compile();
 });
@@ -281,3 +329,44 @@ async function start() {
   }
 }
 void start();
+
+const grid = byId("play-grid");
+const resizer = byId("pane-resizer");
+let split = 45;
+function resize(value: number) {
+  split = Math.max(20, Math.min(80, value));
+  grid.style.setProperty("--editor-width", `${split}%`);
+  resizer.setAttribute("aria-valuenow", String(Math.round(split)));
+}
+resizer.addEventListener("pointerdown", (event) => {
+  if (event.button !== 0) return;
+  event.preventDefault();
+  resizer.setPointerCapture(event.pointerId);
+  grid.classList.add("resizing");
+});
+resizer.addEventListener("pointermove", (event) => {
+  if (!resizer.hasPointerCapture(event.pointerId)) return;
+  const box = grid.getBoundingClientRect();
+  resize(((event.clientX - box.left) / box.width) * 100);
+});
+function finishResize() {
+  grid.classList.remove("resizing");
+}
+resizer.addEventListener("pointerup", (event) => {
+  if (resizer.hasPointerCapture(event.pointerId))
+    resizer.releasePointerCapture(event.pointerId);
+  finishResize();
+});
+resizer.addEventListener("lostpointercapture", finishResize);
+resizer.addEventListener("pointercancel", finishResize);
+resizer.addEventListener("keydown", (event) => {
+  if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+  event.preventDefault();
+  resize(
+    event.key === "Home"
+      ? 20
+      : event.key === "End"
+        ? 80
+        : split + (event.key === "ArrowLeft" ? -2 : 2),
+  );
+});
