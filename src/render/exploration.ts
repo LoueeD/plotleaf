@@ -15,8 +15,8 @@ export function exploration(
     inputs: data.inputs,
     views: data.views.map(({ id, label, when }) => ({ id, label, when })),
   });
-  const controls = data.inputs.map((input) => {
-    const controlId = `${id}-${input.id}`;
+  const controls = data.inputs.map((input, inputIndex) => {
+    const controlId = `${id}-input-${inputIndex}`;
     const attrs = {
       disabled: true,
       dataPlotleafInput: input.id,
@@ -120,22 +120,24 @@ export function exploration(
             [t("Reset")],
           ),
         ]),
-        ...data.inputs
-          .filter((input) => input.type === "date-range")
-          .map((input) =>
-            h(
-              "p",
-              {
-                id: `${id}-${input.id}-ranges`,
-                className: ["explore-supported"],
-              },
-              [
-                t(
-                  `${input.label} — prepared ranges: ${input.options.map((option) => option.label).join(" · ")}`,
+        ...data.inputs.flatMap((input, inputIndex) =>
+          input.type === "date-range"
+            ? [
+                h(
+                  "p",
+                  {
+                    id: `${id}-input-${inputIndex}-ranges`,
+                    className: ["explore-supported"],
+                  },
+                  [
+                    t(
+                      `${input.label} — prepared ranges: ${input.options.map((option) => option.label).join(" · ")}`,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ]
+            : [],
+        ),
         h(
           "p",
           {

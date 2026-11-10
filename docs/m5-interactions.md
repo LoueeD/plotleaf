@@ -42,7 +42,7 @@ Without JavaScript, the declared default view and data alternatives remain reada
 ## Local candidate verification
 
 - Official TypeScript and TSRS pass for the engine; browser/worker site types pass.
-- 151 core/compiler/security/CLI checks pass, including 22 prepared-view tests.
+- 153 core/compiler/security/CLI checks pass, including 24 prepared-view tests.
 - 46 report browser checks pass across Chromium/WebKit, including offline transitions for all six native controls, coherent component/alternative updates, keyboard and theme/mobile checks, hostile text, no-JavaScript defaults and bundle deletion/recovery.
 - 10 website browser checks pass, including live editing of a prepared-view JSON bundle through the real browser compiler.
 - Build budgets remain within their existing limits: base runtime about 1.3 KiB gzip, chart runtime about 204.3 KiB gzip (5/210 KiB ceilings).

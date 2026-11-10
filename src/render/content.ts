@@ -265,7 +265,7 @@ export function renderContent(report: Report): RenderedContent {
           ? child.value
           : child.children.map((n) => text(n as Child)).join("");
       node.properties.id = headingId(namespace + text(node));
-      if (node.tagName === "h1") hasH1 = true;
+      if (node.tagName === "h1" && !namespace) hasH1 = true;
     }
     if (node.tagName === "a" && typeof node.properties.href === "string") {
       if (

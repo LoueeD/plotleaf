@@ -276,3 +276,29 @@ test("repeated use of large prepared cells cannot bypass the expanded byte budge
     ),
   ).toBe(true);
 });
+
+test("authored control IDs cannot collide with generated option/date/hint IDs", async () => {
+  const bundle = fixture();
+  bundle.inputs[0]!.type = "segmented";
+  bundle.inputs.push({
+    ...bundle.inputs[0]!,
+    id: "region-0",
+    type: "select",
+    label: "Second region",
+  });
+  for (const view of bundle.views)
+    (view.when as Record<string, unknown>)["region-0"] = "all";
+  const result = await memory(bundle);
+  expect(result.diagnostics).toEqual([]);
+  const html = renderHtml(result.report!, testAssets);
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
+  expect(new Set(ids).size).toBe(ids.length);
+});
+
+test("a heading in a hidden view cannot suppress the main report title", async () => {
+  const bundle = fixture();
+  bundle.views[1]!.markdown = "# Hidden view heading";
+  const result = await memory(bundle);
+  expect(result.report).toBeDefined();
+  expect(renderHtml(result.report!, testAssets)).toContain(">report</h1>");
+});
