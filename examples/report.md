@@ -92,5 +92,15 @@ Weekly order lines share the same vertical scale, so their heights are comparabl
 - **The natural tote reuses its image.** The portable report embeds each unique illustration once.
 
 :::callout{title="About these examples"}
-All datasets, comparisons, statuses, findings and product illustrations are fictional. Store totals cover 1–7 November 2026; the onboarding and catalogue sections identify their separate periods and populations. Comparisons are prepared by the author, not inferred by the renderer. No live filters, data connections or subtotal calculations are implied.
+All datasets, comparisons, statuses, findings and product illustrations are fictional. Store totals cover 1–7 November 2026; the onboarding and catalogue sections identify their separate periods and populations. Comparisons are prepared by the author, not inferred by the renderer. The explorations below select separately prepared views. Static store totals above remain unchanged. No live data connections or subtotal calculations are implied.
 :::
+
+
+## Explore prepared regional views
+
+The controls in each exploration affect only that exploration. Store totals,
+findings and the earlier examples above stay fixed. All values remain fictional.
+
+::explore{data="./interactions/regional-views.json" title="Regional performance explorer"}
+
+::explore{data="./interactions/control-views.json" title="Prepared catalogue scenarios"}

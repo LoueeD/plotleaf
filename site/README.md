@@ -31,7 +31,7 @@ Routes:
 
 - `/`: landing page with a copyable agent prompt. Its guide URL uses the current origin.
 - `/docs/`: human authoring guide and `/docs/components/` registry-generated reference.
-- `/examples/`: five real, downloadable standalone reports with fictional data.
+- `/examples/`: six real, downloadable standalone reports with fictional data.
 - `/playground/`: Markdown/JSON editing, local compilation, diagnostics, preview and HTML download.
 - `/agent`: plain Markdown from `../skills/plotleaf/SKILL.md`.
 - `/schema.json`: the generated specification from `../schema/components.json`.
@@ -41,3 +41,5 @@ The website's manifest/lock are private and isolated from the reporting package.
 The playground runs the shared engine in a browser Web Worker; report data is never uploaded or persisted. It accepts up to 1 MiB and 16 JSON files. Local image imports and larger reports use the CLI. Exported HTML works offline; the editor itself loads website assets and a static sandbox bootstrap. Source edits are cleared on refresh.
 
 Build first from the repository root dependencies: the site compiles the existing renderer assets and examples before Astro runs. There is no second engine or reporting framework. Browser tests use the root Playwright dependency; install browsers with `node ../node_modules/@playwright/test/cli.js install chromium webkit` from `site/`.
+
+The interactions example demonstrates scoped prepared-view controls through the same compiler/renderer used by exported reports. The playground edits its Markdown and JSON bundles locally; it never executes report code or analytics.

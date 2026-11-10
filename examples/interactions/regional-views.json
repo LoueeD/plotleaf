@@ -1,0 +1,409 @@
+{
+  "inputs": [
+    {
+      "id": "region",
+      "label": "Region",
+      "type": "select",
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": "All regions"
+        },
+        {
+          "value": "emea",
+          "label": "EMEA"
+        },
+        {
+          "value": "unlaunched",
+          "label": "Unlaunched"
+        }
+      ]
+    },
+    {
+      "id": "period",
+      "label": "Reporting period",
+      "type": "date-range",
+      "default": {
+        "start": "2026-11-01",
+        "end": "2026-11-07"
+      },
+      "options": [
+        {
+          "value": {
+            "start": "2026-11-01",
+            "end": "2026-11-07"
+          },
+          "label": "1\u20137 November"
+        },
+        {
+          "value": {
+            "start": "2026-11-08",
+            "end": "2026-11-14"
+          },
+          "label": "8\u201314 November"
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "id": "all-1",
+      "label": "All regions / 1\u20137 November",
+      "when": {
+        "region": "all",
+        "period": {
+          "start": "2026-11-01",
+          "end": "2026-11-07"
+        }
+      },
+      "markdown": "### All regions \u00b7 1\u20137 November\n\nThis prepared subset uses its own counts and denominators.\n\n:::grid{columns=\"3\"}\n::metric{label=\"Orders\" value=\"12480\" comparison=\"Prepared period\" direction=\"flat\" sentiment=\"neutral\"}\n::metric{label=\"Revenue\" value=\"824160\" format=\"currency:USD\"}\n::metric{label=\"Activated\" value=\"7612\"}\n:::\n\n::::grid{columns=\"2\"}\n::area{data=\"./series.json\" x=\"date\" y=\"orders\" xType=\"date\" title=\"Orders in selected view\"}\n::funnel{data=\"./funnel.json\" stage=\"stage\" value=\"teams\" total=\"baseline\" share=\"share\" status=\"status\" title=\"Selected-view funnel\"}\n::::\n\n::donut{data=\"./plans.json\" category=\"plan\" value=\"teams\" title=\"Selected-view plan mix\"}\n\n:::table{data=\"./accounts.json\" title=\"Selected-view accounts\"}\n::column{field=\"account\" label=\"Account\"}\n::column{field=\"orders\" label=\"Orders\"}\n::column{field=\"weekly\" label=\"Weekly orders\" kind=\"sparkline\"}\n:::\n",
+      "datasets": {
+        "series.json": [
+          {
+            "date": "2026-11-01",
+            "orders": 1732
+          },
+          {
+            "date": "2026-11-02",
+            "orders": 1762
+          },
+          {
+            "date": "2026-11-03",
+            "orders": 1782
+          },
+          {
+            "date": "2026-11-04",
+            "orders": 1862
+          }
+        ],
+        "funnel.json": [
+          {
+            "stage": "Visited",
+            "teams": 37440,
+            "baseline": 37440,
+            "share": 1,
+            "status": "on-target"
+          },
+          {
+            "stage": "Ordered",
+            "teams": 12480,
+            "baseline": 37440,
+            "share": 0.3333333333333333,
+            "status": "on-target"
+          },
+          {
+            "stage": "Activated",
+            "teams": 7612,
+            "baseline": 37440,
+            "share": 0.2033119658119658,
+            "status": "below-target"
+          }
+        ],
+        "plans.json": [
+          {
+            "plan": "Pro",
+            "teams": 5075
+          },
+          {
+            "plan": "Team",
+            "teams": 2537
+          }
+        ],
+        "accounts.json": [
+          {
+            "account": "All regions account A",
+            "orders": 6240,
+            "weekly": [
+              10,
+              null,
+              18
+            ]
+          },
+          {
+            "account": "All regions account B",
+            "orders": 6240,
+            "weekly": [
+              7,
+              11,
+              15
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "all-2",
+      "label": "All regions / 8\u201314 November",
+      "when": {
+        "region": "all",
+        "period": {
+          "start": "2026-11-08",
+          "end": "2026-11-14"
+        }
+      },
+      "markdown": "### All regions \u00b7 8\u201314 November\n\nThis prepared subset uses its own counts and denominators.\n\n:::grid{columns=\"3\"}\n::metric{label=\"Orders\" value=\"14520\" comparison=\"Prepared period\" direction=\"flat\" sentiment=\"neutral\"}\n::metric{label=\"Revenue\" value=\"958320\" format=\"currency:USD\"}\n::metric{label=\"Activated\" value=\"8960\"}\n:::\n\n::::grid{columns=\"2\"}\n::area{data=\"./series.json\" x=\"date\" y=\"orders\" xType=\"date\" title=\"Orders in selected view\"}\n::funnel{data=\"./funnel.json\" stage=\"stage\" value=\"teams\" total=\"baseline\" share=\"share\" status=\"status\" title=\"Selected-view funnel\"}\n::::\n\n::donut{data=\"./plans.json\" category=\"plan\" value=\"teams\" title=\"Selected-view plan mix\"}\n\n:::table{data=\"./accounts.json\" title=\"Selected-view accounts\"}\n::column{field=\"account\" label=\"Account\"}\n::column{field=\"orders\" label=\"Orders\"}\n::column{field=\"weekly\" label=\"Weekly orders\" kind=\"sparkline\"}\n:::\n",
+      "datasets": {
+        "series.json": [
+          {
+            "date": "2026-11-08",
+            "orders": 2024
+          },
+          {
+            "date": "2026-11-09",
+            "orders": 2054
+          },
+          {
+            "date": "2026-11-10",
+            "orders": 2074
+          },
+          {
+            "date": "2026-11-11",
+            "orders": 2154
+          }
+        ],
+        "funnel.json": [
+          {
+            "stage": "Visited",
+            "teams": 43560,
+            "baseline": 43560,
+            "share": 1,
+            "status": "on-target"
+          },
+          {
+            "stage": "Ordered",
+            "teams": 14520,
+            "baseline": 43560,
+            "share": 0.3333333333333333,
+            "status": "on-target"
+          },
+          {
+            "stage": "Activated",
+            "teams": 8960,
+            "baseline": 43560,
+            "share": 0.2056932966023875,
+            "status": "below-target"
+          }
+        ],
+        "plans.json": [
+          {
+            "plan": "Pro",
+            "teams": 5974
+          },
+          {
+            "plan": "Team",
+            "teams": 2986
+          }
+        ],
+        "accounts.json": [
+          {
+            "account": "All regions account A",
+            "orders": 7260,
+            "weekly": [
+              14,
+              null,
+              22
+            ]
+          },
+          {
+            "account": "All regions account B",
+            "orders": 7260,
+            "weekly": [
+              11,
+              15,
+              19
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "emea-1",
+      "label": "EMEA / 1\u20137 November",
+      "when": {
+        "region": "emea",
+        "period": {
+          "start": "2026-11-01",
+          "end": "2026-11-07"
+        }
+      },
+      "markdown": "### EMEA \u00b7 1\u20137 November\n\nThis prepared subset uses its own counts and denominators.\n\n:::grid{columns=\"3\"}\n::metric{label=\"Orders\" value=\"4200\" comparison=\"Prepared period\" direction=\"flat\" sentiment=\"neutral\"}\n::metric{label=\"Revenue\" value=\"277200\" format=\"currency:USD\"}\n::metric{label=\"Activated\" value=\"2520\"}\n:::\n\n::::grid{columns=\"2\"}\n::area{data=\"./series.json\" x=\"date\" y=\"orders\" xType=\"date\" title=\"Orders in selected view\"}\n::funnel{data=\"./funnel.json\" stage=\"stage\" value=\"teams\" total=\"baseline\" share=\"share\" status=\"status\" title=\"Selected-view funnel\"}\n::::\n\n::donut{data=\"./plans.json\" category=\"plan\" value=\"teams\" title=\"Selected-view plan mix\"}\n\n:::table{data=\"./accounts.json\" title=\"Selected-view accounts\"}\n::column{field=\"account\" label=\"Account\"}\n::column{field=\"orders\" label=\"Orders\"}\n::column{field=\"weekly\" label=\"Weekly orders\" kind=\"sparkline\"}\n:::\n",
+      "datasets": {
+        "series.json": [
+          {
+            "date": "2026-11-01",
+            "orders": 550
+          },
+          {
+            "date": "2026-11-02",
+            "orders": 580
+          },
+          {
+            "date": "2026-11-03",
+            "orders": 600
+          },
+          {
+            "date": "2026-11-04",
+            "orders": 680
+          }
+        ],
+        "funnel.json": [
+          {
+            "stage": "Visited",
+            "teams": 12600,
+            "baseline": 12600,
+            "share": 1,
+            "status": "on-target"
+          },
+          {
+            "stage": "Ordered",
+            "teams": 4200,
+            "baseline": 12600,
+            "share": 0.3333333333333333,
+            "status": "on-target"
+          },
+          {
+            "stage": "Activated",
+            "teams": 2520,
+            "baseline": 12600,
+            "share": 0.2,
+            "status": "below-target"
+          }
+        ],
+        "plans.json": [
+          {
+            "plan": "Pro",
+            "teams": 1680
+          },
+          {
+            "plan": "Team",
+            "teams": 840
+          }
+        ],
+        "accounts.json": [
+          {
+            "account": "EMEA account A",
+            "orders": 2100,
+            "weekly": [
+              10,
+              null,
+              18
+            ]
+          },
+          {
+            "account": "EMEA account B",
+            "orders": 2100,
+            "weekly": [
+              7,
+              11,
+              15
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "emea-2",
+      "label": "EMEA / 8\u201314 November",
+      "when": {
+        "region": "emea",
+        "period": {
+          "start": "2026-11-08",
+          "end": "2026-11-14"
+        }
+      },
+      "markdown": "### EMEA \u00b7 8\u201314 November\n\nThis prepared subset uses its own counts and denominators.\n\n:::grid{columns=\"3\"}\n::metric{label=\"Orders\" value=\"5100\" comparison=\"Prepared period\" direction=\"flat\" sentiment=\"neutral\"}\n::metric{label=\"Revenue\" value=\"336600\" format=\"currency:USD\"}\n::metric{label=\"Activated\" value=\"3264\"}\n:::\n\n::::grid{columns=\"2\"}\n::area{data=\"./series.json\" x=\"date\" y=\"orders\" xType=\"date\" title=\"Orders in selected view\"}\n::funnel{data=\"./funnel.json\" stage=\"stage\" value=\"teams\" total=\"baseline\" share=\"share\" status=\"status\" title=\"Selected-view funnel\"}\n::::\n\n::donut{data=\"./plans.json\" category=\"plan\" value=\"teams\" title=\"Selected-view plan mix\"}\n\n:::table{data=\"./accounts.json\" title=\"Selected-view accounts\"}\n::column{field=\"account\" label=\"Account\"}\n::column{field=\"orders\" label=\"Orders\"}\n::column{field=\"weekly\" label=\"Weekly orders\" kind=\"sparkline\"}\n:::\n",
+      "datasets": {
+        "series.json": [
+          {
+            "date": "2026-11-08",
+            "orders": 678
+          },
+          {
+            "date": "2026-11-09",
+            "orders": 708
+          },
+          {
+            "date": "2026-11-10",
+            "orders": 728
+          },
+          {
+            "date": "2026-11-11",
+            "orders": 808
+          }
+        ],
+        "funnel.json": [
+          {
+            "stage": "Visited",
+            "teams": 15300,
+            "baseline": 15300,
+            "share": 1,
+            "status": "on-target"
+          },
+          {
+            "stage": "Ordered",
+            "teams": 5100,
+            "baseline": 15300,
+            "share": 0.3333333333333333,
+            "status": "on-target"
+          },
+          {
+            "stage": "Activated",
+            "teams": 3264,
+            "baseline": 15300,
+            "share": 0.21333333333333335,
+            "status": "below-target"
+          }
+        ],
+        "plans.json": [
+          {
+            "plan": "Pro",
+            "teams": 2176
+          },
+          {
+            "plan": "Team",
+            "teams": 1088
+          }
+        ],
+        "accounts.json": [
+          {
+            "account": "EMEA account A",
+            "orders": 2550,
+            "weekly": [
+              14,
+              null,
+              22
+            ]
+          },
+          {
+            "account": "EMEA account B",
+            "orders": 2550,
+            "weekly": [
+              11,
+              15,
+              19
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "unlaunched-1",
+      "label": "Unlaunched / 1\u20137 November",
+      "when": {
+        "region": "unlaunched",
+        "period": {
+          "start": "2026-11-01",
+          "end": "2026-11-07"
+        }
+      },
+      "markdown": "### Unlaunched \u00b7 1\u20137 November\n\nNo observations are available. No conversion rate or denominator is invented.\n\n:::grid{columns=\"3\"}\n::metric{label=\"Orders\" value=\"0\" comparison=\"Prepared period\" direction=\"flat\" sentiment=\"neutral\"}\n::metric{label=\"Revenue\" value=\"0\" format=\"currency:USD\"}\n::metric{label=\"Activated\" value=\"0\"}\n:::\n\n::::grid{columns=\"2\"}\n::area{data=\"./series.json\" x=\"date\" y=\"orders\" xType=\"date\" title=\"Orders in selected view\"}\n::funnel{data=\"./funnel.json\" stage=\"stage\" value=\"teams\" total=\"baseline\" share=\"share\" status=\"status\" title=\"Selected-view funnel\"}\n::::\n\n::donut{data=\"./plans.json\" category=\"plan\" value=\"teams\" title=\"Selected-view plan mix\"}\n\n:::table{data=\"./accounts.json\" title=\"Selected-view accounts\"}\n::column{field=\"account\" label=\"Account\"}\n::column{field=\"orders\" label=\"Orders\"}\n::column{field=\"weekly\" label=\"Weekly orders\" kind=\"sparkline\"}\n:::\n",
+      "datasets": {
+        "series.json": [],
+        "funnel.json": [],
+        "plans.json": [],
+        "accounts.json": []
+      }
+    }
+  ]
+}

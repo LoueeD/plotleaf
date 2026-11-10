@@ -20,13 +20,15 @@ Follow https://plotleaf-site.loueed.workers.dev/agent and give me a preview and 
 
 ## Status
 
+**0.4.0** adds scoped interactive explorations: dropdowns, segmented choices, toggles, literal text/number inputs and supported date ranges select complete agent-prepared views. Metrics, charts, funnels, tables and data alternatives update together, including offline HTML. Unsupported selections show an unavailable state; no analytics or arbitrary queries run in reports.
+
 **0.3.2** adds the website links and updated agent setup prompt. Read the [docs](https://plotleaf-site.loueed.workers.dev/docs/), explore [example reports](https://plotleaf-site.loueed.workers.dev/examples/), or try the [browser playground](https://plotleaf-site.loueed.workers.dev/playground/) without installing anything. The playground supports Markdown and JSON; local image imports and larger reports use the CLI.
 
 The initial MVP includes validation, live preview/reload, self-contained HTML export and a generated component specification. All bundled examples use fictional data.
 
 **0.3.0** adds local PNG/JPEG image cells, static sparklines and a cumulative example report. Donut charts and prepared funnel/progress views are available since 0.2.0. Check your installed CLI version or schema before using newer components.
 
-Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Filters, maps, subtotals and reusable compositions remain planned increments.
+Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Scoped prepared-view controls are supported. Arbitrary row queries, maps, subtotals and reusable compositions remain planned increments.
 
 ## Quick start
 
@@ -169,3 +171,24 @@ Bun builds a Node-target ESM executable and browser-target IIFE assets. The brow
 MIT licensed. Bundled chart licenses/notices are retained in the package and exported HTML.
 
 See [CONTRIBUTING.md](https://github.com/LoueeD/plotleaf/blob/main/CONTRIBUTING.md) for the platform matrix and contribution workflow. The `v0.1.0` source tag reproduces the published npm archive; subsequent source changes require a new package version before release. Renderer releases require the owner's manual visual review of the running preview, in addition to automated checks.
+
+
+## Interactive prepared views
+
+```markdown
+::explore{data="./regional-views.json" title="Regional performance"}
+```
+
+The JSON bundle declares native `inputs`, their defaults/supported values and
+complete `views`. Every view binds all input IDs through `when` and contains
+Markdown using the existing components plus optional inline JSON `datasets`.
+The agent prepares every value and denominator; Plotleaf selects the matching
+view without recalculating analytics. Controls affect only their exploration;
+static prose and metrics outside it stay fixed. Reset restores defaults and an
+unsupported combination hides stale results.
+
+See the [interactive example](https://plotleaf-site.loueed.workers.dev/playground/?example=interactions),
+[authoring guide](https://plotleaf-site.loueed.workers.dev/docs/) and `npx plotleaf schema`
+for the exact contract and limits. All selectable data remains readable in the
+HTML file; hidden views are not redaction. Native controls need JavaScript, while
+the default view and data alternatives remain readable without it.

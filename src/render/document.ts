@@ -63,7 +63,9 @@ export function renderHtml(
     [content.hasCharts ? assets.charts : assets.base],
     preview,
     hash,
-    content.hasCharts ? serializeData(content.payload) : undefined,
+    content.hasCharts || content.payload.explorations?.length
+      ? serializeData(content.payload)
+      : undefined,
     content.hasCharts ? assets.notices : "",
     revision,
   );

@@ -1,3 +1,4 @@
+import type { ExplorationInput, InputValue } from "./exploration-schema.js";
 import type { Root as MarkdownRoot } from "mdast";
 import type { Position } from "unist";
 import type { ComponentName, PropsByName, ColumnProps } from "./registry.js";
@@ -26,6 +27,16 @@ export type ComponentBlock = {
     position?: Position;
     rows?: K extends "table" ? TableRow[] : Row[];
     columns?: ColumnProps[];
+    exploration?: {
+      inputs: ExplorationInput[];
+      defaultView: string;
+      views: {
+        id: string;
+        label: string;
+        when: Record<string, InputValue>;
+        blocks: Block[];
+      }[];
+    };
   };
 }[ComponentName];
 export type Block = MarkdownBlock | ComponentBlock;

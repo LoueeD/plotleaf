@@ -180,7 +180,7 @@ describe("published CLI under Node", () => {
           "utf8",
         );
         expect(Buffer.byteLength(html)).toBeLessThan(20_000);
-        expect(html).not.toContain("plotleaf-data");
+        expect(html).not.toContain('id="plotleaf-data"');
       },
     ));
 

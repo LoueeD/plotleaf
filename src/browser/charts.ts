@@ -29,6 +29,7 @@ const theme = window.matchMedia("(prefers-color-scheme: dark)");
 const instances: {
   chart: ReturnType<typeof echarts.init>;
   data: ChartPayload;
+  observer: ResizeObserver;
 }[] = [];
 
 function options(data: ChartPayload): echarts.EChartsCoreOption {
@@ -228,15 +229,32 @@ function options(data: ChartPayload): echarts.EChartsCoreOption {
   };
 }
 
-for (const data of payload.charts) {
-  const container = document.getElementById(data.id);
-  if (!container) continue;
-  const chart = echarts.init(container, undefined, { renderer: "svg" });
-  chart.setOption(options(data));
-  instances.push({ chart, data });
-  const observer = new ResizeObserver(() => chart.resize());
-  observer.observe(container);
+function synchronizeCharts(): void {
+  for (let index = instances.length - 1; index >= 0; index--) {
+    const item = instances[index]!;
+    if (item.chart.getDom().closest("[hidden]")) {
+      item.observer.disconnect();
+      item.chart.dispose();
+      instances.splice(index, 1);
+    }
+  }
+  for (const data of payload.charts) {
+    const container = document.getElementById(data.id);
+    if (!container || container.closest("[hidden]")) continue;
+    const existing = instances.find((item) => item.data.id === data.id);
+    if (existing) {
+      existing.chart.resize();
+      continue;
+    }
+    const chart = echarts.init(container, undefined, { renderer: "svg" });
+    chart.setOption(options(data));
+    const observer = new ResizeObserver(() => chart.resize());
+    observer.observe(container);
+    instances.push({ chart, data, observer });
+  }
 }
+synchronizeCharts();
+document.addEventListener("plotleaf:viewchange", synchronizeCharts);
 theme.addEventListener("change", () => {
   for (const { chart, data } of instances)
     chart.setOption(options(data), { notMerge: true });

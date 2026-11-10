@@ -700,3 +700,134 @@ th[aria-sort="descending"] .sort-indicator {
     padding: 0;
   }
 }
+
+/* Scoped prepared-view interactions use native controls and the report tokens. */
+.exploration {
+  margin: 40px 0;
+}
+.exploration > h2 {
+  margin-bottom: 24px;
+}
+.explore-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 18px 24px;
+}
+.explore-controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  font-size: 13px;
+  color: var(--body);
+}
+.explore-controls input,
+.explore-controls select,
+.explore-controls button {
+  font: inherit;
+  color: var(--ink);
+  background: var(--page);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  min-height: 38px;
+  padding: 7px 10px;
+  max-width: 100%;
+}
+.explore-controls fieldset {
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+.explore-controls legend {
+  font-size: 13px;
+  color: var(--body);
+  margin-bottom: 7px;
+}
+.explore-controls .explore-segmented label,
+.explore-controls .explore-dates label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 12px;
+}
+.explore-controls .explore-toggle {
+  flex-direction: row;
+  align-items: center;
+  min-height: 38px;
+}
+.explore-controls input[type="checkbox"],
+.explore-controls input[type="radio"] {
+  min-height: 0;
+  accent-color: var(--series);
+}
+.explore-controls input[aria-invalid="true"] {
+  border-color: var(--negative);
+}
+.explore-controls :focus-visible {
+  outline: 2px solid var(--series);
+  outline-offset: 3px;
+}
+.explore-status {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 18px 0 26px;
+}
+.exploration [hidden] {
+  display: none !important;
+}
+@media (max-width: 600px) {
+  .explore-controls {
+    gap: 16px;
+  }
+  .explore-controls input[type="text"],
+  .explore-controls input[type="number"] {
+    width: 160px;
+  }
+  .explore-dates label {
+    flex-wrap: wrap;
+  }
+}
+
+.explore-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+.explore-segment-options {
+  display: inline-flex;
+  flex-wrap: wrap;
+  padding: 3px;
+  background: var(--soft);
+  border: 1px solid var(--rule);
+  border-radius: 7px;
+}
+.explore-controls .explore-segment-options label {
+  position: relative;
+  margin: 0;
+  padding: 5px 12px;
+  min-height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.explore-segment-options label:has(input:checked) {
+  background: var(--page);
+  color: var(--ink);
+}
+.explore-segment-options input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+}
+.explore-segment-options label:has(input:focus-visible) {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+}
+.explore-supported {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}

@@ -258,6 +258,52 @@ try {
   );
   assert(!catalogHtml.includes("/assets/"));
   assert(!catalogHtml.includes('id="plotleaf-data"'));
+  const interactions = path.join(directory, "interactions");
+  await cp(
+    path.join(directory, "node_modules/plotleaf/examples/interactions"),
+    interactions,
+    { recursive: true },
+  );
+  const interactionReport = path.join(interactions, "report.md");
+  assert.equal(
+    JSON.parse(
+      run(process.execPath, [
+        npxCli,
+        "--no-install",
+        "plotleaf",
+        "validate",
+        interactionReport,
+        "--json",
+      ]),
+    ).valid,
+    true,
+  );
+  const interactionOutput = path.join(directory, "interactions.html");
+  run(process.execPath, [
+    npxCli,
+    "--no-install",
+    "plotleaf",
+    "build",
+    interactionReport,
+    "--out",
+    interactionOutput,
+  ]);
+  const interactionHtml = await readFile(interactionOutput, "utf8");
+  const interactionPayload = JSON.parse(
+    interactionHtml.match(
+      /<script type="application\/json" id="plotleaf-data">([\s\S]*?)<\/script>/,
+    )?.[1] ?? "null",
+  );
+  assert.equal(interactionPayload.explorations.length, 2);
+  assert.deepEqual(
+    interactionPayload.explorations.flatMap((scope) =>
+      scope.inputs.map((input) => input.type),
+    ),
+    ["select", "date-range", "segmented", "toggle", "text", "number"],
+  );
+  assert(interactionHtml.includes('data-plotleaf-view="emea-2"'));
+  assert(!interactionHtml.includes(interactions));
+  assert(!interactionHtml.includes("plotleaf-inline:"));
   const showcase = path.join(directory, "showcase");
   await cp(path.join(directory, "node_modules/plotleaf/examples"), showcase, {
     recursive: true,
@@ -274,7 +320,7 @@ try {
     showcaseOutput,
   ]);
   const showcaseHtml = await readFile(showcaseOutput, "utf8");
-  assert.equal(showcaseHtml.match(/class="metric-comparison"/g)?.length, 7);
+  assert.equal(showcaseHtml.match(/class="metric-comparison"/g)?.length, 12);
   assert.equal(showcaseHtml.match(/class="table-image"/g)?.length, 4);
   assert(showcaseHtml.includes('"kind":"donut"'));
   assert(showcaseHtml.includes('"kind":"line"'));

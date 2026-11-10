@@ -53,7 +53,7 @@ test("cumulative showcase retains KPI comparisons and chart interactions alongsi
     page.locator(".metric-comparison[data-sentiment=positive]"),
   ).toHaveCount(7);
   await expect(page.locator(".metric-value").nth(1)).toHaveText("US$824,160");
-  await expect(page.locator(".chart-plot svg")).toHaveCount(4);
+  await expect(page.locator(".chart-plot svg")).toHaveCount(6);
   await expect(page.locator(".chart-plot").first()).toContainText(
     "Daily target",
   );
@@ -61,7 +61,9 @@ test("cumulative showcase retains KPI comparisons and chart interactions alongsi
     page.getByText("At risk", { exact: true }).first(),
   ).toBeVisible();
   await expect(page.locator(".table-image")).toHaveCount(4);
-  await expect(page.locator(".sparkline-chart")).toHaveCount(4);
+  await expect(
+    page.locator(".report > .table-scroll .sparkline-chart"),
+  ).toHaveCount(4);
   await expect(
     page.getByRole("img", { name: "Illustration of a blue desk lamp" }),
   ).toBeVisible();
@@ -90,7 +92,7 @@ test("cumulative showcase retains KPI comparisons and chart interactions alongsi
   for (const theme of ["light", "dark"] as const) {
     await page.emulateMedia({ colorScheme: theme });
     const colors = await page
-      .locator(".metric-comparison")
+      .locator(".metric-comparison[data-sentiment=positive]")
       .evaluateAll((elements) =>
         elements.map((element) => getComputedStyle(element).color),
       );

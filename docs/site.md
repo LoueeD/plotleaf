@@ -48,3 +48,9 @@ The playground uses its own 100dvh workspace shell: full-width top toolbar combi
 This workspace revision is deployed as Cloudflare version `702c862f-974b-4b10-b617-41518270bd46` from source `dcf1aa529cc878aab610441e0f6b4d59432db938`. All eight Chromium/WebKit checks pass locally and against the live site. Live measurements confirm examples at 640px and the docs group/header at 860px, centered with 640px content. [Website CI](https://github.com/LoueeD/plotleaf/actions/runs/42890567125) passes. Evidence and screenshots are retained in `.cache/site-expansion/workspace-*`. No reporting npm release was performed.
 
 [Engine CI](https://github.com/LoueeD/plotleaf/actions/runs/42890567548) also passes all 11 jobs for the workspace source, including the unchanged reporting engine suites and six installed Node consumers.
+
+## M5 website candidate
+
+The local 0.4.0 candidate adds a sixth downloadable report and fifth editable project: scoped prepared-view interactions. Human docs and `/agent` reuse the updated authoring skill; `/schema.json` and the component reference expose the new registry contract. Browser playground tests edit a prepared-view JSON bundle and verify the selected metric and charts change. It uses the same compiler/renderer as CLI exports, with no uploaded data or additional application framework.
+
+Public deployment remains pending owner visual review of the renderer and the release checks. The website workspace and its 640px reading layouts remain unchanged.

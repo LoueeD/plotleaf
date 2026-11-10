@@ -24,6 +24,16 @@ The **0.3.1 agent-discovery patch** is published before M5: the README copy/past
 
 The **0.3.2 website-discovery patch** was authorized and published on 10 November 2026. It updates the npm homepage, site/docs/examples/playground links and simple agent prompt. The shared browser-compiler extraction is included without changing any of the five bundled reports' exported bytes from 0.3.1. All 11 candidate-source CI jobs pass, the audited 29-file archive matches CI and public npm bytes, and fresh anonymous unversioned npx guide/schema/validate/build checks pass without Bun. No M5 features or new runtime dependencies are added. See [release 0.3.2](docs/releases/0.3.2.md); earlier release tags remain immutable.
 
+M5 is implemented in the **0.4.0 candidate**, with scoped `explore` prepared views
+and all six native control types. The public release remains 0.3.2 until owner
+visual review and release verification finish. See [M5 contracts](docs/m5-interactions.md).
+Text/number controls match supplied literal values, dates match supplied inclusive
+ranges, and unsupported combinations hide stale results. All inputs affect only
+their declared exploration; no implicit analytics, arbitrary row queries or new
+UI framework is added. Nested explorations are rejected and expansion is bounded.
+Keep the CLI, browser compiler, site guide/schema, examples and cumulative preview
+on this same contract.
+
 ## Design ownership
 
 The project owner supplied three screenshots, preserved locally under the ignored `docs/design/references/` directory and interpreted in [the design reference](docs/design-reference.md). They are not redistributed in public source; new clones have the written contract and fictional examples. **Use the owner's references as the visual authority.**

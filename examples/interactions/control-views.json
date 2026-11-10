@@ -1,0 +1,412 @@
+{
+  "inputs": [
+    {
+      "id": "cadence",
+      "type": "segmented",
+      "label": "Cadence",
+      "default": "weekly",
+      "options": [
+        {
+          "value": "weekly",
+          "label": "Weekly"
+        },
+        {
+          "value": "monthly",
+          "label": "Monthly"
+        }
+      ]
+    },
+    {
+      "id": "priority",
+      "type": "toggle",
+      "label": "Priority accounts",
+      "default": false
+    },
+    {
+      "id": "product",
+      "type": "text",
+      "label": "Product (all or notebook)",
+      "default": "all",
+      "options": [
+        {
+          "value": "all",
+          "label": "All"
+        },
+        {
+          "value": "notebook",
+          "label": "Notebook"
+        }
+      ]
+    },
+    {
+      "id": "quantity",
+      "type": "number",
+      "label": "Quantity (10 or 20)",
+      "default": 10,
+      "options": [
+        {
+          "value": 10,
+          "label": "10"
+        },
+        {
+          "value": 20,
+          "label": "20"
+        }
+      ]
+    }
+  ],
+  "views": [
+    {
+      "id": "weekly-standard-all-10",
+      "label": "Weekly / standard / all / 10",
+      "when": {
+        "cadence": "weekly",
+        "priority": false,
+        "product": "all",
+        "quantity": 10
+      },
+      "markdown": "### Weekly / standard / all / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"240\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": false,
+            "product": "all",
+            "quantity": 10,
+            "orders": 240
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly-standard-all-20",
+      "label": "Weekly / standard / all / 20",
+      "when": {
+        "cadence": "weekly",
+        "priority": false,
+        "product": "all",
+        "quantity": 20
+      },
+      "markdown": "### Weekly / standard / all / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"250\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": false,
+            "product": "all",
+            "quantity": 20,
+            "orders": 250
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly-standard-notebook-10",
+      "label": "Weekly / standard / notebook / 10",
+      "when": {
+        "cadence": "weekly",
+        "priority": false,
+        "product": "notebook",
+        "quantity": 10
+      },
+      "markdown": "### Weekly / standard / notebook / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"80\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": false,
+            "product": "notebook",
+            "quantity": 10,
+            "orders": 80
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly-standard-notebook-20",
+      "label": "Weekly / standard / notebook / 20",
+      "when": {
+        "cadence": "weekly",
+        "priority": false,
+        "product": "notebook",
+        "quantity": 20
+      },
+      "markdown": "### Weekly / standard / notebook / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"90\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": false,
+            "product": "notebook",
+            "quantity": 20,
+            "orders": 90
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly-priority-all-10",
+      "label": "Weekly / priority / all / 10",
+      "when": {
+        "cadence": "weekly",
+        "priority": true,
+        "product": "all",
+        "quantity": 10
+      },
+      "markdown": "### Weekly / priority / all / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"260\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": true,
+            "product": "all",
+            "quantity": 10,
+            "orders": 260
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly-priority-all-20",
+      "label": "Weekly / priority / all / 20",
+      "when": {
+        "cadence": "weekly",
+        "priority": true,
+        "product": "all",
+        "quantity": 20
+      },
+      "markdown": "### Weekly / priority / all / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"270\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": true,
+            "product": "all",
+            "quantity": 20,
+            "orders": 270
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly-priority-notebook-10",
+      "label": "Weekly / priority / notebook / 10",
+      "when": {
+        "cadence": "weekly",
+        "priority": true,
+        "product": "notebook",
+        "quantity": 10
+      },
+      "markdown": "### Weekly / priority / notebook / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"100\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": true,
+            "product": "notebook",
+            "quantity": 10,
+            "orders": 100
+          }
+        ]
+      }
+    },
+    {
+      "id": "weekly-priority-notebook-20",
+      "label": "Weekly / priority / notebook / 20",
+      "when": {
+        "cadence": "weekly",
+        "priority": true,
+        "product": "notebook",
+        "quantity": 20
+      },
+      "markdown": "### Weekly / priority / notebook / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"110\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "weekly",
+            "priority": true,
+            "product": "notebook",
+            "quantity": 20,
+            "orders": 110
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-standard-all-10",
+      "label": "Monthly / standard / all / 10",
+      "when": {
+        "cadence": "monthly",
+        "priority": false,
+        "product": "all",
+        "quantity": 10
+      },
+      "markdown": "### Monthly / standard / all / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"960\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": false,
+            "product": "all",
+            "quantity": 10,
+            "orders": 960
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-standard-all-20",
+      "label": "Monthly / standard / all / 20",
+      "when": {
+        "cadence": "monthly",
+        "priority": false,
+        "product": "all",
+        "quantity": 20
+      },
+      "markdown": "### Monthly / standard / all / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"970\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": false,
+            "product": "all",
+            "quantity": 20,
+            "orders": 970
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-standard-notebook-10",
+      "label": "Monthly / standard / notebook / 10",
+      "when": {
+        "cadence": "monthly",
+        "priority": false,
+        "product": "notebook",
+        "quantity": 10
+      },
+      "markdown": "### Monthly / standard / notebook / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"320\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": false,
+            "product": "notebook",
+            "quantity": 10,
+            "orders": 320
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-standard-notebook-20",
+      "label": "Monthly / standard / notebook / 20",
+      "when": {
+        "cadence": "monthly",
+        "priority": false,
+        "product": "notebook",
+        "quantity": 20
+      },
+      "markdown": "### Monthly / standard / notebook / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"330\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": false,
+            "product": "notebook",
+            "quantity": 20,
+            "orders": 330
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-priority-all-10",
+      "label": "Monthly / priority / all / 10",
+      "when": {
+        "cadence": "monthly",
+        "priority": true,
+        "product": "all",
+        "quantity": 10
+      },
+      "markdown": "### Monthly / priority / all / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"980\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": true,
+            "product": "all",
+            "quantity": 10,
+            "orders": 980
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-priority-all-20",
+      "label": "Monthly / priority / all / 20",
+      "when": {
+        "cadence": "monthly",
+        "priority": true,
+        "product": "all",
+        "quantity": 20
+      },
+      "markdown": "### Monthly / priority / all / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"990\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": true,
+            "product": "all",
+            "quantity": 20,
+            "orders": 990
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-priority-notebook-10",
+      "label": "Monthly / priority / notebook / 10",
+      "when": {
+        "cadence": "monthly",
+        "priority": true,
+        "product": "notebook",
+        "quantity": 10
+      },
+      "markdown": "### Monthly / priority / notebook / 10\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"340\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": true,
+            "product": "notebook",
+            "quantity": 10,
+            "orders": 340
+          }
+        ]
+      }
+    },
+    {
+      "id": "monthly-priority-notebook-20",
+      "label": "Monthly / priority / notebook / 20",
+      "when": {
+        "cadence": "monthly",
+        "priority": true,
+        "product": "notebook",
+        "quantity": 20
+      },
+      "markdown": "### Monthly / priority / notebook / 20\n\nFictional, independently prepared scenario.\n\n::metric{label=\"Prepared orders\" value=\"350\"}\n\n::table{data=\"./scenario.json\" title=\"Selected scenario\"}\n",
+      "datasets": {
+        "scenario.json": [
+          {
+            "cadence": "monthly",
+            "priority": true,
+            "product": "notebook",
+            "quantity": 20,
+            "orders": 350
+          }
+        ]
+      }
+    }
+  ]
+}

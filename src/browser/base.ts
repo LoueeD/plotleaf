@@ -1,3 +1,4 @@
+import "./exploration.js";
 const collator = new Intl.Collator("en-GB", {
   numeric: true,
   sensitivity: "base",

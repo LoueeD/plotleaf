@@ -239,6 +239,7 @@ describe("report compiler", () => {
     );
     expect(spec).toEqual(componentSpec());
     expect(Object.keys(spec.components)).toEqual([
+      "explore",
       "grid",
       "metric",
       "line",

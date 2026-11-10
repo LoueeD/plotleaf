@@ -1,3 +1,4 @@
+import { exploration } from "./exploration.js";
 import { unified } from "unified";
 import remarkRehype from "remark-rehype";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -31,6 +32,14 @@ const serializer = unified()
     clobberPrefix: "",
     tagNames: [
       ...(defaultSchema.tagNames ?? []),
+      "select",
+      "option",
+      "input",
+      "label",
+      "fieldset",
+      "legend",
+      "datalist",
+      "noscript",
       "figure",
       "figcaption",
       "button",
@@ -52,6 +61,11 @@ const serializer = unified()
         "ariaLabelledBy",
         "ariaHidden",
         "ariaSort",
+        "hidden",
+        "ariaLive",
+        "dataPlotleafExplore",
+        "dataPlotleafView",
+        "dataPlotleafStatus",
         "dataPlotleafChart",
         "dataPlotleafTable",
         "dataColumn",
@@ -62,8 +76,36 @@ const serializer = unified()
         "dataStatus",
         "dataSlice",
       ],
-      button: ["type", "disabled", "ariaLabel", "dataColumn"],
-      section: ["className", "ariaLabel"],
+      input: [
+        "id",
+        "type",
+        "name",
+        "value",
+        "checked",
+        "disabled",
+        "step",
+        "list",
+        "dataPlotleafInput",
+        "dataRangePart",
+        "ariaDescribedBy",
+      ],
+      select: ["id", "disabled", "dataPlotleafInput"],
+      option: ["value", "selected"],
+      label: ["htmlFor", "className"],
+      button: [
+        "type",
+        "disabled",
+        "ariaLabel",
+        "dataColumn",
+        "dataPlotleafReset",
+      ],
+      section: [
+        "className",
+        "ariaLabel",
+        "dataPlotleafExplore",
+        "dataPlotleafView",
+        "hidden",
+      ],
       meter: ["min", "max", "value", "className", "ariaLabel"],
       svg: ["className", "viewBox", "width", "height", "role", "ariaLabel"],
       use: ["href"],
@@ -215,14 +257,14 @@ export function renderContent(report: Report): RenderedContent {
     headings.set(slug, count + 1);
     return `plotleaf-heading-${slug}${count ? `-${count + 1}` : ""}`;
   };
-  function decorate(node: Child): void {
+  function decorate(node: Child, namespace = ""): void {
     if (node.type !== "element") return;
     if (/^h[1-6]$/.test(node.tagName)) {
       const text = (child: Child): string =>
         child.type === "text"
           ? child.value
           : child.children.map((n) => text(n as Child)).join("");
-      node.properties.id = headingId(text(node));
+      node.properties.id = headingId(namespace + text(node));
       if (node.tagName === "h1") hasH1 = true;
     }
     if (node.tagName === "a" && typeof node.properties.href === "string") {
@@ -236,22 +278,24 @@ export function renderContent(report: Report): RenderedContent {
         } catch {
           /* Keep malformed escapes inert. */
         }
-        node.properties.href = `#plotleaf-heading-${slugOf(fragment)}`;
+        node.properties.href = `#plotleaf-heading-${slugOf(namespace + fragment)}`;
       }
       if (/^https?:/.test(node.properties.href))
         node.properties.rel = ["noopener", "noreferrer"];
     }
-    node.children.forEach((child) => decorate(child as Child));
+    node.children.forEach((child) => decorate(child as Child, namespace));
   }
-  function render(blocks: Block[]): Child[] {
+  function render(blocks: Block[], namespace = ""): Child[] {
     return blocks.flatMap((block): Child[] => {
       if (block.type === "markdown") {
         const root = markdown.runSync(block.tree) as Root;
-        root.children.forEach((child) => decorate(child as Child));
+        root.children.forEach((child) => decorate(child as Child, namespace));
         return root.children as Child[];
       }
       const id = `plotleaf-component-${String(++sequence).padStart(4, "0")}`;
       switch (block.name) {
+        case "explore":
+          return exploration(block, id, render, (payload.explorations ??= []));
         case "grid":
           return [
             h(
@@ -269,7 +313,7 @@ export function renderContent(report: Report): RenderedContent {
                 ],
                 dataColumns: block.props.columns,
               },
-              render(block.children),
+              render(block.children, namespace),
             ),
           ];
         case "metric": {
@@ -327,7 +371,7 @@ export function renderContent(report: Report): RenderedContent {
                     ]),
                   ]
                 : []),
-              ...render(block.children),
+              ...render(block.children, namespace),
             ]),
           ];
         case "table":

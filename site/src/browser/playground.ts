@@ -29,6 +29,12 @@ let timeout: ReturnType<typeof setTimeout>;
 let documentUrl: string | undefined;
 
 function showMessages(messages: Diagnostic[]) {
+  const panel = byId<HTMLDetailsElement>("compile-messages");
+  panel.hidden = messages.length === 0;
+  panel.open = messages.some((item) => item.severity === "error");
+  byId("diagnostic-summary").textContent = panel.open
+    ? "Validation errors"
+    : `${messages.length} ${messages.length === 1 ? "warning" : "warnings"}`;
   diagnostics.replaceChildren();
   for (const item of messages) {
     const li = document.createElement("li");

@@ -61,6 +61,14 @@ const entries = [
     kind: "Images · Sparklines · Table",
   },
 ];
+entries.push({
+  slug: "interactions",
+  name: "Interactive regional report",
+  file: "examples/interactions/report.md",
+  description:
+    "Scoped region/date controls and native inputs select coherent prepared metrics, charts, funnel stages and table rows. Everything works offline.",
+  kind: "Prepared views · Native controls",
+});
 const projects = [];
 for (const entry of entries) {
   const filename = path.join(root, entry.file);
@@ -115,4 +123,4 @@ await writeFile(
   path.join(root, "site/public/playground-projects.json"),
   JSON.stringify(projects),
 );
-console.log("Prepared five real reports and four editable browser examples.");
+console.log("Prepared six real reports and five editable browser examples.");

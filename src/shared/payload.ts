@@ -1,3 +1,4 @@
+import type { ExplorationConfig } from "../compiler/exploration-schema.js";
 export type Cell = string | number | boolean | null;
 export type Row = Record<string, Cell>;
 interface ChartBase {
@@ -28,4 +29,5 @@ export const funnelStatuses = {
 } as const;
 export interface ReportPayload {
   charts: ChartPayload[];
+  explorations?: ExplorationConfig[];
 }

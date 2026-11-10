@@ -1,4 +1,6 @@
 import * as z from "zod";
+import { explorationLimits } from "../shared/exploration.js";
+import { explorationSchema } from "./exploration-schema.js";
 import { limits } from "../shared/limits.js";
 import { funnelStatuses } from "../shared/payload.js";
 
@@ -24,6 +26,23 @@ const line = z.strictObject({
 });
 
 export const registry = {
+  explore: {
+    forms: ["leaf"],
+    children: [],
+    description:
+      "Scoped native controls select complete agent-prepared views. No analytics or report JavaScript.",
+    schema: z.strictObject({ data: text, title: text }),
+    dataRules: {
+      schema: z.toJSONSchema(explorationSchema),
+      resolution:
+        "Relative JSON bundle; inline view datasets override the same plain filename only within that view.",
+      limits: explorationLimits,
+      binding:
+        "Every input affects exactly this exploration. Every view declares all input values. No matching combination hides the previous view.",
+    },
+    example:
+      '::explore{data="./regional-views.json" title="Regional performance"}',
+  },
   grid: {
     forms: ["container"],
     children: [
@@ -197,7 +216,7 @@ export function componentSpec() {
     limits,
     data: {
       shape:
-        "array of flat JSON records; explicit table sparkline columns permit bounded numeric/null arrays only in their declared fields",
+        "component datasets are arrays of flat JSON records; explicit table sparkline columns permit bounded numeric/null arrays only in their declared fields; explore bundles use their component-specific inputs/views schema",
       resolution: "relative to the report directory; local .json files only",
       percent: "ratios: 0.12 displays as 12%",
       percentagePoints: "point values: 0.8 displays as 0.8 pt",
@@ -231,7 +250,7 @@ export function componentSpec() {
       "Donut category/value fields must differ; category count is bounded, and all-zero values do not create equal slices.",
       "Funnel fields must differ; shares and denominators are supplied, validated and displayed per row, with no sorting or status inference.",
       "Only explicit image columns can load local static PNG/JPEG; every resource stays within the report root and shared byte limits.",
-      "Filters, maps, arbitrary nested data and executable components are not supported in this release.",
+      "explore selects finite agent-prepared views using scoped native controls; nested explorations, arbitrary row queries, maps and executable components are not supported.",
     ],
   };
 }

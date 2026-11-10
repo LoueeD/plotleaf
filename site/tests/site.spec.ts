@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
 async function ready(page: import("@playwright/test").Page) {
-  await expect(page.locator("#compile-status")).toHaveText("Ready");
+  await expect(page.locator("#compile-status")).toHaveText(/^Ready/);
   await expect(
     page.getByRole("button", { name: "Download HTML" }),
   ).toBeEnabled();
@@ -26,10 +26,12 @@ test("human docs, generated reference and real examples are readable across them
   await expect(page.locator("iframe")).toHaveCount(0);
   const reportPage = await page.context().newPage();
   await reportPage.goto("/reports/showcase/");
-  await expect(reportPage.locator(".metric-comparison")).toHaveCount(7);
-  await expect(reportPage.locator(".chart-plot svg")).toHaveCount(4);
+  await expect(
+    reportPage.locator(".metric-comparison[data-sentiment=positive]"),
+  ).toHaveCount(7);
+  await expect(reportPage.locator(".chart-plot svg")).toHaveCount(6);
   await reportPage.close();
-  await expect(page.getByRole("link", { name: "View report" })).toHaveCount(4);
+  await expect(page.getByRole("link", { name: "View report" })).toHaveCount(5);
   for (const path of [
     "/",
     "/docs/",
@@ -232,4 +234,33 @@ test("workspace fits viewport, resizes panes and adds editable JSON tabs", async
   );
   await page.getByRole("button", { name: "Remove selected JSON" }).click();
   await expect(page.getByRole("tab", { name: "notes.json" })).toHaveCount(0);
+});
+
+test("browser playground compiles interactive bundles and live JSON edits update prepared views", async ({
+  page,
+}) => {
+  await page.goto("/playground/?example=interactions");
+  await ready(page);
+  const frame = page.frameLocator("#report-preview");
+  const region = frame.locator(".exploration").nth(0);
+  await region.getByLabel("Region", { exact: true }).selectOption("1");
+  await expect(region.locator(".metric-value:visible").first()).toHaveText(
+    "4,200",
+  );
+  await page
+    .getByRole("tab", { name: "regional-views.json", exact: true })
+    .click();
+  const bundle = JSON.parse(await page.locator("#source-editor").inputValue());
+  const view = bundle.views.find(
+    (item: { id: string }) => item.id === "emea-1",
+  );
+  view.markdown = view.markdown.replace('value="4200"', 'value="4300"');
+  await page.locator("#source-editor").fill(JSON.stringify(bundle, null, 2));
+  await expect(page.locator("#compile-status")).toHaveText("Editing…");
+  await ready(page);
+  await region.getByLabel("Region", { exact: true }).selectOption("1");
+  await expect(region.locator(".metric-value:visible").first()).toHaveText(
+    "4,300",
+  );
+  await expect(region.locator(".chart-plot svg")).toHaveCount(2);
 });

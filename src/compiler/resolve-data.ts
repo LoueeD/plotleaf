@@ -1,3 +1,8 @@
+import {
+  resolveExploration,
+  expansionBudget,
+  type ExpansionBudget,
+} from "./exploration.js";
 import type { Block, ComponentBlock, RichCell, TableRow } from "./ir.js";
 import {
   LocalFileError,
@@ -15,14 +20,15 @@ type SourceRow = Record<string, Cell | (number | null)[]>;
 const reserved = new Set(["__proto__", "constructor", "prototype"]);
 
 export class DataResolver {
-  private readonly cache = new Map<
-    string,
-    { rows: SourceRow[]; arrays: Map<string, number> }
-  >();
   constructor(
     readonly diagnostics: Diagnostics,
     private readonly files: SourceFiles,
     readonly images: SourceImages,
+    private readonly expansion: ExpansionBudget = expansionBudget(),
+    private readonly cache = new Map<
+      string,
+      { rows: SourceRow[]; arrays: Map<string, number> }
+    >(),
   ) {}
 
   async load(
@@ -156,6 +162,23 @@ export class DataResolver {
   async resolve(blocks: Block[]): Promise<void> {
     for (const block of blocks) {
       if (block.type !== "component") continue;
+      if (block.name === "explore") {
+        await resolveExploration(
+          block,
+          this.files,
+          this.diagnostics,
+          (children, files, diagnostics) =>
+            new DataResolver(
+              diagnostics,
+              files,
+              this.images,
+              this.expansion,
+              this.cache,
+            ).resolve(children),
+          this.expansion,
+        );
+        continue;
+      }
       if (
         block.name === "line" ||
         block.name === "area" ||
