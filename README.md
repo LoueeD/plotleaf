@@ -20,6 +20,8 @@ Follow https://plotleaf-site.loueed.workers.dev/agent and give me a preview and 
 
 ## Status
 
+**0.4.1** removes metric-value scrollbars; exceptionally long values wrap rather than clip.
+
 **0.4.0** adds scoped interactive explorations: dropdowns, segmented choices, toggles, literal text/number inputs and supported date ranges select complete agent-prepared views. Metrics, charts, funnels, tables and data alternatives update together, including offline HTML. Unsupported selections show an unavailable state; no analytics or arbitrary queries run in reports.
 
 **0.3.2** adds the website links and updated agent setup prompt. Read the [docs](https://plotleaf-site.loueed.workers.dev/docs/), explore [example reports](https://plotleaf-site.loueed.workers.dev/examples/), or try the [browser playground](https://plotleaf-site.loueed.workers.dev/playground/) without installing anything. The playground supports Markdown and JSON; local image imports and larger reports use the CLI.

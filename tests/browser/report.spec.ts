@@ -160,6 +160,42 @@ test("keeps full currency metrics on one visible line across responsive widths",
   }
 });
 
+test("wraps exceptionally long metric values without clipping or a scrollbar", async ({
+  page,
+}, info) => {
+  const source = path.join(directory, `long-metric-${info.project.name}.md`);
+  const output = path.join(directory, `long-metric-${info.project.name}.html`);
+  await writeFile(
+    source,
+    '# Large value\n\n:::grid{columns="4"}\n::metric{label="Large" value="1e100"}\n::metric{label="Small" value="42"}\n:::\n',
+  );
+  build(source, output);
+  await page.setViewportSize({ width: 320, height: 1000 });
+  await page.goto(pathToFileURL(output).href);
+  const value = page.locator(".metric-value").first();
+  await expect(value).toHaveText(new Intl.NumberFormat("en-GB").format(1e100));
+  const layout = await value.evaluate((element) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    const box = element.getBoundingClientRect();
+    return {
+      overflow: getComputedStyle(element).overflowX,
+      lines: range.getClientRects().length,
+      contained: [...range.getClientRects()].every(
+        (rect) => rect.left >= box.left - 1 && rect.right <= box.right + 1,
+      ),
+      pageFits: document.documentElement.scrollWidth <= innerWidth,
+    };
+  });
+  expect(layout).toEqual({
+    overflow: "visible",
+    lines: expect.any(Number),
+    contained: true,
+    pageFits: true,
+  });
+  expect(layout.lines).toBeGreaterThan(1);
+});
+
 test("follows system theme, resizes, and contains mobile/table overflow", async ({
   page,
 }, info) => {
