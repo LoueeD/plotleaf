@@ -13,7 +13,7 @@ Use an installed `plotleaf` CLI or `npx plotleaf`. The CLI requires Node 22 or n
 
 Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Donut and funnel require plotleaf 0.2.0 or newer; check the installed CLI's schema when using an older version.
 
-Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Image/sparkline column kinds require 0.3.0 or newer; check the installed CLI version and schema. Filters, maps, subtotals and executable/custom components remain future capabilities.
+Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Image/sparkline column kinds require 0.3.0 or newer; check the installed CLI version and schema. Scoped prepared-view controls are available since 0.4.0; maps, subtotals and executable/custom components remain future capabilities.
 
 ## Author prepared content
 
@@ -93,3 +93,63 @@ Repair diagnostics using their code, one-based source location, message and hint
 Export is one self-contained interactive HTML file. Check it after copying it away from sources and disabling networking. Charts require JavaScript; prose, metrics, tables and native chart-data disclosures remain readable without it. All displayed/embedded values are readable by recipients: collapsing a table or hiding a field visually is not redaction. Prepare sensitive data before rendering; explicit-column tables and chart field projection help avoid exporting unused fields.
 
 Inspect the result at a narrow viewport and in both system themes. Preserve the source's meaning and the product's quiet editorial design when making revisions.
+
+## Scoped interactions (0.4.0 or newer)
+
+Use `::explore{data="./views.json" title="Regional performance"}` for a complete
+agent-prepared interactive section. Check the installed schema first: older
+releases do not support this directive. No calculation, arbitrary query or code
+execution occurs when a reader changes controls.
+
+Prepare one JSON bundle with `inputs` and `views`. Each input declares `id`,
+`label`, `type`, `default` and (except toggle) `options` containing `{value,label}`.
+Types are `select`, `segmented`, `toggle`, `text`, `number`, and `date-range`.
+Text/number inputs accept declared literal values; unsupported values display an
+unavailable state. A date-range value is `{start:"2026-11-01",end:"2026-11-07"}`:
+real inclusive ISO calendar dates, and only supplied start/end pairs are supported.
+Select All is an ordinary prepared value, not a special string or hidden reducer.
+
+Each view declares `id`, `label`, `when` (exactly every input ID), `markdown` and
+optional `datasets`. Markdown uses the same built-in components. A dataset named
+`sales.json` resolves from `./sales.json` inside that view; undeclared dataset
+references resolve from the report directory. Inline datasets undergo the same
+shape/field/null/date/image/sparkline validation and field projection as ordinary
+JSON. Nested explorations are rejected.
+
+```json
+{
+  "inputs": [{
+    "id": "region", "label": "Region", "type": "select", "default": "all",
+    "options": [{"value": "all", "label": "All regions"}, {"value": "emea", "label": "EMEA"}]
+  }],
+  "views": [
+    {"id": "all", "label": "All regions", "when": {"region": "all"},
+     "markdown": "::metric{label=\"Orders\" value=\"100\"}\n\n::table{data=\"./sales.json\"}",
+     "datasets": {"sales.json": [{"region": "All regions", "orders": 100}]}},
+    {"id": "emea", "label": "EMEA", "when": {"region": "emea"},
+     "markdown": "::metric{label=\"Orders\" value=\"40\"}\n\n::table{data=\"./sales.json\"}",
+     "datasets": {"sales.json": [{"region": "EMEA", "orders": 40}]}}
+  ]
+}
+```
+
+Prepare metrics, comparisons, denominators, chart series, funnel stages, table rows
+and scope-specific prose together. Every control affects only its exploration;
+static content outside it stays fixed and must identify its scope. Every view
+binds all inputs, duplicate conditions are invalid, and defaults must select one
+view. Unsupported combinations hide the previous view; Reset restores defaults.
+No view infers a total, percentage, business sentiment or arbitrary date range.
+
+Bounds: four explorations per report, six inputs per exploration, 20 choices per
+input, 32 views per exploration, 512 expanded components, 20,000 expanded component
+rows, 8 MiB expanded prepared data and 2 MiB expanded Markdown per compilation. Bundles allow at most 32 JSON nesting
+levels and 100,000 JSON containers, in addition to ordinary file and
+data limits. Keep prepared bundles small. All selectable views/data remain
+readable in exports; hiding views is not redaction. Default content and data
+alternatives remain readable without JavaScript, with disabled controls.
+
+Validate every view, then test transitions, reset, invalid/unavailable values,
+empty data, keyboard access, narrow widths and both themes. Export and interact
+offline after removing source files. The fictional interactions example and the
+browser playground demonstrate all six control types. No URL state, persistence,
+remote fetch, free-form row query or analytics engine is implied.
