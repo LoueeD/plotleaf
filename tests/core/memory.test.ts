@@ -1,6 +1,7 @@
 import { expect, test } from "bun:test";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { createHash } from "node:crypto";
 import { compileMemory } from "../../src/compiler/memory.js";
 import { compileReport } from "../../src/compiler/compile.js";
 import { renderHtml } from "../../src/render/html.js";
