@@ -49,3 +49,6 @@ Without JavaScript, the declared default view and data alternatives remain reada
 - The final 32-file candidate archive matches current build/source files exactly. Node 22/24/26 installed-consumer checks and remote candidate-source CI are verified before the review handoff.
 
 The owner-review report stays at `http://127.0.0.1:51114/`, with the new exploration sections appended. The local website playground is `http://127.0.0.1:8787/playground/?example=interactions`. These are local review surfaces, not public deployment evidence. Website deployment and npm publication remain pending manual visual acceptance.
+
+
+Final candidate source `ceffd6d4ad709b3750c8ee2c8eb0f705fd017c85` passes all [11 engine CI jobs](https://github.com/LoueeD/plotleaf/actions/runs/42906308955) and [website CI](https://github.com/LoueeD/plotleaf/actions/runs/42906308469). The final archive matches the CI-tested bytes and installed Node 22/24/26 consumers pass. [Release evidence](releases/0.4.0.md) records the integrity and pending owner review gate. Implementation and local website updates are complete; public deployment/publication remain pending visual approval.
