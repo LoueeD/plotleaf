@@ -1,12 +1,11 @@
 ---
-import Layout from '../../layouts/Layout.astro';
+import DocsLayout from '../../layouts/DocsLayout.astro';
 import spec from '../../../../schema/components.json';
 const components = Object.entries(spec.components);
 function typeOf(prop: Record<string,unknown>):string { return Array.isArray(prop.enum)?prop.enum.map(String).join(' | '):typeof prop.type==='string'?prop.type:JSON.stringify(prop.type ?? prop.anyOf ?? 'literal'); }
 ---
-<Layout title="Component reference · Plotleaf">
+<DocsLayout title="Component reference · Plotleaf">
   <div class="page-intro"><h1>A small language.<br/>A complete report.</h1><p>Generated from the same registry used to validate reports. Attributes are literal values; your installed CLI's schema is authoritative for its version.</p></div>
-  <nav class="doc-links" aria-label="Documentation"><a href="/docs/">Authoring guide</a><a href="/docs/components/" aria-current="page">Component reference</a><a href="/schema.json">JSON specification</a><a href="/playground/">Playground</a></nav>
-  <nav class="doc-links" aria-label="Components">{components.map(([name])=><a href={`#${name}`}>{name}</a>)}</nav>
+  <nav slot="sidebar" aria-label="Components">{components.map(([name])=><a href={`#${name}`}>{name}</a>)}</nav>
   <div class="reference">{components.map(([name, component])=><section id={name}><h2>{name}</h2><p>{component.description}</p><pre><code>{component.example}</code></pre><div class="table-container"><table><caption class="visually-hidden">{name} properties</caption><thead><tr><th scope="col">Property</th><th scope="col">Type / values</th><th scope="col">Required</th><th scope="col">Default</th></tr></thead><tbody>{Object.entries(component.props.properties).map(([key,value])=><tr><th scope="row"><code>{key}</code></th><td>{typeOf(value)}</td><td>{component.props.required?.includes(key)?'Yes':'No'}</td><td>{'default' in value?JSON.stringify(value.default):'—'}</td></tr>)}</tbody></table></div>{'dataRules' in component && <details><summary>Data rules</summary><pre>{JSON.stringify(component.dataRules,null,2)}</pre></details>}</section>)}</div>
-</Layout>
+</DocsLayout>

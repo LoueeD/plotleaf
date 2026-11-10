@@ -22,3 +22,5 @@ This is the explicitly authorized, private Astro website for Plotleaf. It is sep
 - Preview HTML executes only inside an opaque-origin iframe (`sandbox="allow-scripts"`). The static bootstrap accepts one message from its own parent origin. Do not add `allow-same-origin` or weaken parent CSP. Exports keep the renderer's hash-based CSP and work offline.
 - Verify real compilation, diagnostics/recovery, malicious text isolation, byte equality with CLI exports, offline HTML, both browsers/themes and mobile widths. Site CI installs root and site dependencies independently and runs browser checks.
 - This authoring playground does not implement reader filters or advance M5. Website deployment does not authorize npm publication.
+
+- Keep ordinary page content centered at 640px. Documentation sidebars sit outside that measure on wide screens and flow above content on smaller screens. Examples and playground workspaces may expand to 1464px; their introductory text retains the 640px measure.

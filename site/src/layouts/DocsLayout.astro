@@ -1,0 +1,23 @@
+---
+import Layout from './Layout.astro';
+const { title } = Astro.props;
+const path = Astro.url.pathname;
+const links = [
+  { href:'/docs/', label:'Authoring guide' },
+  { href:'/docs/components/', label:'Component reference' },
+  { href:'/schema.json', label:'JSON specification' },
+  { href:'/examples/', label:'Examples' },
+  { href:'/playground/', label:'Playground' },
+];
+---
+<Layout title={title}>
+  <div class="docs-layout">
+    <aside class="docs-sidebar" aria-label="Documentation navigation">
+      <div class="docs-sidebar-inner">
+        <nav aria-label="Documentation">{links.map(link=><a href={link.href} aria-current={path===link.href?'page':undefined}>{link.label}</a>)}</nav>
+        <slot name="sidebar"/>
+      </div>
+    </aside>
+    <div class="docs-content"><slot/></div>
+  </div>
+</Layout>
