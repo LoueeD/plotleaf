@@ -20,6 +20,8 @@ Follow https://plotleaf-site.loueed.workers.dev/agent and give me a preview and 
 
 ## Status
 
+**0.3.2** adds the website links and updated agent setup prompt. Read the [docs](https://plotleaf-site.loueed.workers.dev/docs/), explore [example reports](https://plotleaf-site.loueed.workers.dev/examples/), or try the [browser playground](https://plotleaf-site.loueed.workers.dev/playground/) without installing anything. The playground supports Markdown and JSON; local image imports and larger reports use the CLI.
+
 The initial MVP includes validation, live preview/reload, self-contained HTML export and a generated component specification. All bundled examples use fictional data.
 
 **0.3.0** adds local PNG/JPEG image cells, static sparklines and a cumulative example report. Donut charts and prepared funnel/progress views are available since 0.2.0. Check your installed CLI version or schema before using newer components.

@@ -1,6 +1,6 @@
 {
   "name": "plotleaf",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Beautiful, interactive reports from Markdown and JSON. Built for agents.",
   "type": "module",
   "license": "MIT",
@@ -8,7 +8,7 @@
     "type": "git",
     "url": "git+https://github.com/LoueeD/plotleaf.git"
   },
-  "homepage": "https://github.com/LoueeD/plotleaf#readme",
+  "homepage": "https://plotleaf-site.loueed.workers.dev",
   "bugs": {
     "url": "https://github.com/LoueeD/plotleaf/issues"
   },
