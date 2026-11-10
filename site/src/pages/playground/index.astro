@@ -1,0 +1,15 @@
+---
+import Layout from '../../layouts/Layout.astro';
+---
+<Layout title="Playground · Plotleaf" wide>
+  <div class="page-intro"><h1>A report, as you write.</h1><p>Edit Markdown and JSON, see the result, and download a standalone HTML report. Your files stay in this browser tab.</p></div>
+  <noscript><p class="play-help">The playground needs JavaScript. You can still <a href="/examples/">view and download complete reports</a> or use the <a href="/docs/">CLI guide</a>.</p></noscript>
+  <div id="playground" hidden>
+    <div class="play-toolbar"><div><label for="example-select">Example</label><select id="example-select"></select><button class="secondary" id="reset-example" type="button">Reset example</button><label class="file-button">Open files<input class="visually-hidden" id="open-files" type="file" accept=".md,.json" multiple/></label></div><button id="download-report" type="button" disabled>Download HTML</button></div>
+    <p id="playground-error" role="alert"></p>
+    <div class="play-grid"><section class="editor" aria-label="Source editor"><div class="pane-heading"><label for="file-select">File</label><select id="file-select"></select></div><label class="visually-hidden" for="source-editor">File contents</label><textarea id="source-editor" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea></section><section class="preview-pane" aria-label="Rendered report"><div class="pane-heading"><h2>Preview</h2><span id="compile-status" role="status" aria-live="polite">Loading…</span></div><ul id="diagnostics" aria-label="Validation messages"></ul><iframe id="report-preview" title="Report preview" sandbox="allow-scripts" hidden></iframe></section></div>
+    <div class="file-tools"><label for="new-file">Add JSON file</label><input id="new-file" placeholder="data.json" maxlength="120"/><button id="add-file" class="secondary" type="button">Add file</button><button id="delete-file" class="secondary" type="button">Remove selected JSON</button></div>
+    <p class="play-help">Markdown and JSON only, up to 1 MiB and 16 JSON files. Images and larger reports work through the CLI. Report data stays in this tab. Refreshing clears edits.</p>
+  </div>
+  <script>import '../../browser/playground';</script>
+</Layout>

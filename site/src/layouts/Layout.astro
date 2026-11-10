@@ -1,0 +1,9 @@
+---
+import '../styles/site.css';
+const { title = 'Plotleaf — Beautiful reports from Markdown', description = 'Beautiful, interactive reports from Markdown and prepared data.', wide = false } = Astro.props;
+const path = Astro.url.pathname;
+const links = [{href:'/docs/',label:'Docs'},{href:'/examples/',label:'Examples'},{href:'/playground/',label:'Playground'},{href:'https://github.com/LoueeD/plotleaf',label:'GitHub ↗'}];
+---
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="description" content={description}/><meta name="color-scheme" content="light dark"/><title>{title}</title><link rel="icon" href="/favicon.svg" type="image/svg+xml"/></head>
+<body><div class:list={['page',{wide}]}><header><a class="wordmark" href="/" aria-label="Plotleaf home"><svg width="25" height="25" viewBox="0 0 28 28" aria-hidden="true"><path d="M4 24V9h4v15zm8 0V15h4v9zm8 0V3h4v21z" fill="currentColor"/></svg>plotleaf</a><nav aria-label="Main navigation">{links.map(link=><a href={link.href} aria-current={path.startsWith(link.href)?'page':undefined}>{link.label}</a>)}</nav></header><main><slot/></main><footer><p>Open source. Local first. No account required.</p><div><a href="/agent">Agent guide</a><a href="https://www.npmjs.com/package/plotleaf">npm</a><a href="https://github.com/LoueeD/plotleaf/blob/main/LICENSE">MIT license</a></div></footer></div></body></html>

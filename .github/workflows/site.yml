@@ -3,9 +3,31 @@ name: Verify Plotleaf website
 on:
   push:
     branches: [main]
-    paths: ["site/**", "skills/plotleaf/SKILL.md", "schema/components.json", ".github/workflows/site.yml"]
+    paths:
+      [
+        "site/**",
+        "src/**",
+        "scripts/build.ts",
+        "package.json",
+        "bun.lock",
+        "examples/**",
+        "skills/plotleaf/SKILL.md",
+        "schema/components.json",
+        ".github/workflows/site.yml",
+      ]
   pull_request:
-    paths: ["site/**", "skills/plotleaf/SKILL.md", "schema/components.json", ".github/workflows/site.yml"]
+    paths:
+      [
+        "site/**",
+        "src/**",
+        "scripts/build.ts",
+        "package.json",
+        "bun.lock",
+        "examples/**",
+        "skills/plotleaf/SKILL.md",
+        "schema/components.json",
+        ".github/workflows/site.yml",
+      ]
   workflow_dispatch:
 
 permissions:
@@ -29,6 +51,16 @@ jobs:
         with:
           bun-version: "1.4.4"
       - run: bun install --frozen-lockfile
+        working-directory: .
+      - run: bun install --frozen-lockfile
       - run: bun run build
       - run: bun run check
       - run: bunx wrangler deploy --dry-run
+      - run: node ../node_modules/@playwright/test/cli.js install --with-deps chromium webkit
+      - run: bun run test:browser
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: website-browser-results
+          path: site/test-results/
+          if-no-files-found: ignore

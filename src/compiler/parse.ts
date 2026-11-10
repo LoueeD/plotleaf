@@ -8,7 +8,7 @@ import type { Node, Position } from "unist";
 import * as z from "zod";
 import { registry, decodeProps, type ComponentName } from "./registry.js";
 import type { Block, ComponentBlock, Report } from "./ir.js";
-import { Diagnostics } from "./diagnostics.js";
+import { Diagnostics } from "./diagnostic-core.js";
 
 const parser = unified()
   .use(remarkParse)

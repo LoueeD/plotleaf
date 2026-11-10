@@ -19,7 +19,7 @@ import type {
   Row,
 } from "../shared/payload.js";
 import { formatValue, valueSentiment } from "../shared/format.js";
-import { parseDate } from "../compiler/data.js";
+import { parseDate } from "../shared/date.js";
 import { serializeData } from "../shared/serialize.js";
 import { funnelStatuses } from "../shared/payload.js";
 

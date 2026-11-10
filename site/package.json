@@ -8,11 +8,12 @@
   "packageManager": "bun@1.4.4",
   "scripts": {
     "dev": "astro dev --host 127.0.0.1",
-    "build": "astro build",
+    "build": "bun ../scripts/build.ts && bun scripts/prepare.ts && astro build",
     "preview": "wrangler dev",
-    "deploy": "astro build && node scripts/check-build.mjs && wrangler deploy",
-    "check": "node scripts/check-build.mjs",
-    "types": "wrangler types --include-runtime false"
+    "deploy": "bun run build && bun run check && wrangler deploy",
+    "check": "node ../node_modules/typescript/bin/tsc --noEmit -p tsconfig.browser.json && node ../node_modules/typescript/bin/tsc --noEmit -p tsconfig.worker.json && node scripts/check-build.mjs",
+    "types": "wrangler types --include-runtime false",
+    "test:browser": "node ../node_modules/@playwright/test/cli.js test"
   },
   "devDependencies": {
     "astro": "7.4.8",

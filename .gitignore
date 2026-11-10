@@ -18,3 +18,5 @@ site/.astro/
 site/.wrangler/
 site/.dev.vars
 site/.dev.vars.*
+site/public/reports/
+site/public/playground-projects.json

@@ -2,14 +2,8 @@ import path from "node:path";
 import { open, realpath, stat } from "node:fs/promises";
 import { limits } from "../shared/limits.js";
 
-export class LocalFileError extends Error {
-  constructor(
-    readonly kind: "path" | "read",
-    message: string,
-  ) {
-    super(message);
-  }
-}
+import { LocalFileError } from "./sources.js";
+export { LocalFileError } from "./sources.js";
 
 export function contained(root: string, filename: string): boolean {
   const relative = path.relative(root, filename);

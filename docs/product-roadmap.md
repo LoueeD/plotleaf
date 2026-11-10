@@ -156,3 +156,7 @@ Before marking a later capability complete:
 - Every increment: export includes the data needed for all supported states, and documentation says it is readable by recipients. Filtering is not redaction or row-level authorization.
 
 Preserve minimal authoring and excellent diagnostics as these features land. If a capability needs a new trust model, a general query engine or substantial runtime infrastructure, make that an explicit later decision instead of weakening the original contract silently.
+
+### Website documentation and playground
+
+The website now provides canonical authoring docs, a generated component reference, five real example exports and four editable browser projects. The browser playground shares the compiler/renderer, supports Markdown/JSON up to 1 MiB and 16 JSON files, and downloads standalone HTML without uploading report data. Image imports remain CLI-only. This supporting authoring workflow does not complete or expand M5 reader inputs. See [website architecture and checks](site.md).

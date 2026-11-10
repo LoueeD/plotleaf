@@ -1,0 +1,20 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import guide from '../../../../skills/plotleaf/SKILL.md?raw';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkFrontmatter from 'remark-frontmatter';
+import remarkRehype from 'remark-rehype';
+import rehypeSanitize from 'rehype-sanitize';
+import rehypeStringify from 'rehype-stringify';
+const parser = unified().use(remarkParse).use(remarkFrontmatter);
+const tree = parser.parse(guide);
+tree.children = tree.children.filter(node=>node.type!=='yaml' && !(node.type==='heading' && node.depth===1));
+const renderer = unified().use(remarkRehype).use(rehypeSanitize).use(rehypeStringify);
+const html = renderer.stringify(await renderer.run(tree));
+---
+<Layout title="Documentation · Plotleaf">
+  <div class="page-intro"><h1>Write a report.<br/>Keep it simple.</h1><p>One Markdown file, prepared data and a small set of components. This is the same authoring guide your coding agent reads.</p></div>
+  <nav class="doc-links" aria-label="Documentation"><a href="/docs/" aria-current="page">Authoring guide</a><a href="/docs/components/">Component reference</a><a href="/examples/">Examples</a><a href="/playground/">Try the playground</a></nav>
+  <article class="prose" set:html={html}/>
+</Layout>

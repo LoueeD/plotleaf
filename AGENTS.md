@@ -53,7 +53,7 @@ V1 excludes hosting/deployment integrations, accounts, managed infrastructure, d
 
 ## Website exception
 
-The owner has explicitly authorized a minimal Astro website in `site/`, deployed at https://plotleaf-site.loueed.workers.dev. This is a private documentation/landing-site package with an isolated Bun lockfile; it is excluded from the reporting npm package and does not add hosting dependencies or connectors to reports. Its `/agent` route reuses the existing authoring guide. Follow `site/AGENTS.md` for site work, keep the report preview intact, and keep site deployment separate from npm publication.
+The owner has explicitly authorized a minimal Astro website in `site/`, deployed at https://plotleaf-site.loueed.workers.dev. This is a private documentation/landing-site package with an isolated Bun lockfile; it is excluded from the reporting npm package and does not add hosting dependencies or connectors to reports. Its `/agent` route and human docs reuse the existing authoring guide. The site includes registry-generated reference docs, real example exports and a local browser playground using shared compiler/renderer modules. Input remains in the browser; PNG/JPEG imports remain CLI-only. Follow `site/AGENTS.md` for site work, keep the report preview intact, and keep site deployment separate from npm publication.
 
 ## Architecture working defaults
 

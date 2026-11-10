@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Report preview</title></head><body><script>
+if (window.parent !== window) {
+  window.addEventListener('message', event => {
+    if (event.source !== window.parent || event.origin !== new URL(location.href).origin || event.data?.type !== 'plotleaf-preview' || typeof event.data.html !== 'string') return;
+    document.open();
+    document.write(event.data.html);
+    document.close();
+  }, {once:true});
+}
+</script></body></html>

@@ -4,7 +4,7 @@ Beautiful, interactive reports from Markdown and prepared JSON. Built for coding
 
 **The agent does the thinking. We do the rendering.**
 
-[Website](https://plotleaf-site.loueed.workers.dev) · [Source](https://github.com/LoueeD/plotleaf) · [Issues](https://github.com/LoueeD/plotleaf/issues) · [Verification](https://github.com/LoueeD/plotleaf/actions/workflows/ci.yml) · [Contributing](https://github.com/LoueeD/plotleaf/blob/main/CONTRIBUTING.md)
+[Website](https://plotleaf-site.loueed.workers.dev) · [Docs](https://plotleaf-site.loueed.workers.dev/docs/) · [Examples](https://plotleaf-site.loueed.workers.dev/examples/) · [Playground](https://plotleaf-site.loueed.workers.dev/playground/) · [Source](https://github.com/LoueeD/plotleaf) · [Issues](https://github.com/LoueeD/plotleaf/issues) · [Verification](https://github.com/LoueeD/plotleaf/actions/workflows/ci.yml) · [Contributing](https://github.com/LoueeD/plotleaf/blob/main/CONTRIBUTING.md)
 
 A report is one Markdown file, optionally accompanied by local JSON datasets. No application, configuration file, account, database or hosted service. Export one HTML file that keeps working offline.
 
