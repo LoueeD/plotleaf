@@ -104,3 +104,17 @@ findings and the earlier examples above stay fixed. All values remain fictional.
 ::explore{data="./interactions/regional-views.json" title="Regional performance explorer"}
 
 ::explore{data="./interactions/control-views.json" title="Prepared catalogue scenarios"}
+
+## Reusable regional summary
+
+The same declarative metric definition is reused for both regions. The table's subtotals are prepared by the author and apply to the stated scope; sorting keeps each subtotal with its group.
+
+:::grid{columns="2"}
+::component{src="./m6/summary.json" label="North orders" value="53"}
+::component{src="./m6/summary.json" label="South orders" value="65"}
+:::
+
+:::table{data="./m6/prepared-subtotals.json" title="Orders by region" prepared="grouped"}
+::column{field="product" label="Product"}
+::column{field="orders" label="Orders" format="number"}
+:::

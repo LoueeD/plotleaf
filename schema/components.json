@@ -29,6 +29,189 @@
     "timeZone": "UTC"
   },
   "components": {
+    "component": {
+      "description": "A declarative composition from a local JSON definition.",
+      "forms": [
+        "leaf"
+      ],
+      "children": [],
+      "props": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "src": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "src"
+        ],
+        "additionalProperties": {
+          "type": "string",
+          "maxLength": 1000
+        }
+      },
+      "example": "::component{src=\"./components/summary.json\" label=\"Orders\" value=\"1284\"}",
+      "dataRules": {
+        "schema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "number",
+              "const": 1
+            },
+            "props": {
+              "type": "object",
+              "propertyNames": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+              },
+              "additionalProperties": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "string"
+                      },
+                      "default": {
+                        "type": "string",
+                        "maxLength": 1000
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "number"
+                      },
+                      "default": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "boolean"
+                      },
+                      "default": {
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "components": {
+              "minItems": 1,
+              "maxItems": 512,
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/__schema0"
+              }
+            }
+          },
+          "required": [
+            "version",
+            "props",
+            "components"
+          ],
+          "additionalProperties": false,
+          "$defs": {
+            "__schema0": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                },
+                "props": {
+                  "type": "object",
+                  "propertyNames": {
+                    "type": "string",
+                    "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                  },
+                  "additionalProperties": {
+                    "anyOf": [
+                      {
+                        "anyOf": [
+                          {
+                            "type": "string",
+                            "maxLength": 1000
+                          },
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "boolean"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "prop": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                          }
+                        },
+                        "required": [
+                          "prop"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  }
+                },
+                "children": {
+                  "maxItems": 512,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/__schema0"
+                  }
+                }
+              },
+              "required": [
+                "name",
+                "props"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "limits": {
+          "depth": 16,
+          "definitions": 64,
+          "nodes": 512,
+          "rows": 20000,
+          "dataBytes": 8388608,
+          "parameters": 32,
+          "jsonDepth": 32,
+          "jsonContainers": 10000
+        }
+      }
+    },
     "explore": {
       "description": "Scoped native controls select complete agent-prepared views. No analytics or report JavaScript.",
       "forms": [
@@ -411,6 +594,7 @@
       ],
       "children": [
         "metric",
+        "component",
         "line",
         "area",
         "bar",
@@ -821,6 +1005,12 @@
             "type": "string",
             "minLength": 1,
             "maxLength": 1000
+          },
+          "prepared": {
+            "type": "string",
+            "enum": [
+              "grouped"
+            ]
           }
         },
         "required": [
@@ -828,7 +1018,76 @@
         ],
         "additionalProperties": false
       },
-      "example": ":::table{data=\"./plans.json\" title=\"By plan\"}\n::column{field=\"plan\" label=\"Plan\"}\n::column{field=\"change\" label=\"Δ QoQ\" format=\"percent\" sign=\"always\"}\n:::"
+      "example": ":::table{data=\"./plans.json\" title=\"By plan\"}\n::column{field=\"plan\" label=\"Plan\"}\n::column{field=\"change\" label=\"Δ QoQ\" format=\"percent\" sign=\"always\"}\n:::",
+      "dataRules": {
+        "grouped": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {
+            "version": {
+              "type": "number",
+              "const": 1
+            },
+            "scope": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1000
+            },
+            "groups": {
+              "maxItems": 1000,
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  },
+                  "label": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 1000
+                  },
+                  "rows": {
+                    "minItems": 1,
+                    "maxItems": 1000,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    }
+                  },
+                  "subtotal": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  }
+                },
+                "required": [
+                  "id",
+                  "label",
+                  "rows",
+                  "subtotal"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "version",
+            "scope",
+            "groups"
+          ],
+          "additionalProperties": false
+        },
+        "sorting": "Details sort within groups; prepared subtotals stay at the end of their group. Scope is supplied explicitly."
+      }
     },
     "column": {
       "description": "A scalar, local image or bounded sparkline column. Omitted kind means scalar.",

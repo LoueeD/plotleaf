@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "props": {
+    "label": { "type": "string" },
+    "value": { "type": "number" }
+  },
+  "components": [
+    {
+      "name": "metric",
+      "props": {
+        "label": { "prop": "label" },
+        "value": { "prop": "value" }
+      }
+    }
+  ]
+}

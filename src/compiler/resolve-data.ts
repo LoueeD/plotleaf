@@ -1,3 +1,13 @@
+import { subtotalSchema } from "./subtotal-schema.js";
+import {
+  checkCompositionStructure,
+  compositionLimits,
+} from "./composition-schema.js";
+import {
+  compositionState,
+  expandComposition,
+  type CompositionState,
+} from "./composition.js";
 import {
   resolveExploration,
   expansionBudget,
@@ -25,9 +35,15 @@ export class DataResolver {
     private readonly files: SourceFiles,
     readonly images: SourceImages,
     private readonly expansion: ExpansionBudget = expansionBudget(),
+    private readonly compositions: CompositionState = compositionState(),
+    private readonly inExploration = false,
     private readonly cache = new Map<
       string,
-      { rows: SourceRow[]; arrays: Map<string, number> }
+      {
+        rows: SourceRow[];
+        arrays: Map<string, number>;
+        grouped?: NonNullable<ComponentBlock["tableGroups"]>;
+      }
     >(),
   ) {}
 
@@ -84,8 +100,37 @@ export class DataResolver {
           "Use a JSON array of records, without comments or trailing commas.",
         );
       }
+      let grouped: NonNullable<ComponentBlock["tableGroups"]> | undefined;
+      if (block.name === "table" && block.props.prepared === "grouped") {
+        const structural = checkCompositionStructure(parsed);
+        if (structural) return fail("E_TABLE_GROUPS", structural);
+        const result = subtotalSchema.safeParse(parsed);
+        if (!result.success)
+          return fail(
+            "E_TABLE_GROUPS",
+            result.error.issues
+              .slice(0, 8)
+              .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+              .join("; "),
+          );
+        grouped = {
+          scope: result.data.scope,
+          groups: result.data.groups.map((group) => ({
+            id: group.id,
+            label: group.label,
+            size: group.rows.length,
+          })),
+        };
+        parsed = result.data.groups.flatMap((group) => [
+          ...group.rows,
+          group.subtotal,
+        ]);
+      }
       if (!Array.isArray(parsed))
-        return fail("E_DATA_SHAPE", "Expected an array of flat JSON records.");
+        return fail(
+          "E_DATA_SHAPE",
+          "Expected an array of flat JSON records, or declare prepared=grouped for a subtotal bundle.",
+        );
       if (parsed.length > limits.rows)
         return fail(
           "E_DATA_LIMIT",
@@ -135,9 +180,23 @@ export class DataResolver {
             );
         }
       }
-      dataset = { rows: parsed as SourceRow[], arrays };
+      dataset = {
+        rows: parsed as SourceRow[],
+        arrays,
+        ...(grouped ? { grouped } : {}),
+      };
       this.cache.set(canonical, dataset);
     }
+    if (
+      Boolean(dataset.grouped) !==
+      (block.name === "table" && block.props.prepared === "grouped")
+    )
+      return fail(
+        "E_DATA_SHAPE",
+        "Grouped subtotal bundles require prepared=grouped and cannot be used as ordinary datasets.",
+      );
+    if (block.name === "table" && dataset.grouped)
+      block.tableGroups = dataset.grouped;
     const declared = new Set(
       block.name === "table"
         ? block.children.flatMap((child) =>
@@ -159,10 +218,35 @@ export class DataResolver {
     return dataset.rows;
   }
 
-  async resolve(blocks: Block[]): Promise<void> {
-    for (const block of blocks) {
+  async resolve(blocks: Block[], parent = "root"): Promise<void> {
+    for (let index = 0; index < blocks.length; index++) {
+      let block = blocks[index]!;
+      if (block.type === "component" && block.name === "component") {
+        const expanded = await expandComposition(
+          block,
+          this.files,
+          this.diagnostics,
+          this.compositions,
+          parent,
+        );
+        blocks.splice(index, 1, ...expanded);
+        if (!expanded.length) {
+          index--;
+          continue;
+        }
+        index--;
+        continue;
+      }
       if (block.type !== "component") continue;
       if (block.name === "explore") {
+        if (this.inExploration) {
+          this.diagnostics.add(
+            "E_EXPLORE_SCHEMA",
+            "Nested explorations are unsupported, including inside compositions.",
+            block.position,
+          );
+          continue;
+        }
         await resolveExploration(
           block,
           this.files,
@@ -173,6 +257,8 @@ export class DataResolver {
               files,
               this.images,
               this.expansion,
+              this.compositions,
+              true,
               this.cache,
             ).resolve(children),
           this.expansion,
@@ -203,7 +289,25 @@ export class DataResolver {
           else this.resolveChart(block, rows);
         }
       }
-      await this.resolve(block.children);
+      if (block.compositionOrigin && block.rows) {
+        this.compositions.rows += block.rows.length;
+        this.compositions.dataBytes += new TextEncoder().encode(
+          JSON.stringify(block.rows),
+        ).length;
+        if (
+          this.compositions.rows > compositionLimits.rows ||
+          this.compositions.dataBytes > compositionLimits.dataBytes
+        ) {
+          this.diagnostics.add(
+            "E_COMPONENT_LIMIT",
+            "Expanded composition data exceeds its row or byte budget.",
+            block.position,
+            "Prepare a smaller dataset or reuse fewer components.",
+          );
+          return;
+        }
+      }
+      await this.resolve(block.children, block.name);
     }
   }
 

@@ -25,8 +25,14 @@ export type ComponentBlock = {
     props: PropsByName[K];
     children: Block[];
     position?: Position;
+    /** Internal expansion accounting; never emitted into output. */
+    compositionOrigin?: boolean;
     rows?: K extends "table" ? TableRow[] : Row[];
     columns?: ColumnProps[];
+    tableGroups?: {
+      scope: string;
+      groups: { id: string; label: string; size: number }[];
+    };
     exploration?: {
       inputs: ExplorationInput[];
       defaultView: string;

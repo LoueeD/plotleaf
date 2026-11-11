@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "scope": "All regions, January–March",
+  "groups": [
+    {
+      "id": "north",
+      "label": "North",
+      "rows": [
+        { "product": "Notebook", "orders": 35 },
+        { "product": "Lamp", "orders": 18 }
+      ],
+      "subtotal": { "product": "North subtotal", "orders": 53 }
+    },
+    {
+      "id": "south",
+      "label": "South",
+      "rows": [
+        { "product": "Notebook", "orders": 24 },
+        { "product": "Lamp", "orders": 41 }
+      ],
+      "subtotal": { "product": "South subtotal", "orders": 65 }
+    }
+  ]
+}

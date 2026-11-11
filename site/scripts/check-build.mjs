@@ -15,6 +15,7 @@ console.log("Agent guide and component schema match their canonical sources.");
 
 for (const slug of [
   "showcase",
+  "reuse",
   "interactions",
   "storefront",
   "adoption",
@@ -40,10 +41,10 @@ const projects = JSON.parse(
     "utf8",
   ),
 );
-assert.equal(projects.filter((project) => project.editable).length, 5);
+assert.equal(projects.filter((project) => project.editable).length, 6);
 const assets = await readdir(new URL("../dist/_astro/", import.meta.url));
 assert.ok(
   assets.some((name) => /^compiler-.*\.js$/.test(name)),
   "Browser compiler must be emitted",
 );
-console.log("Six standalone reports and five editable projects are present.");
+console.log("Seven standalone reports and six editable projects are present.");

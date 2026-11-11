@@ -31,7 +31,7 @@ test("human docs, generated reference and real examples are readable across them
   ).toHaveCount(7);
   await expect(reportPage.locator(".chart-plot svg")).toHaveCount(6);
   await reportPage.close();
-  await expect(page.getByRole("link", { name: "View report" })).toHaveCount(5);
+  await expect(page.getByRole("link", { name: "View report" })).toHaveCount(6);
   for (const path of [
     "/",
     "/docs/",
@@ -263,4 +263,32 @@ test("browser playground compiles interactive bundles and live JSON edits update
     "4,300",
   );
   await expect(region.locator(".chart-plot svg")).toHaveCount(2);
+});
+
+test("playground edits reusable definitions and scoped subtotal data", async ({
+  page,
+}) => {
+  await page.goto("/playground/?example=reuse");
+  await ready(page);
+  const frame = page.frameLocator("#report-preview");
+  await expect(frame.locator(".metric-value").first()).toHaveText("53");
+  await expect(frame.getByText("All regions, January–March")).toBeVisible();
+  await page.getByRole("tab", { name: "summary.json", exact: true }).click();
+  const definition = JSON.parse(
+    await page.locator("#source-editor").inputValue(),
+  );
+  definition.components[0].props.comparison = "Prepared comparison";
+  await page
+    .locator("#source-editor")
+    .fill(JSON.stringify(definition, null, 2));
+  await ready(page);
+  await expect(frame.getByText("Prepared comparison")).toHaveCount(2);
+  await page
+    .getByRole("tab", { name: "prepared-subtotals.json", exact: true })
+    .click();
+  const data = JSON.parse(await page.locator("#source-editor").inputValue());
+  data.scope = "Revised prepared scope";
+  await page.locator("#source-editor").fill(JSON.stringify(data, null, 2));
+  await ready(page);
+  await expect(frame.getByText("Revised prepared scope")).toBeVisible();
 });

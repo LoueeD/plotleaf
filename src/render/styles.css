@@ -443,6 +443,20 @@ caption {
   text-align: start;
   padding: 0 0 20px;
 }
+.table-scope {
+  display: block;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
+}
+.table-group th {
+  color: var(--muted);
+  font-size: 14px;
+  padding-block: 18px 7px;
+}
+.table-subtotal td {
+  font-weight: 550;
+}
 thead {
   color: var(--muted);
 }

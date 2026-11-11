@@ -114,7 +114,8 @@ const serializer = unified()
       ul: ["className", "role"],
       ol: ["start", "className", "role"],
       li: ["className", "dataStatus"],
-      th: ["scope", "ariaSort", "className"],
+      th: ["scope", "ariaSort", "className", "colSpan"],
+      tr: ["className", "dataPlotleafGroupHeader", "dataPlotleafSubtotal"],
       td: ["className", "dataRaw"],
     },
   })
@@ -148,6 +149,7 @@ function table(
   title: string,
   id: string,
   sortable = true,
+  groups?: NonNullable<ComponentBlock["tableGroups"]>,
 ): Element {
   const scales = columns.map((column) =>
     column.kind === "sparkline" ? columnScale(rows, column.field) : undefined,
@@ -163,7 +165,12 @@ function table(
       rows.some((row) => typeof row[column.field] === "number") ||
       Boolean(column.format),
   );
-  const caption = h("caption", {}, [t(title)]);
+  const caption = h("caption", {}, [
+    t(title),
+    ...(groups
+      ? [h("span", { className: ["table-scope"] }, [t(groups.scope)])]
+      : []),
+  ]);
   const headers = columns.map((column, index) => {
     const name = column.label ?? label(column.field);
     const content = canSort[index]
@@ -215,12 +222,29 @@ function table(
     });
     return h("tr", {}, cells);
   });
-  const body = h("tbody", {}, tableRows);
+  let offset = 0;
+  const bodies = groups
+    ? groups.groups.map((group) => {
+        const entries = tableRows.slice(offset, offset + group.size + 1);
+        offset += group.size + 1;
+        const subtotal = entries.at(-1)!;
+        subtotal.properties.dataPlotleafSubtotal = "";
+        subtotal.properties.className = ["table-subtotal"];
+        return h("tbody", {}, [
+          h("tr", { dataPlotleafGroupHeader: "", className: ["table-group"] }, [
+            h("th", { scope: "rowgroup", colSpan: columns.length }, [
+              t(group.label),
+            ]),
+          ]),
+          ...entries,
+        ]);
+      })
+    : [h("tbody", {}, tableRows)];
   return h("div", { className: ["table-scroll"] }, [
     h("table", { id, ...(sortable ? { dataPlotleafTable: "" } : {}) }, [
       caption,
       head,
-      body,
+      ...bodies,
     ]),
   ]);
 }
@@ -294,6 +318,8 @@ export function renderContent(report: Report): RenderedContent {
       }
       const id = `plotleaf-component-${String(++sequence).padStart(4, "0")}`;
       switch (block.name) {
+        case "component":
+          return []; // Compositions are expanded before rendering.
         case "explore":
           return exploration(block, id, render, (payload.explorations ??= []));
         case "grid":
@@ -381,6 +407,8 @@ export function renderContent(report: Report): RenderedContent {
               block.columns ?? [],
               block.props.title ?? "Data",
               id,
+              true,
+              block.tableGroups,
             ),
             ...(!block.rows?.length
               ? [

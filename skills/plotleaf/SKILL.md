@@ -11,9 +11,9 @@ Use an installed `plotleaf` CLI or `npx plotleaf`. The CLI requires Node 22 or n
 
 ## Discover the contract
 
-Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components include `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Donut and funnel require plotleaf 0.2.0 or newer; check the installed CLI's schema when using an older version.
+Run `plotleaf schema` (or `npx plotleaf schema`) for the current machine-readable component/prop specifications, rules and input limits. Prefer that output over remembered syntax. Supported components include `component`, `grid`, `metric`, `line`, `area`, `bar`, `donut`, `funnel`, `table`, `column` and `callout`. Donut and funnel require plotleaf 0.2.0 or newer; check the installed CLI's schema when using an older version.
 
-Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Image/sparkline column kinds require 0.3.0 or newer; check the installed CLI version and schema. Scoped prepared-view controls are available since 0.4.0; maps, subtotals and executable/custom components remain future capabilities.
+Use ordinary Markdown for headings, prose, findings, emphasis, lists, links and dividers. Headings provide sections. Design is built in; do not add custom CSS, raw HTML or framework components. Image/sparkline column kinds require 0.3.0 or newer; check the installed CLI version and schema. Scoped prepared-view controls are available since 0.4.0. Declarative reusable components and prepared subtotals require 0.5.0 or newer; maps and executable/custom components remain future capabilities.
 
 ## Author prepared content
 
@@ -153,3 +153,34 @@ empty data, keyboard access, narrow widths and both themes. Export and interact
 offline after removing source files. The fictional interactions example and the
 browser playground demonstrate all six control types. No URL state, persistence,
 remote fetch, free-form row query or analytics engine is implied.
+
+
+## Reusable compositions and prepared subtotals (0.5.0 or newer)
+
+Use `::component{src="./summary.json" label="Orders" value="1284"}` to reuse a local definition. Its attributes are literal parameters declared by the definition. For example:
+
+```json
+{
+  "version": 1,
+  "props": {"label": {"type": "string"}, "value": {"type": "number"}},
+  "components": [{"name": "metric", "props": {"label": {"prop": "label"}, "value": {"prop": "value"}}}]
+}
+```
+
+Parameters have type `string`, `number` or `boolean`, and may declare a typed `default`; others are required. Reference a complete parameter value with `{ "prop": "name" }`. Definitions may contain registered components, nested `component` definitions and valid component children. They cannot contain expressions, executable code or arbitrary HTML. Static dataset and nested-definition paths resolve relative to the defining JSON file. Caller-provided paths resolve relative to the caller. All references remain within the report directory. Unknown parameters and components, cycles and oversized expansions are errors. Export includes expanded output and requires no definition files. See `plotleaf schema` for the full machine-readable contract and limits.
+
+For prepared subtotals, use `:::table{data="./groups.json" title="Orders" prepared="grouped"}` and ordinary `::column` directives. The JSON is an explicit versioned bundle:
+
+```json
+{
+  "version": 1,
+  "scope": "All regions, January–March",
+  "groups": [{
+    "id": "north", "label": "North",
+    "rows": [{"product": "Lamp", "orders": 18}],
+    "subtotal": {"product": "North subtotal", "orders": 18}
+  }]
+}
+```
+
+The scope is visible. Supply every detail and subtotal yourself; Plotleaf does not compute or infer totals. Sorting reorders detail rows within each group and keeps the prepared subtotal last. All records follow normal table validation and column projection. For an exploration, each view must refer to the corresponding prepared bundle and scope; never reuse a full-report subtotal to describe a subset.

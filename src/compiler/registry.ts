@@ -1,4 +1,6 @@
 import * as z from "zod";
+import { compositionLimits, compositionSchema } from "./composition-schema.js";
+import { subtotalSchema } from "./subtotal-schema.js";
 import { explorationLimits } from "../shared/exploration.js";
 import { explorationSchema } from "./exploration-schema.js";
 import { limits } from "../shared/limits.js";
@@ -26,6 +28,18 @@ const line = z.strictObject({
 });
 
 export const registry = {
+  component: {
+    forms: ["leaf"],
+    children: [],
+    description: "A declarative composition from a local JSON definition.",
+    dataRules: {
+      schema: z.toJSONSchema(compositionSchema),
+      limits: compositionLimits,
+    },
+    schema: z.object({ src: text }).catchall(z.string().max(1000)),
+    example:
+      '::component{src="./components/summary.json" label="Orders" value="1284"}',
+  },
   explore: {
     forms: ["leaf"],
     children: [],
@@ -47,6 +61,7 @@ export const registry = {
     forms: ["container"],
     children: [
       "metric",
+      "component",
       "line",
       "area",
       "bar",
@@ -156,7 +171,16 @@ export const registry = {
     children: ["column"],
     description:
       "A semantic sortable table, with inferred or explicitly formatted columns.",
-    schema: z.strictObject({ data: text, title: text.optional() }),
+    dataRules: {
+      grouped: z.toJSONSchema(subtotalSchema),
+      sorting:
+        "Details sort within groups; prepared subtotals stay at the end of their group. Scope is supplied explicitly.",
+    },
+    schema: z.strictObject({
+      data: text,
+      title: text.optional(),
+      prepared: z.enum(["grouped"]).optional(),
+    }),
     example:
       ':::table{data="./plans.json" title="By plan"}\n::column{field="plan" label="Plan"}\n::column{field="change" label="Δ QoQ" format="percent" sign="always"}\n:::',
   },

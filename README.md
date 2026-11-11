@@ -20,6 +20,8 @@ Follow https://plotleaf-site.loueed.workers.dev/agent and give me a preview and 
 
 ## Status
 
+**0.5.0** adds reusable declarative compositions and agent-prepared, explicitly scoped subtotals that remain with their groups when sorting.
+
 **0.4.1** removes metric-value scrollbars; exceptionally long values wrap rather than clip.
 
 **0.4.0** adds scoped interactive explorations: dropdowns, segmented choices, toggles, literal text/number inputs and supported date ranges select complete agent-prepared views. Metrics, charts, funnels, tables and data alternatives update together, including offline HTML. Unsupported selections show an unavailable state; no analytics or arbitrary queries run in reports.
@@ -30,7 +32,7 @@ The initial MVP includes validation, live preview/reload, self-contained HTML ex
 
 **0.3.0** adds local PNG/JPEG image cells, static sparklines and a cumulative example report. Donut charts and prepared funnel/progress views are available since 0.2.0. Check your installed CLI version or schema before using newer components.
 
-Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Scoped prepared-view controls are supported. Arbitrary row queries, maps, subtotals and reusable compositions remain planned increments.
+Implemented components: responsive grids, metrics/comparisons, line/area/bar/donut charts, prepared funnel/progress stages, literal chart targets, sortable/formatted tables and callouts. Reports support light/dark system preference, native chart-data disclosures and responsive layouts. Scoped prepared-view controls, reusable compositions and prepared subtotals are supported. Arbitrary row queries and maps remain planned increments.
 
 ## Quick start
 

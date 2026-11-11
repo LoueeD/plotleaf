@@ -62,6 +62,14 @@ const entries = [
   },
 ];
 entries.push({
+  slug: "reuse",
+  name: "Regional order summary",
+  file: "examples/m6/report.md",
+  description:
+    "Reusable metric definitions and explicitly scoped, prepared subtotals in sortable groups.",
+  kind: "Reusable components · Subtotals",
+});
+entries.push({
   slug: "interactions",
   name: "Interactive regional report",
   file: "examples/interactions/report.md",
@@ -123,4 +131,4 @@ await writeFile(
   path.join(root, "site/public/playground-projects.json"),
   JSON.stringify(projects),
 );
-console.log("Prepared six real reports and five editable browser examples.");
+console.log("Prepared seven real reports and six editable browser examples.");
