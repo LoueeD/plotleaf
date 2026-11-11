@@ -1,6 +1,6 @@
 # Product capabilities and staged delivery
 
-Updated: 10 November 2026. **The current release is `plotleaf@0.4.0`, including M5 scoped prepared views, earlier components and the website/docs/examples/playground.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.4.0.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
+Updated: 11 November 2026. **The current release is `plotleaf@0.4.1`, including the metric overflow fix, M5 scoped prepared views, earlier components and the website/docs/examples/playground.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.4.1.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
 
 ## Delivery position
 
@@ -176,4 +176,4 @@ unbounded date ranges remain outside this first prepared-view contract.
 
 The cumulative report, authoring skill, generated component specification and
 website/playground are updated and deployed. Owner visual review, release checks
-and independent public verification pass; public npm latest is 0.4.0. See [M5 contracts](m5-interactions.md).
+and independent public verification pass; M5 was published as 0.4.0. See [M5 contracts](m5-interactions.md).
