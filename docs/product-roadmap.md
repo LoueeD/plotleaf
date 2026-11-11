@@ -1,6 +1,6 @@
 # Product capabilities and staged delivery
 
-Updated: 11 November 2026. **The current release is `plotleaf@0.4.1`, including the metric overflow fix, M5 scoped prepared views, earlier components and the website/docs/examples/playground.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.4.1.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
+Updated: 11 November 2026. **The current release is `plotleaf@0.5.0`, including M6 reusable compositions and prepared subtotals, the metric overflow fix, M5 scoped prepared views, earlier components and the website/docs/examples/playground.** The initial MVP is archived as 0.1.0. Its public npm archive matches the reviewed artifact, and fresh public `npx plotleaf` checks pass without Bun. See the [current release record](releases/0.5.0.md), [initial release](releases/0.1.0.md) and [implementation results](phase-zero-results.md). This document tracks delivered scope and the recommended delivery order; later capabilities remain proposed contracts, not shipped features or committed release dates.
 
 ## Delivery position
 
@@ -32,7 +32,7 @@ Treat these as the intended product direction. The staging below keeps the first
 | M3 — Visualization increment | Published: `0.2.0`, 8 November 2026 | Prepared funnel/progress stages, bounded donut categories, native data alternatives and fictional onboarding example. | [M3 evidence](m3-visualizations.md); chart budget explicitly revised to 210 KiB gzip and enforced by build. Owner authorized publication after the preview review handoff. |
 | M4 — Rich table cells | Published: `0.3.0`, 8 November 2026 | Local PNG/JPEG cells, deduplicated offline assets, bounded static sparklines with shared column scales and explicit scalar sort keys. | [M4 contracts and evidence](m4-rich-tables.md): 116 local/Linux core tests, 114 Windows passes + two skips, 34 browser checks per platform, all 11 CI jobs, audited 29-file archive and cumulative review report. Owner visual acceptance, final CI, exact public archive and fresh anonymous npx verification are complete. |
 | M5 — Interaction increment | Published as 0.4.0 | Dropdown, text/number input, toggle, segmented choice and supported date-range selection; explicit bindings, reset/no-match states and prepared views. | One real region/range transition is specified before implementation. Bound metrics, charts, funnel, tables and alternatives update coherently offline. |
-| M6 — Reuse increment | Implementation and verification in progress | Versioned declarative compositions, typed props and reusable definitions in companion JSON. Prepared subtotal rows with explicit scope. | One composition is reused in two reports; cycles/unknown props fail; exports work without definition files and subtotals retain their declared scope. |
+| M6 — Reuse increment | Published as 0.5.0 | Versioned declarative compositions, typed props and reusable definitions in companion JSON. Prepared subtotal rows with explicit scope. | One composition is reused in two reports; cycles/unknown props fail; exports work without definition files and subtotals retain their declared scope. |
 | M7 — Geographic increment | Later, planned | Local GeoJSON/region maps, then point-density heatmaps and selection linked to input state. | Offline fixtures, bounded geometry, accessible selection alternatives and a separate bundle/performance budget. |
 | Advanced extensions | Deferred | New trusted renderers, broader table engines, reducers or view frameworks only when demonstrated needs justify them. | An explicit trust/packaging decision; no arbitrary report JavaScript or incidental plugin platform. |
 
@@ -54,7 +54,7 @@ M3 is published as `0.2.0`: prepared funnel/progress stages and donut views thro
 
 M5 is delivered as 0.4.0 after owner visual review. A real region/range transition and six native controls select complete agent-prepared views, keeping metrics, charts, funnel, table and alternatives coherent offline. There is no arbitrary row query or analytics engine. The cumulative report and website retain all earlier demonstrations; public package and live site verification pass. See [M5 contracts](m5-interactions.md) and [release evidence](releases/0.4.0.md).
 
-M6 is next: versioned declarative compositions with typed props and companion JSON definitions, plus agent-prepared subtotal rows with explicit scope. Begin with a reusable composition fixture used by two reports and a subtotal sorting/scope fixture. Do not add arbitrary report JavaScript, a plugin platform or a table engine without a demonstrated need.
+M6 is delivered in 0.5.0: versioned declarative compositions with typed props and companion JSON definitions, plus agent-prepared subtotal rows with explicit scope. The reuse and subtotal fixtures are verified across CLI, browser compiler and offline export. M7 local geographic views are next. Do not add arbitrary report JavaScript, a plugin platform or a table engine without a demonstrated need.
 
 Matching-version TSRS conformance/speed measurement remains an optional development-tool follow-up while official TypeScript stays authoritative. It does not block the published renderer or justify weakening release checks. A documentation website, new UI framework, MCP server or deployment service is not needed for the next batch.
 
@@ -101,7 +101,7 @@ Plain Markdown does not automatically become reactive. Time-bound prose must ide
 
 ## Rich tables
 
-Column metadata preserves the native table: fields, labels, number formats, sign display and semantic direction. M4 adds explicit image/sparkline kinds; subtotals remain proposed for M6:
+Column metadata preserves the native table: fields, labels, number formats, sign display and semantic direction. M4 adds explicit image/sparkline kinds; M6 adds prepared subtotals:
 
 | Column or row feature | Data contract / stage | Required behaviour |
 | --- | --- | --- |
@@ -143,7 +143,7 @@ Illustrative future report reference:
 ::component{src="./components/adoption-summary.json" data="./adoption.json"}
 ```
 
-The candidate definition format and validation rules are documented in [M6 contracts](m6-reuse.md). The registry generates the machine-readable component specification; report-authored definitions remain declarative and cannot add rendering code. Publication remains pending the full release checks and owner visual review.
+The published definition format and validation rules are documented in [M6 contracts](m6-reuse.md). The registry generates the machine-readable component specification; report-authored definitions remain declarative and cannot add rendering code. Publication followed the release checks and owner visual review.
 
 This makes reuse a product goal without falsely claiming that declarative composition can generate every conceivable new visual. Agents can propose new primitives and contribute their trusted implementation; report generation itself stays a text-and-data workflow.
 

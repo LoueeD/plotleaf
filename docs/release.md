@@ -2,7 +2,7 @@
 
 Use the npm registry and a Node-compatible package. Bun is a maintainer tool, not a consumer prerequisite. Current public examples are the explicitly fictional storefront, adoption, onboarding and catalogue reports, plus their cumulative showcase. Internal-project demos and owner-supplied design screenshots do not belong in a release.
 
-Current public release: **0.4.1 / metric overflow fix**, published on 11 November 2026 after owner visual approval and release verification. M5 scoped prepared-view interactions were published in 0.4.0. The website is deployed and all public package checks pass. See the [release record](releases/0.4.1.md) for exact source, CI, archive integrity and public verification, and [M5 contracts](m5-interactions.md) for the supported native controls and prepared-view model. Use a new version for subsequent publication.
+Current public release: **0.5.0 / reusable compositions and prepared subtotals**, published on 11 November 2026 after owner visual approval and release verification. M5 scoped prepared-view interactions were published in 0.4.0. The website is deployed and all public package checks pass. See the [release record](releases/0.5.0.md) for exact source, CI, archive integrity and public verification, and [M5 contracts](m5-interactions.md) for the supported native controls and prepared-view model. Use a new version for subsequent publication.
 
 Before publishing, run the repository typechecks, build, core tests and browser suite.
 

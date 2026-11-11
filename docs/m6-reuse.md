@@ -1,6 +1,6 @@
 # M6 implementation contract
 
-M6 adds declarative reuse and agent-prepared table subtotals. This document records the candidate contract while implementation and verification are in progress; the feature is not published yet.
+M6 adds declarative reuse and agent-prepared table subtotals. This document records the contract published in 0.5.0; see [release evidence](releases/0.5.0.md).
 
 ## Reusable compositions
 

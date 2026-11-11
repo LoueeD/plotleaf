@@ -56,3 +56,5 @@ Version 0.4.0 adds a sixth downloadable report and fifth editable project: scope
 The owner approved visual review and all release checks pass. The website is deployed as Cloudflare version `426236b8-c6b8-4f4f-9680-ac8753bd1845`; all 10 live Chromium/WebKit checks pass, and live guide/schema bodies exactly match their canonical sources. The website workspace and its 640px reading layouts are retained. npm 0.4.0 is published and independently verified; see [release evidence](releases/0.4.0.md).
 
 The metric overflow fix was deployed on 11 November 2026 as Cloudflare version `2a000b69-e486-4828-bcf7-97735f704d82`, after owner visual approval. All 10 live Chromium/WebKit site checks passed. See [0.4.1 release evidence](releases/0.4.1.md) for npm publication and verification evidence.
+
+M6 is deployed as Cloudflare version `7a726065-e3a0-43d5-9c5b-f65eb2213481`, with a reusable summary example, browser playground and updated canonical guide/schema. All 12 live Chromium/WebKit checks passed; see [release evidence](releases/0.5.0.md).
